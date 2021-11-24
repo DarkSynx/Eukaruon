@@ -1,0 +1,1 @@
+git filter-branch -f --env-filter "GIT_AUTHOR_NAME='Darksynx'; GIT_AUTHOR_EMAIL='Dark.synx.github@gmail.com'; GIT_COMMITTER_NAME='committed-name'; GIT_COMMITTER_EMAIL='committed-email';" HEAD

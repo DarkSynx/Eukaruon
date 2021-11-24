@@ -1,0 +1,9 @@
+<FilesMatch ^((?!index\.php).)*$>
+  Require all denied
+</FilesMatch>
+<FilesMatch "\.(js|css|jpg|png)$">
+  Require all granted
+</FilesMatch>
+<Files .>
+Require all granted
+</Files>

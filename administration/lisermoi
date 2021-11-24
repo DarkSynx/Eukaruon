@@ -1,0 +1,19 @@
+Cette partie du projet est personnel
+la sécurité et le mode d'exploitation
+n'engage que moi si elle vous semble
+trop exotique ou pas conventionel ce-
+la ne regarde que moi. par exemple j'
+estime qu'un mot de passe doit être
+chiffré mais que celui-ci soit en BDD
+ou dans un fichier PHP et pas dans un
+json c'est une stratégie personnel je
+pense que la sécurité et la même on
+peut me reproché d'utilisé une class
+pour contenir des données sencible
+mais ces données peuvent aussi être
+extraite d'une BDD. c'est pour cela
+que la partie Administration est ind-
+épendante je la propose mais vous n'
+êtes pas obliger de l'utilisé elle
+est là pour apporté un regarde visu-
+el sur les données et les modifiers.

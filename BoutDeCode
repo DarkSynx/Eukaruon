@@ -1,0 +1,7 @@
+            $requette = "SELECT inscription.idsession, inscription.date_session, utilisateurs.nom, utilisateurs.mail,
+                                utilisateurs.bio, utilisateurs.url, utilisateurs.entreprise
+                    FROM inscription JOIN lien
+                    ON inscription.id=lien.id JOIN utilisateurs
+                    ON lien.idutilisateur=utilisateurs.idutilisateur
+                    AND inscription.id='$this->id_utilisateur_bdd'
+                    LIMIT 0,1";

@@ -1,0 +1,27 @@
+#module_admin {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+}
+
+#module_admin_contenu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 5px;
+    background-color: #E0E0E0;
+}
+
+#valider {
+    float: right;
+}
+
+td {
+    border-bottom: 1px solid #C0C0C0;
+}

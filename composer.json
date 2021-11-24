@@ -1,0 +1,17 @@
+{
+  "name": "darksynx/Eukaruon",
+  "description": "gestionnaire de module",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Darksynx\\Eukaruon\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "DarkSynx",
+      "email": "dark.sunx.github@gmail.com"
+    }
+  ],
+  "require": {}
+}
