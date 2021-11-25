@@ -1,5 +1,5 @@
 {
-  "name": "darksynx/Eukaruon",
+  "name": "darksynx/eukaruon",
   "description": "gestionnaire de module",
   "type": "project",
   "autoload": {
@@ -12,6 +12,5 @@
       "name": "DarkSynx",
       "email": "dark.sunx.github@gmail.com"
     }
-  ],
-  "require": {}
+  ]
 }

@@ -34,6 +34,7 @@ class pilote
      */
     protected ?object $journal = null;
 
+
     /** Le constructeur acceptera la constante
      * @param null $modules_primaire
      * @param null $forcer_sessionid
@@ -51,6 +52,8 @@ class pilote
 
         $this->Modules_gestionnaire = new Modules_gestionnaire();
         $this->journal = new journal();
+
+
     }
 
     /**
