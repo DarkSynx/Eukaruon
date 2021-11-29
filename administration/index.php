@@ -1,4 +1,7 @@
 <?php
+
+use Eukaruon\administration\systeme\systeme;
+
 ini_set("session.cookie_secure", 1);
 session_set_cookie_params(['samesite' => 'secure']);
 session_start();

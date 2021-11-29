@@ -1,4 +1,7 @@
 <?php
+
+use Eukaruon\configs\DonneeUniqueServeur;
+
 include_once CHEMIN_SITE . 'chemins.php';
 include CONFIGS . 'DonneeUniqueServeur.php';
 if (!isset($contenu)) $contenu = '';
@@ -6,7 +9,7 @@ if (!isset($contenu)) $contenu = '';
 $contenu .= '<h3>Donnee Unique Serveur</h3>';
 $contenu .= '<table>';
 foreach (DonneeUniqueServeur::LISTING_VAR as $index) {
-    $valeur = constant('DonneeUniqueServeur::' . $index);
+    $valeur = constant('Eukaruon\\configs\\DonneeUniqueServeur::' . $index);
     switch ($index) {
         default:
             $plus = '';

@@ -1,4 +1,6 @@
-<?php
+<?php namespace Eukaruon\administration\systeme;
+
+use FilesystemIterator;
 
 class systeme
 {
@@ -23,6 +25,8 @@ class systeme
                 //echo $nom_fichier . '<br>' . PHP_EOL;
                 include_once MODULES_ADMIN . $nom_fichier . '.php';
                 $compte_place = count($this->_list_modules);
+
+                $nom_fichier = 'Eukaruon\\administration\\systeme\\modules\\' . $nom_fichier;
                 $this->_list_modules[$compte_place] = [$nom_fichier, new $nom_fichier(), null];
 
                 if (is_dir(MODULES_ADMIN . $nom_fichier)) {
@@ -48,6 +52,7 @@ class systeme
         $tabcont = '';
         foreach ($this->_list_modules as $nombre => $valeur) {
             list($nom, $objet, $infos) = $valeur;
+            $nom = basename($nom);
             $nom = str_replace('_', chr(32), $nom);
             if ($infos !== null) {
                 if (array_key_exists('nom', $infos)) {

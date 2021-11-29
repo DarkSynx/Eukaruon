@@ -1,4 +1,7 @@
 <?php
+
+use Eukaruon\configs\admin_pilote;
+
 include_once CHEMIN_SITE . 'chemins.php';
 include CONFIGS . 'admin_pilote.php';
 

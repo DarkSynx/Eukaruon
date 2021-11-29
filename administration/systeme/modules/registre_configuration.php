@@ -1,4 +1,6 @@
-<?php
+<?php namespace Eukaruon\administration\systeme\modules;
+
+use exploiter_data;
 
 class registre_configuration extends exploiter_data
 {
@@ -20,7 +22,7 @@ class registre_configuration extends exploiter_data
 
     private function recupere_html($name): string
     {
-        return file_get_contents(MODULES_ADMIN . get_class($this) . '/' . $name . '.html');
+        return file_get_contents(MODULES_ADMIN . basename(get_class($this)) . '/' . $name . '.html');
     }
 
     private function ajouter_contenu(string $contenu = ''): string

@@ -1,4 +1,7 @@
-<?php
+<?php namespace Eukaruon\administration\systeme\modules;
+
+use Eukaruon\configs\Page_en_cache;
+use FilesystemIterator;
 
 class pages_en_cache
 {

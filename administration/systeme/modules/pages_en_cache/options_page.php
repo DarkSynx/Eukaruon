@@ -1,4 +1,7 @@
 <?php
+
+use Eukaruon\modules\Modules_pages;
+
 ini_set('html_errors', false);
 session_start();
 include 'administration_outils.php';

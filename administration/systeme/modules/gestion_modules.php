@@ -1,4 +1,7 @@
-<?php
+<?php namespace Eukaruon\administration\systeme\modules;
+
+use Eukaruon\configs\CMD;
+use FilesystemIterator;
 
 class gestion_modules
 {
@@ -20,7 +23,7 @@ class gestion_modules
 
         $contenu = '<h3>List modules</h3><ul id="listedonneemodule">';
         foreach (CMD::CMD_LISTE as $valeur) {
-            $valeur2 = constant('CMD::' . $valeur);
+            $valeur2 = constant('Eukaruon\\configs\\CMD::' . $valeur);
             $contenu .= "<li id='donnee_{$valeur}' class='donnee_modules_over'><name data-valeur='$valeur' data-nom='$valeur2'>$valeur2</name><button onclick=\"$('#donnee_{$valeur}').remove();\">Retirer</button></li>";
         }
         $contenu .= '</ul>

@@ -1,4 +1,7 @@
 <?php
+
+use Eukaruon\configs\Modules_autorisations;
+
 include_once CHEMIN_SITE . 'chemins.php';
 include CONFIGS . 'Modules_autorisations.php';
 
