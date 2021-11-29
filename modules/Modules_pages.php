@@ -1,4 +1,6 @@
-<?php
+<?php namespace Eukaruon\modules;
+
+use FilesystemIterator;
 
 /** Ce module à pour objectif la gestion des pages il gérera donc aussi bien la construction de profils
  * que l'affichage de ceux si

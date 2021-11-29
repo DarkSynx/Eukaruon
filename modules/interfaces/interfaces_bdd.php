@@ -1,4 +1,4 @@
-<?php
+<?php namespace Darksynx\Eukaruon\modules\interfaces;
 
 /** Ce module à pour objectif de forcer le development des modules
  * avec les méthodes si dessous. je rappel aussi que requette_brute_query

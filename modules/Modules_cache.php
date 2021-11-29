@@ -1,4 +1,6 @@
-<?php
+<?php namespace Eukaruon\modules;
+
+use Exception;
 
 class Modules_cache extends Modules_outils
 {
@@ -145,7 +147,7 @@ class Modules_cache extends Modules_outils
     public function ecriture_cache($fichier, $donnee)
     {
         $this->_data_exploite = $donnee;
-        echo "<<ecriture>>" . $fichier . '|';
+        //echo "<<ecriture>>" . $fichier . '|';
         file_put_contents($fichier, $this->_data_exploite);
         return $donnee;
     }

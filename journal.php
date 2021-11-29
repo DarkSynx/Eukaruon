@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon;
 
 /** A pour objectif de loguer les actions dans des fichier texte
  * de log

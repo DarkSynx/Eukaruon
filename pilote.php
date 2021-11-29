@@ -1,4 +1,7 @@
-<?php
+<?php namespace Eukaruon;
+
+use Eukaruon\modules\Modules_gestionnaire;
+use Exception;
 
 /** Cette Class est là pour piloté l'application elle se distingue du reste par
  * ce quelle prend la main sur le module Gestionnaire pour facilité son utilisation
@@ -25,6 +28,22 @@ class pilote
         'journal.php',
         'installation.php'
     ];
+
+    const LIST_EXCEPTION_MODULE = [
+        'Modules_autorisations',
+        'CMD',
+        'admin_pilote',
+        'DonneeUniqueServeur',
+        'Page_en_cache'
+    ];
+
+    const LIST_NAME_SPACE = [
+        'configs' => 'Eukaruon\\configs\\',
+        'modules' => 'Eukaruon\\modules\\',
+        'sousmodules' => 'Eukaruon\\modules\\sousmodules\\',
+    ];
+
+
     /** Contiendra l'instanciation de Modules_gestionnaire
      * @var null
      */
@@ -50,7 +69,7 @@ class pilote
             $this->Inclure_fichier($modules_primaire);
         }
 
-        $this->Modules_gestionnaire = new Modules_gestionnaire();
+        $this->Modules_gestionnaire = new Modules_gestionnaire(self::LIST_EXCEPTION_MODULE, self::LIST_NAME_SPACE);
         $this->journal = new journal();
 
 
@@ -124,27 +143,48 @@ class pilote
     }
 }
 
-spl_autoload_register(/**
- * @param $class_name
- */ function ($class_name) {
-    try {
-        $portion_nom = explode('_', $class_name);
-        $dossier_a_charger = strtolower($portion_nom[0]);
-        if ($dossier_a_charger == 'interfaces') {
-            include_once INTERFACES . $class_name . '.php';
-        } elseif ($dossier_a_charger == 'modules') {
 
-            include_once MODULES . $class_name . '.php';
-        } else {
-            if ($class_name == 'CMD') {
-                include_once CONFIGS . 'CMD.php';
-            } elseif ($class_name == 'admin_pilote') {
-                include_once CONFIGS . 'admin_pilote.php';
-            } else {
-                include_once MODULES . $dossier_a_charger . '/' . $class_name . '.php';
+spl_autoload_register(
+    function ($class_name) {
+        try {
+            $class_name = basename($class_name);
+
+            $portion_nom = explode('_', $class_name);
+            $dossier_a_charger = strtolower($portion_nom[0]);
+
+
+            switch ($class_name) {
+                case 'Modules_autorisations':
+                    include_once CONFIGS . 'Modules_autorisations.php';
+                    break;
+                case 'CMD':
+                    include_once CONFIGS . 'CMD.php';
+                    break;
+                case 'admin_pilote':
+                    include_once CONFIGS . 'admin_pilote.php';
+                    break;
+                case 'DonneeUniqueServeur':
+                    include_once CONFIGS . 'DonneeUniqueServeur.php';
+                    break;
+                case 'Page_en_cache':
+                    include_once CONFIGS . 'Page_en_cache.php';
+                    break;
+                default:
+                    switch ($dossier_a_charger) {
+                        case 'interfaces':
+                            include_once INTERFACES . $class_name . '.php';
+                            break;
+                        case 'modules':
+                            include_once MODULES . $class_name . '.php';
+                            break;
+                        case 'sousmodules':
+                            include_once SOUSMODULES . $class_name . '.php';
+                            break;
+                    }
             }
+
+
+        } catch (Exception $e) {
+            echo $e->getMessage(), "\n";
         }
-    } catch (Exception $e) {
-        echo $e->getMessage(), "\n";
-    }
 });

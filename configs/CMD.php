@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon\configs;
 
 class CMD
 {
@@ -7,6 +7,7 @@ class CMD
     const MODULES_SECURISER = 'Modules_securiser';
     const MODULES_UTILISATEURS = 'Modules_utilisateurs';
     const DONNEEUNIQUESERVEUR = 'DonneeUniqueServeur';
+    const PAGEENCACHE = 'Page_en_cache';
 
 
     const CMD_LISTE = [
@@ -15,5 +16,6 @@ class CMD
         2 => 'MODULES_SECURISER',
         3 => 'MODULES_UTILISATEURS',
         4 => 'DONNEEUNIQUESERVEUR',
+        5 => 'PAGEENCACHE'
     ];
 }

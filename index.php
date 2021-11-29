@@ -1,4 +1,8 @@
 <?php
+
+use Eukaruon\Euka;
+use Eukaruon\pilote;
+
 $time_start = microtime(true);
 
 include 'pilote.php';
@@ -14,8 +18,8 @@ $pilote = new pilote(
 
 /* Fin */
 include 'Euka.php';
-$Euka = new Euka($pilote);
-$Euka->index(); // vous devez coder votre premier page dans Euka.php->index()
+$Euka = new Euka();
+$Euka->index($pilote); // vous devez coder votre premier page dans Euka.php->index()
 
 
 $time_end = microtime(true);

@@ -1,4 +1,8 @@
-<?php
+<?php namespace Eukaruon\modules;
+
+
+use Darksynx\Eukaruon\modules\interfaces\interfaces_bdd;
+use SQLite3;
 
 /** Module SQLite 3
  * - selection_bdd

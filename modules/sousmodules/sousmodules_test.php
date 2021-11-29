@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon\modules\sousmodules;
 
 class sousmodules_test
 {

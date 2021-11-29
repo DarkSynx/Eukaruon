@@ -108,7 +108,7 @@ body {
 width:90%;
 height:800px;
 padding:5px;
-overflow:hidden;
+overflow:auto;
 margin:auto;
 
 display: flex;

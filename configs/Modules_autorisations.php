@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon\configs;
 
 class Modules_autorisations
 {

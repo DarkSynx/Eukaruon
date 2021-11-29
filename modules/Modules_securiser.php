@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon\modules;
 
 
 /** a pour objectif de securisé les donnés

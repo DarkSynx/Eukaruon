@@ -1,23 +1,17 @@
-<?php
+<?php namespace Eukaruon;
+
+use Eukaruon\configs\CMD;
 
 /**
  * @name  Euka/Eukaruon [faham]
  * @author Manzïny/DarkSynx 2021
- * @version alpha 0.19.13.24112021
+ * @version alpha 0.20.01.29112021
  */
 class Euka
 {
-    private $_pilote = null;
-
-    public function __construct($pilote)
+    public function index($pilote)
     {
-        $this->_pilote = $pilote;
-    }
 
-    public function index()
-    {
-        // pour une utilisation réduite de la variable
-        $pilote = $this->_pilote;
 
         //var_dump($pilote->gestion_url());
 
@@ -25,14 +19,14 @@ class Euka
         /* module utilisateur */
         $Modules_utilisateurs = $pilote->Charger_le_module(
             module_a_charger: 'Modules_utilisateurs',
-            modules_primaire: MGC_DONNEEUNIQUESERVEUR | MGC_MODULES_BDD
+            modules_primaire: [CMD::DONNEEUNIQUESERVEUR, CMD::MODULES_BDD]
         );
 
 
         /* module pages  'Page_en_cache | Modules_bdd' */
         $Modules_pages = $pilote->Charger_le_module(
             module_a_charger: 'Modules_pages',
-            modules_primaire: MGC_PAGE_EN_CACHE | MGC_MODULES_BDD
+            modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
         );
 
         $sousmodules_test = $pilote->Charger_le_module(
@@ -44,7 +38,7 @@ class Euka
         );
 
 
-        //$sousmodules_test->test();
+        $sousmodules_test->test();
 
 
         /* gestion de l'utilisateur et de la page */
@@ -65,7 +59,7 @@ CODE
         );
 
 //test
-        echo "Lire le fichier cache : ", $Modules_cache->cache('test:user1023456'), PHP_EOL;
+        // echo "Lire le fichier cache : ", $Modules_cache->cache('test:user1023456'), PHP_EOL;
 
 //$Modules_cache->supprimer_cache('test:user1023456');
 

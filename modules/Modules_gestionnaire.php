@@ -1,4 +1,11 @@
-<?php
+<?php namespace Eukaruon\modules;
+
+use Eukaruon\configs\admin_pilote;
+use Eukaruon\configs\CMD;
+use Eukaruon\configs\Modules_autorisations;
+use Exception;
+use FilesystemIterator;
+
 
 /** module principale de gestion des autres modules
  *  - set_DonneeUniqueServeur
@@ -27,6 +34,9 @@ class Modules_gestionnaire
     protected array $tableau_drapeau = array();
     private string $nom_module = '';
 
+    private array $_liste_exception_module = array();
+    private array $_liste_espace_de_nom = array();
+
     /** Le constructeur démarre les modules essentiels au bon fonctionnement
      *  chaque module essentiel dit primaire devra être rajouté à la main. Ils sont
      *  considérés comme des modules sensibles et ne peuvent donc pas être chargé automatiquement
@@ -36,8 +46,11 @@ class Modules_gestionnaire
      *  - les modules essentiel sont ceux correspondent aux modules primaires de cette application
      *  - les autres modules sont chargers à la demande
      */
-    public function __construct()
+    public function __construct(array $liste_exception_module = array(), array $liste_name_space = array())
     {
+        $this->_liste_exception_module = $liste_exception_module;
+        $this->_liste_espace_de_nom = $liste_name_space;
+
         $this->set_DonneeUniqueServeur();
         $this->set_Page_en_cache();
         $this->set_Modules_bdd();
@@ -66,7 +79,38 @@ class Modules_gestionnaire
     {
         $this->generer_drapeau_tableau('DonneeUniqueServeur');
         include_once CONFIGS . 'DonneeUniqueServeur.php';
-        $this->liste_modules_instance('DonneeUniqueServeur', true);
+        $this->liste_modules_instance($this->name_space('configs') . 'DonneeUniqueServeur', true);
+    }
+
+    protected function set_Page_en_cache()
+    {
+        $this->generer_drapeau_tableau('Page_en_cache');
+        include_once CONFIGS . 'Page_en_cache.php';
+        $this->liste_modules_instance($this->name_space('configs') . 'Page_en_cache', true);
+    }
+
+    /** Permet de charger le module de gestion des bases de donnée
+     *
+     */
+    public function set_Modules_bdd()
+    {
+        $this->generer_drapeau_tableau('Modules_bdd');
+        $this->liste_modules_instance($this->name_space('modules') . 'Modules_bdd', true);
+        //$this->Modules_bdd->set_selection_module_bdd('Modules_bdd_sqlite');
+    }
+
+    protected function set_Modules_autorisations()
+    {
+        $this->generer_drapeau_tableau('Modules_autorisations');
+        include_once CONFIGS . 'Modules_autorisations.php';
+        $this->liste_modules_instance($this->name_space('configs') . 'Modules_autorisations', true);
+    }
+
+    /* ----------------------------------- */
+
+    public function name_space($nom)
+    {
+        return $this->_liste_espace_de_nom[$nom];
     }
 
     public function generer_drapeau_tableau($nom_module): int
@@ -84,6 +128,8 @@ class Modules_gestionnaire
 
     protected function &liste_modules_instance($nom_du_module, $force = false, &$donnees_module = null, $force_post_construct = false): mixed
     {
+        $nom_du_module_repertorier = basename($nom_du_module);
+
         if (
             $nom_du_module != 'AUTRES_MODULES' &&
             ($force ||
@@ -91,27 +137,56 @@ class Modules_gestionnaire
             )
         ) {
             if (!is_null($donnees_module)) {
-                $this->list_modules_instancier[$nom_du_module]['donnee'] = &$donnees_module;
-                $this->list_modules_instancier[$nom_du_module]['module'] = new $nom_du_module($donnees_module, $force_post_construct);
+
+                if (in_array($nom_du_module, $this->_liste_exception_module)) {
+                    echo 'yes >> ', $nom_du_module, PHP_EOL;
+                    $nom_du_module = $this->name_space('configs') . $nom_du_module;
+                } else {
+                    $portion_nom = explode('_', $nom_du_module);
+                    $dossier_a_charger = strtolower($portion_nom[0]);
+                    if ($dossier_a_charger == 'modules') {
+                        $nom_du_module = $this->name_space('modules') . $nom_du_module;
+                    } elseif ($dossier_a_charger == 'sousmodules') {
+                        $nom_du_module = $this->name_space('sousmodules') . $nom_du_module;
+                    }
+                }
+                $this->list_modules_instancier[$nom_du_module_repertorier]['donnee'] = &$donnees_module;
+                $this->list_modules_instancier[$nom_du_module_repertorier]['module'] = new $nom_du_module($donnees_module, $force_post_construct);
                 $this->parent_et_interfaces($nom_du_module);
             } else {
-                $this->list_modules_instancier[$nom_du_module]['module'] = new $nom_du_module(null, $force_post_construct);
+
+                /* pas oublier de retirer les here 1,2,3
+                et gerer les fichier dans configs*/
+                if (in_array($nom_du_module, $this->_liste_exception_module)) {
+
+                    $nom_du_module = $this->name_space('configs') . $nom_du_module;
+                } else {
+                    $portion_nom = explode('_', $nom_du_module);
+                    $dossier_a_charger = strtolower($portion_nom[0]);
+                    if ($dossier_a_charger == 'modules') {
+                        $nom_du_module = $this->name_space('modules') . $nom_du_module;
+                    } elseif ($dossier_a_charger == 'sousmodules') {
+                        $nom_du_module = $this->name_space('sousmodules') . $nom_du_module;
+                    }
+                }
+                $this->list_modules_instancier[$nom_du_module_repertorier]['module'] = new $nom_du_module(null, $force_post_construct);
                 $this->parent_et_interfaces($nom_du_module);
             }
-            return $this->list_modules_instancier[$nom_du_module]['module'];
+            return $this->list_modules_instancier[$nom_du_module_repertorier]['module'];
         }
 
-        return $this->list_modules_instancier[$nom_du_module]['module'];
+        return $this->list_modules_instancier[$nom_du_module_repertorier]['module'];
     }
 
     public function parent_et_interfaces($nom_du_module)
     {
+        $nom_du_module_repertorier = basename($nom_du_module);
         // créé une erreur si l'objet n'est pas charger
         if (strpos($nom_du_module, '_')) {
             try {
                 $nom_eclater = explode('_', $nom_du_module);
-                $interfaces_modules = class_implements($this->list_modules_instancier[$nom_du_module]['module']);
-                $Modules_outils = get_parent_class($this->list_modules_instancier[$nom_du_module]['module']);
+                $interfaces_modules = class_implements($this->list_modules_instancier[$nom_du_module_repertorier]['module']);
+                $Modules_outils = get_parent_class($this->list_modules_instancier[$nom_du_module_repertorier]['module']);
 
                 $list_modules_exceptions = [
                     'DonneeUniqueServeur',
@@ -149,29 +224,6 @@ class Modules_gestionnaire
         }
     }
 
-    protected function set_Page_en_cache()
-    {
-        $this->generer_drapeau_tableau('Page_en_cache');
-        include_once CONFIGS . 'Page_en_cache.php';
-        $this->liste_modules_instance('Page_en_cache', true);
-    }
-
-    /** Permet de charger le module de gestion des bases de donnée
-     *
-     */
-    public function set_Modules_bdd()
-    {
-        $this->generer_drapeau_tableau('Modules_bdd');
-        $this->liste_modules_instance('Modules_bdd', true);
-        //$this->Modules_bdd->set_selection_module_bdd('Modules_bdd_sqlite');
-    }
-
-    protected function set_Modules_autorisations()
-    {
-        $this->generer_drapeau_tableau('Modules_autorisations');
-        include_once CONFIGS . 'Modules_autorisations.php';
-        $this->liste_modules_instance('Modules_autorisations', true);
-    }
 
     /** Permet d'obtenir la liste des modules disponible
      * @return array
@@ -196,7 +248,7 @@ class Modules_gestionnaire
             admin_pilote::REGISTRE['recherche_automatique_modules'] === false
         ) {
             foreach (CMD::CMD_LISTE as $valeur) {
-                $nom_fichier = constant('CMD::' . $valeur);
+                $nom_fichier = constant('Eukaruon\\configs\\CMD::' . $valeur);
                 $this->list_modules_instancier[$nom_fichier] = null;
                 $this->generer_drapeau_tableau($nom_fichier);
             }
@@ -234,7 +286,7 @@ class Modules_gestionnaire
         /* partie ou l'on instancie le module avec ces modules utilitaire */
         if ($forcer_recharger_module === 1 || !array_key_exists($nom_module, $this->list_modules_instancier) || is_null($this->list_modules_instancier[$nom_module])) {
             if (!is_null($modules_primaire)) {
-                $donnee = &$this->chargement_donne_choisi($modules_primaire, $modules_secondaire);
+                $donnee = &$this->chargement_donnee_choisi($modules_primaire, $modules_secondaire);
             }
             //$this->Modules_charger[$nom_module]['module'] = new $nom_module($this->Modules_charger[$nom_module]['donnee']);
 
@@ -243,7 +295,7 @@ class Modules_gestionnaire
 
         /* partie ou l'on redémarre le post_construct du module avec ces modules utilitaire */
         if (!is_null($modules_primaire)) {
-            $donnee = &$this->chargement_donne_choisi($modules_primaire, $modules_secondaire);
+            $donnee = &$this->chargement_donnee_choisi($modules_primaire, $modules_secondaire);
             if ($forcer_recharger_module === 2) {
                 $this->list_modules_instancier[$nom_module]['module']->post_construct($donnee);
             } else {
@@ -267,7 +319,7 @@ class Modules_gestionnaire
      * @param mixed $modules_primaire
      * @return array
      */
-    public function &chargement_donne_choisi(mixed $modules_primaire, array $modules_secondaire = null): array
+    public function &chargement_donnee_choisi(mixed $modules_primaire, array $modules_secondaire = null): array
     {
         $donnee_tableau = array();
         $this->tableau_contenant_donnes = array();
@@ -275,10 +327,21 @@ class Modules_gestionnaire
 
             if (is_array($modules_primaire)) {
                 $donnee_tableau = $modules_primaire;
-            } elseif (is_int($modules_primaire)) {
+            } /*
+            // le gestionnaire de drapeau ne gére de 66 modules max
+            // à n'activer que si vous en avez une utilité
+            /*
+             *  $Modules_pages = $pilote->Charger_le_module(
+             *      module_a_charger: 'Modules_pages',
+             *      modules_primaire: MGC_PAGE_EN_CACHE | MGC_MODULES_BDD <-- ici
+             *  );
+             * /
+            elseif (is_int($modules_primaire)) {
                 $donnee_tableau = $this->binaire_extraction_drapeau($modules_primaire);
                 // $donnee_tableau =
-            } elseif (is_string($modules_primaire)) {
+            }
+            */
+            elseif (is_string($modules_primaire)) {
                 $donnee_tableau = explode('|', $modules_primaire);
             }
 

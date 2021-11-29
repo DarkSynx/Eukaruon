@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon\modules;
 
 /** Module interface qui à pour objectif de proposé un controle facile de l'accés à la base de donnée quelques
  * soit le module de BDD charger. le projet utilisé principalement du Sqlite pour des raison minimaliste mais

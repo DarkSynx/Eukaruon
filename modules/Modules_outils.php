@@ -1,4 +1,7 @@
-<?php
+<?php namespace Eukaruon\modules;
+
+use Darksynx\Eukaruon\modules\interfaces\interfaces_modules;
+use Exception;
 
 /** Class abstraite boite à outils contenant le nécessaire à la gestion de fonction de base comme
  *  on y regroupera tout ce qui est recurrent à des fins de création de sucre syntaxique

@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon;
 
 
 /* Fabrication des unique du serveur */
@@ -26,7 +26,7 @@ $attention = <<<INFOS
     */
 INFOS;
 
-fwrite($DUSStream, '<?php ' . PHP_EOL . $attention . PHP_EOL . 'class DonneeUniqueServeur {' . PHP_EOL);
+fwrite($DUSStream, '<?php namespace Eukaruon\\configs; ' . PHP_EOL . $attention . PHP_EOL . 'class DonneeUniqueServeur {' . PHP_EOL);
 foreach ($donnees_serveur as $cle => $valeurs) {
     fwrite($DUSStream, 'const ' . $cle . ' = \'' . $valeurs . '\';' . PHP_EOL);
 }

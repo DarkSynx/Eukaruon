@@ -1,4 +1,4 @@
-<?php
+<?php namespace Darksynx\Eukaruon\modules\interfaces;
 
 /** Force l'ajoute de partie comme post_construct
  *
