@@ -19,7 +19,7 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
 
 
     $fp = fopen(CONFIGS . 'admin_pilote.php', 'w');
-    fwrite($fp, '<?php ' . PHP_EOL . 'class admin_pilote {' . PHP_EOL . PHP_EOL);
+    fwrite($fp, '<?php namespace Eukaruon\\configs;' . PHP_EOL . 'class admin_pilote {' . PHP_EOL . PHP_EOL);
 
     fwrite($fp, 'Const REGISTRE =' . var_export_style($donnees_serveur) . ';' . PHP_EOL . PHP_EOL);
 

@@ -1,6 +1,6 @@
 <?php namespace Eukaruon\modules;
 
-use Darksynx\Eukaruon\modules\interfaces\interfaces_modules;
+use Eukaruon\modules\interfaces\interfaces_modules;
 use Exception;
 
 /** Class abstraite boite à outils contenant le nécessaire à la gestion de fonction de base comme

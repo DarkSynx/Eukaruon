@@ -5,7 +5,7 @@ use Eukaruon\configs\CMD;
 /**
  * @name  Euka/Eukaruon [faham]
  * @author Manzïny/DarkSynx 2021
- * @version alpha 0.20.01.29112021
+ * @version alpha 0.20.02.000001
  */
 class Euka
 {

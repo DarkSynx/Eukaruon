@@ -30,7 +30,7 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
     */
 INFOS;
 
-    fwrite($fp, '<?php ' . PHP_EOL . $attention . PHP_EOL . 'class DonneeUniqueServeur {' . PHP_EOL);
+    fwrite($fp, '<?php namespace Eukaruon\\configs;' . PHP_EOL . $attention . PHP_EOL . 'class DonneeUniqueServeur {' . PHP_EOL);
     foreach ($donnees_serveur as $cle => $valeurs) {
         fwrite($fp, 'const ' . $cle . ' = \'' . $valeurs . '\';' . PHP_EOL);
     }

@@ -23,15 +23,19 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
     array_map($callback, iterator_to_array(
         new FilesystemIterator(PROFILS, FilesystemIterator::SKIP_DOTS)));
 
+    /*
+     * pas de gestion de page simple pour le moment
+     * toutes les pages doivent être dans pages/profils
     $callback2 = function ($class_fichier) use (&$liste_fichier) {
         $nom = $class_fichier->getFilename();
         if (!is_dir(PAGES . $nom)) {
+            $nom = basename($nom,'.php');
             $liste_fichier[] = $nom;
         }
     };
     array_map($callback2, iterator_to_array(
         new FilesystemIterator(PAGES, FilesystemIterator::SKIP_DOTS)));
-    //var_dump($liste_fichier);
+    //var_dump($liste_fichier);*/
 
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($liste_fichier);

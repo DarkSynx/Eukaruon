@@ -27,7 +27,7 @@ INFOS;
 
     $fp = fopen(CONFIGS . 'Page_en_cache.php', 'w');
 
-    fwrite($fp, '<?php ' . PHP_EOL . 'class Page_en_cache {' . PHP_EOL . $attention . PHP_EOL);
+    fwrite($fp, '<?php namespace Eukaruon\\configs;' . PHP_EOL . 'class Page_en_cache {' . PHP_EOL . $attention . PHP_EOL);
 
     fwrite($fp, 'protected array $page_en_cache = ');
     fwrite($fp, var_export_style($list) . ';' . PHP_EOL);

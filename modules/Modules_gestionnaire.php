@@ -188,6 +188,7 @@ class Modules_gestionnaire
                 $interfaces_modules = class_implements($this->list_modules_instancier[$nom_du_module_repertorier]['module']);
                 $Modules_outils = get_parent_class($this->list_modules_instancier[$nom_du_module_repertorier]['module']);
 
+                // voir si c'est pas possible de le mettre en début de class
                 $list_modules_exceptions = [
                     'DonneeUniqueServeur',
                     'Page_en_cache',

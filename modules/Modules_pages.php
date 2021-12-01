@@ -131,11 +131,24 @@ class Modules_pages extends Modules_outils
     {
         $donnee = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.json');
         $tableau_donnee = json_decode($donnee, true);
-        return $this->construction_page(
-            $nom_profil,
-            $tableau_donnee['corps'],
-            $tableau_donnee['donnees']
-        );
+        $nom_specifique = explode('_', basename($nom_profil));
+        if ($nom_specifique[0] == 'page') {
+            return $this->construction_page(
+                $nom_profil,
+                $tableau_donnee['corps'],
+                $tableau_donnee['donnees'],
+                true
+            );
+        } else {
+
+            return $this->construction_page(
+                $nom_profil,
+                $tableau_donnee['corps'],
+                $tableau_donnee['donnees'],
+                false
+            );
+        }
+
     }
 
     /** Cette methode permet de construire une page par rapport au profile de celle-ci
@@ -146,8 +159,17 @@ class Modules_pages extends Modules_outils
      * @param array $parties_relier
      * @return array|false|string|string[]
      */
-    public function construction_page(string $nom_profil, string $fichier_corps, array $parties_relier,): array|bool|string
+    public function construction_page(string $nom_profil, string|null $fichier_corps = '', array|null $parties_relier = array(), bool $pages_non_profil = false): array|bool|string
     {
+        /*if ($pages_non_profil == true) {
+
+            include_once PAGES . $nom_profil . '.php';
+            $nom_espace_de_nom = 'Eukaruon\\pages\\' . $nom_profil;
+            $pages_nom_de_profil = new $nom_espace_de_nom();
+
+            return $pages_nom_de_profil->index();
+
+        } else {*/
         $chemin_profils = PROFILS . $nom_profil;
         $corps = file_get_contents($chemin_profils . '/html/' . $fichier_corps);
         $tableau = array();
@@ -294,6 +316,7 @@ class Modules_pages extends Modules_outils
         $clee_moustache = array_map($callback, array_keys($parties_relier));
 
         return str_replace($clee_moustache, $tableau, $corps);
+        //}
     }
 
     /** cette fonction est là pour la mise en cache des données via son temps max soit 15j
@@ -382,7 +405,6 @@ class Modules_pages extends Modules_outils
     public function preparation_mise_encache($nom_du_profil)
     {
 
-
         if ($this->cedossier_existe_il(CONTENUS . $nom_du_profil)) {
             // si oui on supprimer
             $liste_dossiers = new FilesystemIterator(CONTENUS . $nom_du_profil, FilesystemIterator::SKIP_DOTS);
@@ -414,7 +436,6 @@ class Modules_pages extends Modules_outils
                 PROFILS . $nom_du_profil . "/$dossier/",
                 CONTENUS . $nom_du_profil . "/$dossier/");
         }
-
     }
 
     /** Test de l'existance d'un dossier
@@ -432,9 +453,15 @@ class Modules_pages extends Modules_outils
      */
     private function copyer_fichiers_dans($dossier_origine, $dossier_destination)
     {
+        var_dump($dossier_origine, $dossier_destination);
         $liste_fichiers = new FilesystemIterator($dossier_origine, FilesystemIterator::SKIP_DOTS);
         foreach ($liste_fichiers as $fichier) {
             $nom_fichier = $fichier->getBasename();
+            /*
+            $eclater = explode('_', $nom_fichier);
+            if ($eclater[0] == 'page') {
+                $nom_fichier .= '.php';
+            }*/
             copy($dossier_origine . $nom_fichier, $dossier_destination . $nom_fichier);
         }
     }

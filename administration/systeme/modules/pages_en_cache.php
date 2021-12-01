@@ -18,6 +18,7 @@ class pages_en_cache
         $incrementer = -1;
         $recherche = $this->rechercher();
         foreach ($list_en_cache as $valeur) {
+            //$valeur = basename($valeur,'.php');
             $valeur2 = str_replace('_', chr(32), $valeur);
             if (in_array($valeur, $recherche)) {
                 $gestion_bouttons = '';
@@ -30,11 +31,11 @@ class pages_en_cache
 
                 //<button id='generer_{$valeur}' class='generer_button' title='generer'>&#9889;</button><button id='cache_{$valeur}' class='cache_button' title='mise en cache'>&#128293;</button><button id='supprimer_{$valeur}' class='supprimer_button' title='supprimer du cache'>&#128721;</button>
 
-                $gestion_bouttons .= in_array($valeur, $liste_fichier['GENERER']) ? '' : "<button id='generer_{$valeur}' class='generer_button' title='generer'>&#9889;</button>";
+                $gestion_bouttons .= in_array($valeur, $liste_fichier['GENERER']) ? '' : "<button id='generer_$valeur' class='generer_button specifique' title='generer'>&#9889;</button>";
                 $gestion_bouttons .= (in_array($valeur, $liste_fichier['CACHE']) ?
-                    "<button id='supprimer_{$valeur}' class='supprimer_button' title='supprimer du cache'>&#128721;</button>" :
+                    "<button id='supprimer_{$valeur}' class='supprimer_button specifique' title='supprimer du cache'>&#128721;</button>" :
                     (!in_array($valeur, $liste_fichier['GENERER']) ? '' :
-                        "<button id='cache_{$valeur}' class='cache_button' title='mise en cache'>&#128293;</button>"));
+                        "<button id='cache_{$valeur}' class='cache_button specifique' title='mise en cache'>&#128293;</button>"));
 
                 //$gestion_bouttons =
 
@@ -76,20 +77,22 @@ les pages en cache sont organisé par un numero de position exploitable elle ne 
  $( document ).ready(function() {
      actiliser_list();
   
-     $('ul#sortable_page_en_cache').on('click', 'li button',function(){
-         let parent = $('#' + this.id).parent();
+     $('ul#sortable_page_en_cache').on('click', 'li button.specifique',function(){
+         
+         let parent = $('#' + this.id ).parent();
          let option = this.id.split('_');
          let allinput = {};
             allinput['option'] = option[0];
             allinput['valeur'] = $('name', parent).attr('data-valeur');
-         
+            console.log('#' + this.id);
+            
             $.ajax({
                 type: "POST",
                 url: './systeme/modules/pages_en_cache/options_page.php',
                 data: allinput,
                 success: function(done){
-                    alert(done);
-                    window.location.href = '?tabselect=2';
+                   alert(done);
+                  window.location.href = '?tabselect=2';
                 }
             });
      });
@@ -124,6 +127,7 @@ les pages en cache sont organisé par un numero de position exploitable elle ne 
         ConfirmDialog('attention!','vous voulez le retirer ?',function() {  
             qui.remove();
             renum_detect();
+            
         });
     });
       

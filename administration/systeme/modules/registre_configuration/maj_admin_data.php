@@ -13,7 +13,7 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
     $_POST['password_administration'] = password_hash($_POST['password_administration'], PASSWORD_BCRYPT, ["cost" => 8]);
 
     $fp = fopen(DATA_ADMIN . 'administration_data.php', 'w');
-    fwrite($fp, '<?php class administration_data { protected array $data_acces = ' . var_export_style($_POST) . ';}');
+    fwrite($fp, '<?php namespace Eukaruon\\administration\\data; class administration_data { protected array $data_acces = ' . var_export_style($_POST) . ';}');
     fclose($fp);
 
     //var_dump($_POST);

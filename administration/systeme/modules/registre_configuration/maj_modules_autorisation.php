@@ -53,7 +53,7 @@ INFOS;
 INFOS2;
 
 
-    fwrite($fp, '<?php ' . PHP_EOL . 'class Modules_autorisations {' . PHP_EOL . $attention . PHP_EOL . PHP_EOL . $attention2 . PHP_EOL);
+    fwrite($fp, '<?php namespace Eukaruon\\configs;' . PHP_EOL . 'class Modules_autorisations {' . PHP_EOL . $attention . PHP_EOL . PHP_EOL . $attention2 . PHP_EOL);
 
     fwrite($fp, 'const MODULE_INTERDIT_AUX_SOUSMODULES = ');
     $mias = explode(',', str_replace(chr(32), null, $donnees_serveur['MODULE_INTERDIT_AUX_SOUSMODULES']));

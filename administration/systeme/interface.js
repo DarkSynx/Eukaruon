@@ -2,7 +2,7 @@ function ConfirmDialog(titre, message, action) {
     $('<div></div>').appendTo('body').html('<div><h5>' + message + '?</h5></div>').dialog({
         modal: true,
         title: titre,
-        zIndex: 10000,
+        zIndex: 100000,
         autoOpen: true,
         width: 'auto',
         resizable: false,

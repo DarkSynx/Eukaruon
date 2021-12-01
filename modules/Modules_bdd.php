@@ -72,6 +72,7 @@ class Modules_bdd
      */
     public function set_selection_module_bdd($nom_module_exploitant_bdd)
     {
+        $nom_module_exploitant_bdd = 'Eukaruon\\modules\\' . $nom_module_exploitant_bdd;
         $this->module_dbb = new $nom_module_exploitant_bdd();
     }
 

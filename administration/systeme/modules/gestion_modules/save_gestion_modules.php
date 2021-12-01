@@ -21,7 +21,7 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
 
     $fp = fopen(CONFIGS . 'CMD.php', 'w');
 
-    fwrite($fp, '<?php ' . PHP_EOL . 'class CMD {' . PHP_EOL);
+    fwrite($fp, '<?php namespace Eukaruon\\configs;' . PHP_EOL . 'class CMD {' . PHP_EOL);
 
     foreach ($donnees_serveur as $index => $valeur) {
         fwrite($fp, "const $index = '$valeur';" . PHP_EOL);
