@@ -1,5 +1,4 @@
 <?php namespace Eukaruon\configs;
-
 class Modules_autorisations
 {
     /* permet d'obtenir la liste de droit d'utilisation et d'autorisation des modules */
@@ -53,6 +52,6 @@ class Modules_autorisations
         'Modules_utilisateurs' => [
             'global' => 0,
             'exception' => [],
-        ]
+        ],
     ];
 }

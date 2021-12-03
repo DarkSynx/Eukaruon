@@ -31,7 +31,7 @@ class pages_en_cache
 
                 //<button id='generer_{$valeur}' class='generer_button' title='generer'>&#9889;</button><button id='cache_{$valeur}' class='cache_button' title='mise en cache'>&#128293;</button><button id='supprimer_{$valeur}' class='supprimer_button' title='supprimer du cache'>&#128721;</button>
 
-                $gestion_bouttons .= in_array($valeur, $liste_fichier['GENERER']) ? '' : "<button id='generer_$valeur' class='generer_button specifique' title='generer'>&#9889;</button>";
+                $gestion_bouttons .= in_array($valeur, $liste_fichier['GENERER']) ? '' : "<button id='generer_{$valeur}' class='generer_button specifique' title='generer'>&#9889;</button>";
                 $gestion_bouttons .= (in_array($valeur, $liste_fichier['CACHE']) ?
                     "<button id='supprimer_{$valeur}' class='supprimer_button specifique' title='supprimer du cache'>&#128721;</button>" :
                     (!in_array($valeur, $liste_fichier['GENERER']) ? '' :
@@ -127,7 +127,7 @@ les pages en cache sont organisé par un numero de position exploitable elle ne 
         ConfirmDialog('attention!','vous voulez le retirer ?',function() {  
             qui.remove();
             renum_detect();
-            
+           // window.location.href = '?tabselect=2';
         });
     });
       
@@ -165,9 +165,9 @@ les pages en cache sont organisé par un numero de position exploitable elle ne 
        let paterne = '<li><label>?</label>&nbsp;&nbsp;<name data-valeur="' + name + '">' + name + 
        '</name><button id="retirer_' + name + 
        '" class="retirer_button" title="retirer de la liste">&#10060;</button><button id="generer_' + name + 
-       '" class="generer_button" title="generer">&#9889;</button><button id="cache_' + name + 
-       '" class="cache_button" title="mise en cache">&#128293;</button><button id="supprimer_' + name + 
-       '" class="supprimer_button" title="supprimer du cache">&#128721;</button></li>';
+       '" class="generer_button specifique" title="generer">&#9889;</button><button id="cache_' + name + 
+       '" class="cache_button specifique" title="mise en cache">&#128293;</button><button id="supprimer_' + name + 
+       '" class="supprimer_button specifique" title="supprimer du cache">&#128721;</button></li>';
        $('ul#sortable_page_en_cache').append(paterne);    
         renum_detect();
     });

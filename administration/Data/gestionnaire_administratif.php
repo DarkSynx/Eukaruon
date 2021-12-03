@@ -1,4 +1,4 @@
-<?php
+<?php namespace Eukaruon\administration\Data;
 
 class gestionnaire_administratif extends exploiter_data
 {

@@ -1,6 +1,7 @@
 <?php namespace Eukaruon\administration\systeme\modules;
 
-use exploiter_data;
+use Eukaruon\administration\Data\exploiter_data;
+
 
 class registre_configuration extends exploiter_data
 {

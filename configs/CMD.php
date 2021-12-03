@@ -1,5 +1,4 @@
 <?php namespace Eukaruon\configs;
-
 class CMD
 {
     const MODULES_BDD = 'Modules_bdd';
@@ -16,6 +15,6 @@ class CMD
         2 => 'MODULES_SECURISER',
         3 => 'MODULES_UTILISATEURS',
         4 => 'DONNEEUNIQUESERVEUR',
-        5 => 'PAGEENCACHE'
+        5 => 'PAGEENCACHE',
     ];
 }

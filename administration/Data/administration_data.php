@@ -1,4 +1,5 @@
-<?php class administration_data
+<?php namespace Eukaruon\administration\Data;
+class administration_data
 {
     protected array $data_acces = [
         'production' => 'false',

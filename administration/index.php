@@ -1,5 +1,6 @@
 <?php
 
+use Eukaruon\administration\Data\gestionnaire_administratif;
 use Eukaruon\administration\systeme\systeme;
 
 ini_set("session.cookie_secure", 1);

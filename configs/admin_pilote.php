@@ -1,5 +1,4 @@
 <?php namespace Eukaruon\configs;
-
 class admin_pilote
 {
 

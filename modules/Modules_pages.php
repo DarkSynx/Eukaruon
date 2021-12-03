@@ -95,6 +95,7 @@ class Modules_pages extends Modules_outils
     public function afficher_la_page(?int $numero_de_page = null): bool|string
     { // par défault vide va renvoyer à l'acceuil
 
+
         if (is_null($numero_de_page)) {
             $numero_de_page = $this->page_specifique;
         }
@@ -103,7 +104,9 @@ class Modules_pages extends Modules_outils
         $tableau = $page_en_cache->get_page_en_cache();
         $page_demander = $tableau[$numero_de_page];
 
-        if (file_exists(CACHE . $page_demander)) {
+        //var_dump($this->recuperer_cache($tableau[$numero_de_page]));
+
+        if (file_exists(CACHE . $page_demander . '.html')) {
             return $this->recuperer_cache($tableau[$numero_de_page]);
         }
         // !! erreur journal ici
@@ -338,23 +341,25 @@ class Modules_pages extends Modules_outils
         if (@filemtime($chemin_encache) < time() - $temps_max || $force) {
 
             //---------
-            ob_start();
+            //ob_start();
+            // revoir cette partie
 
             /* contenu mise en cache et pas afficher
              * echo htmlspecialchars($_COOKIE["tc"],  ENT_QUOTES, 'UTF-8');
              * die();
              */
-            echo htmlspecialchars(
-                file_get_contents(GENERER . $nom_fichier_genrer)
-                , ENT_QUOTES, 'UTF-8');
+            //echo //htmlspecialchars(
+            //    file_get_contents(GENERER . $nom_fichier_genrer)
+            //, ENT_QUOTES, 'UTF-8')
+            // ;
 
-            $cache_contenu = ob_get_contents();
-            ob_end_flush();
+            //$cache_contenu = ob_get_contents();
+            //ob_end_flush();
             //------------
 
             $fd = fopen($chemin_encache, 'w');
             if ($fd) {
-                fwrite($fd, $cache_contenu);
+                fwrite($fd, file_get_contents(GENERER . $nom_fichier_genrer));
                 fclose($fd);
             }
 

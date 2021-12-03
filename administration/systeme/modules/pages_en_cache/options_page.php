@@ -57,6 +57,7 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
 
 function delTree($dir): bool
 {
+    echo $dir;
     $files = array_diff(@scandir($dir), array('.', '..'));
     foreach ($files as $file) {
         (is_dir("$dir/$file")) ? @delTree("$dir/$file") : @unlink("$dir/$file");
