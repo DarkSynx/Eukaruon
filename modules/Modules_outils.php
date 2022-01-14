@@ -21,6 +21,29 @@ class Modules_outils implements interfaces_modules
      */
     protected array $donnee_gestionnaire = array();
 
+    protected array $alpha_codec = [
+        '00' => 'a', '01' => 'h', '02' => 'o', '03' => 'u',
+        '04' => 'b', '05' => 'i', '06' => 'p', '07' => 'v',
+        '08' => 'c', '09' => 'j', '10' => 'q', '11' => 'w',
+        '12' => 'd', '13' => 'k', '14' => 'r', '15' => 'x',
+        '16' => 'e', '17' => 'l', '18' => 's', '19' => 'y',
+        '20' => 'f', '21' => 'm', '22' => 't', '23' => 'z',
+        '24' => 'g', '25' => 'n', '26' => '4', '27' => '7',
+        '28' => '0', '29' => '2', '30' => '5', '31' => '8',
+        '32' => '1', '33' => '3', '34' => '6', '36' => '9',
+        '37' => 'A', '38' => 'H', '39' => 'O', '40' => 'U',
+        '41' => 'B', '42' => 'I', '43' => 'P', '44' => 'V',
+        '45' => 'C', '46' => 'J', '47' => 'Q', '48' => 'W',
+        '49' => 'D', '50' => 'K', '51' => 'R', '52' => 'X',
+        '53' => 'E', '54' => 'L', '55' => 'S', '56' => 'Y',
+        '57' => 'F', '58' => 'M', '59' => 'T', '60' => 'Z',
+        '61' => 'G', '62' => 'N', '63' => ';', '64' => '_',
+        '65' => '+', '66' => '#', '67' => '!', '68' => '?'
+    ];
+    // produits = 0614021203052218
+
+    protected array $arguments_url = array();
+
     protected ?object $Modules_bdd_utilisation_rapide = null;
 
     public function __construct($donnee_gestionnaire = null, bool $pas_de_post_construct = false)
@@ -67,6 +90,7 @@ class Modules_outils implements interfaces_modules
             $this->donnee_gestionnaire = &$donnee_gestionnaire;
         }
     }
+
 
     public function Name_module(): string
     {

@@ -58,6 +58,7 @@ class Modules_pages extends Modules_outils
     protected ?string $charger_nom_page_valider = null;
     //protected $donnee_gestionnaire = array();
 
+
     //--------------------------------------------------------
 
 
@@ -90,6 +91,18 @@ class Modules_pages extends Modules_outils
     {
         $this->page_specifique = ($get_utilisateur_bdd_ok ? $page_specifique_demander : -1);
         return $this->page_specifique;
+    }
+
+    /** Permet de récuperer le contenu de la page créé dans generer
+     * pour en suite l'utiliser dans l'application qui affiche la page
+     * à l'utilisateur
+     * @param string $nom_page
+     * @return false|string
+     */
+    public function recuperer_cache(string $nom_page): bool|string
+    {
+        //return file_get_contents($page);
+        return CACHE . $nom_page . '.html.php';
     }
 
     public function affichage($page)
@@ -143,7 +156,56 @@ class Modules_pages extends Modules_outils
 
             if (str_contains($page_potentiel, '_')) {
                 $donnee_parties = explode('_', $page_potentiel);
-                if ($donnee_parties[0] == 'page') {
+                //var_dump($this->donnee_gestionnaire_ID);
+                if ($donnee_parties[0] == 'ac') {
+
+                    $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
+                    $tableau = $page_en_cache->get_page_en_cache();
+                    $flipped = array_flip($tableau);
+
+                    $cellules = strlen($donnee_parties[1]) - 1;
+                    $decode = '';
+                    for ($curseur = 0; $curseur < $cellules; $curseur += 2) {
+
+                        $deuxdigit = substr($donnee_parties[1], $curseur, 2);
+                        if (array_key_exists($deuxdigit, $this->alpha_codec)) {
+                            $decode .= $this->alpha_codec[$deuxdigit];
+                        } else {
+                            return null;
+                        }
+                    }
+
+                    if ($decode === '') return null;
+
+                    // var_dump($decode);
+                    // ne pas oublier la gestion des ';' avec alpha_codec
+                    // pour une gestion argument multiple
+                    if (str_contains($decode, ';')) {
+                        $separer = explode(';', $decode);
+                        $this->arguments_url = $separer;
+                        $decode = $separer[0];
+                    }
+                    // var_dump($this->arguments_url);
+                    // var_dump($decode);
+
+                    if (array_key_exists($decode, $flipped)) {
+                        $page_num_demander = $flipped[$decode];
+                    } else {
+                        return null;
+                    }
+
+                    if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
+                        return intval($page_num_demander);
+                    }
+
+                    if (is_null($fonction_dutilisation)) {
+                        return intval($page_num_demander);
+                    } else {
+                        return null;
+                    }
+
+
+                } else if ($donnee_parties[0] == 'page') {
 
                     $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
                     $tableau = $page_en_cache->get_page_en_cache();
@@ -194,25 +256,13 @@ class Modules_pages extends Modules_outils
     }
 
 
-    /** Permet de récuperer le contenu de la page créé dans generer
-     * pour en suite l'utiliser dans l'application qui affiche la page
-     * à l'utilisateur
-     * @param string $nom_page
-     * @return false|string
-     */
-    public function recuperer_cache(string $nom_page): bool|string
-    {
-        //$page = CACHE . $nom_page . '.html.php';
-        //return file_get_contents($page);
-        return "./ressources/cache/$nom_page.html.php";
-    }
-
     /** Cette methode permet de récupérer le fichier .json d'un profil de page créé et d'en exploité les données
      * cette fonction est necessaire à la génération d'une page avant ça mise en cache
      * @param $nom_profil
      * @return array|bool|string
      */
-    public function get_profile($nom_profil): array|bool|string
+    public
+    function get_profile($nom_profil): array|bool|string
     {
         $donnee = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.json');
         $tableau_donnee = json_decode($donnee, true);
@@ -244,7 +294,8 @@ class Modules_pages extends Modules_outils
      * @param array $parties_relier
      * @return array|false|string|string[]
      */
-    public function construction_page(string $nom_profil, string|null $fichier_corps = '', array|null $parties_relier = array(), bool $pages_non_profil = false): array|bool|string
+    public
+    function construction_page(string $nom_profil, string|null $fichier_corps = '', array|null $parties_relier = array(), bool $pages_non_profil = false): array|bool|string
     {
         /*if ($pages_non_profil == true) {
 
@@ -411,7 +462,8 @@ class Modules_pages extends Modules_outils
      * @param bool $force
      * @param int|float $temps_max
      */
-    public function mise_en_cache(
+    public
+    function mise_en_cache(
         string $nom_fichier_genrer,
         bool   $force = false,
         int    $temps_max = (60 * 60 * 24 * 14) // 3600s x 24h x 14j
@@ -489,7 +541,8 @@ class Modules_pages extends Modules_outils
      *      vous devrez mettre vos fichier spécifique ici
      * @param $nom_du_profil
      */
-    public function preparation_mise_encache($nom_du_profil)
+    public
+    function preparation_mise_encache($nom_du_profil)
     {
 
         if ($this->cedossier_existe_il(CONTENUS . $nom_du_profil)) {
@@ -531,7 +584,8 @@ class Modules_pages extends Modules_outils
      * @param $dossier
      * @return bool
      */
-    private function cedossier_existe_il($dossier): bool
+    private
+    function cedossier_existe_il($dossier): bool
     {
         return (file_exists($dossier) && is_dir($dossier));
     }
@@ -540,7 +594,8 @@ class Modules_pages extends Modules_outils
      * @param $dossier_origine
      * @param $dossier_destination
      */
-    private function copyer_fichiers_dans($dossier_origine, $dossier_destination)
+    private
+    function copyer_fichiers_dans($dossier_origine, $dossier_destination)
     {
         var_dump($dossier_origine, $dossier_destination);
         $liste_fichiers = new FilesystemIterator($dossier_origine, FilesystemIterator::SKIP_DOTS);
@@ -561,7 +616,8 @@ class Modules_pages extends Modules_outils
      * @param string $nom_page
      * @param string $donnee_page
      */
-    public function generer(string $nom_page, string $donnee_page)
+    public
+    function generer(string $nom_page, string $donnee_page)
     {
         $fp = fopen(GENERER . $nom_page, 'w');
         fwrite($fp, $donnee_page);
@@ -573,7 +629,8 @@ class Modules_pages extends Modules_outils
      * @param string $nom_page
      * @return false|string
      */
-    public function recuperer_generer(string $nom_page): bool|string
+    public
+    function recuperer_generer(string $nom_page): bool|string
     {
         return file_get_contents(GENERER . $nom_page);
     }
@@ -582,13 +639,11 @@ class Modules_pages extends Modules_outils
      * c'est le dernier element qui indique ou se trouve l'utilisateur
      * @return int
      */
-    public function get_page_specifique(): int
+    public
+    function get_page_specifique(): int
     {
         return $this->page_specifique;
     }
-
-
-
 
 
     /* !!!! à finir obligatoirement !!!!
@@ -618,7 +673,8 @@ class Modules_pages extends Modules_outils
      * [$charger_nom_page_non_valider] vers la variable [$charger_nom_page_valider]
      *
      */
-    public function charger_page_valider()
+    public
+    function charger_page_valider()
     {
         $this->charger_nom_page_valider = $this->charger_nom_page_non_valider;
     }
@@ -627,7 +683,8 @@ class Modules_pages extends Modules_outils
      * @param string $clee_authentification_temporaire
      * @return array
      */
-    private function get_verification_clee_authentification_temporaire(string $clee_authentification_temporaire): array
+    private
+    function get_verification_clee_authentification_temporaire(string $clee_authentification_temporaire): array
     {
         return array();
     }
@@ -635,7 +692,8 @@ class Modules_pages extends Modules_outils
     /** permet d'actualisé le temps d'utilisation de la clé authentifiacation
      *
      */
-    private function set_actualisation_temps_restant()
+    private
+    function set_actualisation_temps_restant()
     {
     }
 
@@ -643,7 +701,8 @@ class Modules_pages extends Modules_outils
      * @param int $page_specifique_demander
      * @return false
      */
-    private function get_verifier_page_specifique_demander(int $page_specifique_demander): bool
+    private
+    function get_verifier_page_specifique_demander(int $page_specifique_demander): bool
     {
 
         $Modules_bdd = &$this->Donnee_selectionner_du_gestionnaire('Modules_bdd');
