@@ -245,7 +245,7 @@ CONTENU;
             new FilesystemIterator(GENERER, FilesystemIterator::SKIP_DOTS)));
 
         $callback2 = function ($class_fichier) use (&$liste_fichier) {
-            $nom = $class_fichier->getBasename('.html');
+            $nom = $class_fichier->getBasename('.html.php');
             if (!is_dir(CACHE . $nom)) {
                 $liste_fichier['CACHE'][] = $nom;
             }

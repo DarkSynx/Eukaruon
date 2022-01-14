@@ -41,7 +41,7 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
             //echo 'Mise en cache!' . PHP_EOL;
             break;
         case 'supprimer':
-            @unlink(CACHE . $donnees_serveur['valeur'] . '.html');
+            @unlink(CACHE . $donnees_serveur['valeur'] . '.html.php');
             @unlink(GENERER . $donnees_serveur['valeur'] . '.html');
             @delTree(CONTENUS . $donnees_serveur['valeur']);
             //echo 'Supprimer!' . PHP_EOL;

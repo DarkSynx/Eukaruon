@@ -17,7 +17,18 @@ class Euka
             modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
         );
 
-        echo $Modules_pages->afficher_la_page(-1);
+
+        $demande_de_page = $Modules_pages->recuperer_page_en_url();
+
+        if (is_null($demande_de_page)) $demande_de_page = -1;
+
+
+        var_dump($demande_de_page);
+
+
+        $Modules_pages->affichage(
+            $Modules_pages->afficher_la_page($demande_de_page)
+        );
 
         /*
         //var_dump($pilote->gestion_url());
@@ -61,7 +72,7 @@ CODE
         );
 */
 //test
-// echo "Lire le fichier cache : ", $Modules_cache->cache('test:user1023456'), PHP_EOL;
+// echo 'Lire le fichier cache : ", $Modules_cache->cache('test:user1023456'), PHP_EOL;
 //$Modules_cache->supprimer_cache('test:user1023456');
 // la preparation de la page permet de savoir quel page charger
 //if($Modules_pages->get_page_specifique());

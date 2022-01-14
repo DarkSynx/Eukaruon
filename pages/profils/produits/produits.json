@@ -1,0 +1,24 @@
+{
+  "corps": "corps.html",
+  "donnees": {
+    "LANGUE": "fr",
+    "TITRE": "test de page",
+    "BUSTE_NORMAL": {
+      "type": "PAGE",
+      "page": "buste.html"
+    },
+    "JAMBES_NORMAL": {
+      "type": "PAGE",
+      "page": "jambes.html"
+    },
+    "ARTICLES": {
+      "type": "CLASS",
+      "class": "produits",
+      "methode": "article",
+      "options": [
+        "option1",
+        "option2"
+      ]
+    }
+  }
+}

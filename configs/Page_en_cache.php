@@ -7,9 +7,10 @@ class Page_en_cache
      */
     protected array $page_en_cache = [
         -1 => 'accueil',
-        0 => 'inscription',
-        1 => 'authentification',
-        2 => 'tableau_de_bord',
+        0 => 'produits',
+        1 => 'inscription',
+        2 => 'authentification',
+        3 => 'tableau_de_bord',
     ];
 
     public function get_page_en_cache()

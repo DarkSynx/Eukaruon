@@ -92,27 +92,107 @@ class Modules_pages extends Modules_outils
         return $this->page_specifique;
     }
 
+    public function affichage($page)
+    {
+        header('Content-type: text/html; charset=utf-8');
+        include_once($page);
+        // die();
+    }
+
     public function afficher_la_page(?int $numero_de_page = null): bool|string
     { // par défault vide va renvoyer à l'acceuil
 
-
+        //var_dump($numero_de_page);
         if (is_null($numero_de_page)) {
             $numero_de_page = $this->page_specifique;
         }
 
         $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
         $tableau = $page_en_cache->get_page_en_cache();
-        $page_demander = $tableau[$numero_de_page];
 
+        if (array_key_exists($numero_de_page, $tableau)) {
+            $page_demander = $tableau[$numero_de_page];
+        } else {
+            $numero_de_page = -1;
+            $page_demander = $tableau[$numero_de_page];
+        }
+
+        //var_dump($page_demander);
         //var_dump($this->recuperer_cache($tableau[$numero_de_page]));
 
-        if (file_exists(CACHE . $page_demander . '.html')) {
+        if (file_exists(CACHE . $page_demander . '.php')) {
             return $this->recuperer_cache($tableau[$numero_de_page]);
         }
+
         // !! erreur journal ici
         return $this->recuperer_cache($tableau[-1]);
 
     }
+
+    // à tester !!
+    public function recuperer_page_en_url($fonction_dutilisation = null): int|null
+    {
+        // utilisé ?page={numero}/{page_{nom}}
+        if (array_key_exists('page', $_GET)) {
+            $page_potentiel = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
+            $page_potentiel = str_replace(['$', '.', '!', '*', '\'', '(', ')', ',', '{', '}', '|',
+                '\\', '^', '~', '[', ']', '`', '<', '>', '#', '%', '"', ';',
+                '/', '?', ':', '@', '&', '='], '', $page_potentiel);
+
+            if (strlen($page_potentiel) == 0) return null;
+
+            if (str_contains($page_potentiel, '_')) {
+                $donnee_parties = explode('_', $page_potentiel);
+                if ($donnee_parties[0] == 'page') {
+
+                    $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
+                    $tableau = $page_en_cache->get_page_en_cache();
+                    $flipped = array_flip($tableau);
+
+                    if (array_key_exists($donnee_parties[1], $flipped)) {
+                        $page_num_demander = $flipped[$donnee_parties[1]];
+                    } else {
+                        return null;
+                    }
+
+                    if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
+                        return intval($page_num_demander);
+                    }
+
+                    if (is_null($fonction_dutilisation)) {
+                        return intval($page_num_demander);
+                    } else {
+                        return null;
+                    }
+
+                } else {
+                    return null;
+                }
+
+            } else {
+
+
+                $page_potentiel = filter_var($page_potentiel, FILTER_SANITIZE_NUMBER_INT);
+
+                if (strlen($page_potentiel) == 0) return null;
+
+                if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
+                    return intval($page_potentiel);
+                }
+
+                if (is_null($fonction_dutilisation)) {
+                    return intval($page_potentiel);
+                } else {
+                    return null;
+                }
+            }
+        } else {
+            return null;
+        }
+
+
+    }
+
 
     /** Permet de récuperer le contenu de la page créé dans generer
      * pour en suite l'utiliser dans l'application qui affiche la page
@@ -122,7 +202,9 @@ class Modules_pages extends Modules_outils
      */
     public function recuperer_cache(string $nom_page): bool|string
     {
-        return file_get_contents(CACHE . $nom_page . '.html');
+        $page = CACHE . $nom_page . '.php';
+        //return file_get_contents($page);
+        return "./ressources/cache/$nom_page.php";
     }
 
     /** Cette methode permet de récupérer le fichier .json d'un profil de page créé et d'en exploité les données
@@ -357,7 +439,7 @@ class Modules_pages extends Modules_outils
             //ob_end_flush();
             //------------
 
-            $fd = fopen($chemin_encache, 'w');
+            $fd = fopen($chemin_encache . '.php', 'w');
             if ($fd) {
                 fwrite($fd, file_get_contents(GENERER . $nom_fichier_genrer));
                 fclose($fd);
@@ -437,9 +519,11 @@ class Modules_pages extends Modules_outils
 
         /* on copy les fichiers contenu dans le profile */
         foreach ($dossier_liste as $dossier) {
-            $this->copyer_fichiers_dans(
-                PROFILS . $nom_du_profil . "/$dossier/",
-                CONTENUS . $nom_du_profil . "/$dossier/");
+            if (file_exists(PROFILS . $nom_du_profil . "/$dossier/")) {
+                $this->copyer_fichiers_dans(
+                    PROFILS . $nom_du_profil . "/$dossier/",
+                    CONTENUS . $nom_du_profil . "/$dossier/");
+            }
         }
     }
 

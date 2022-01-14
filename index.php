@@ -7,14 +7,13 @@ $time_start = microtime(true);
 
 include 'pilote.php';
 $pilote = new pilote(
-    modules_primaire: pilote::MODULES_PRIMAIRE,
-    forcer_sessionid: '12345678910111213141516'
+    modules_primaire: pilote::MODULES_PRIMAIRE
+//,forcer_sessionid: '12345678910111213141516'
 );
 
 /* Zone de code Statistique ou Autre */
 // ici c'est dédier à du code produit avant la premier page
 // comme pour des statistiques ou actions autre
-
 
 /* Fin */
 include 'Euka.php';

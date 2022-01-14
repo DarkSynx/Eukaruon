@@ -6,8 +6,8 @@
  */
 class DonneeUniqueServeur
 {
-    const PHP_VERSION = '80010';
-    const IDSERVEUR = '643cc2bb4d49a48ce89e15be63be34f6975bc32929cd7b5adb6e9dbd0265c6af';
+    const PHP_VERSION = '80011';
+    const IDSERVEUR = '7bc991bc34a733bacf1a5216410bc5354ed86d94065d5c2d1d6173d79ba2c9f9';
     const MODULES_UTILISATEUR_INSCRIT = 'Modules_bdd_sqlite';
     const LISTING_VAR = array(
         0 => 'PHP_VERSION',
