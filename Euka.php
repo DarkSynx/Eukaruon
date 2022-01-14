@@ -23,8 +23,6 @@ class Euka
         if (is_null($demande_de_page)) $demande_de_page = -1;
 
 
-        var_dump($demande_de_page);
-
 
         $Modules_pages->affichage(
             $Modules_pages->afficher_la_page($demande_de_page)

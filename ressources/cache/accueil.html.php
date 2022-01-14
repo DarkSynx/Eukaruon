@@ -16,9 +16,6 @@
 <nav>{{NAV}}</nav>
 <div id="lot_articles">
     article
-    <?php
-    echo 'xxxxxxx';
-    ?>
 </div>
 
 <footer>

@@ -120,7 +120,7 @@ class Modules_pages extends Modules_outils
         //var_dump($page_demander);
         //var_dump($this->recuperer_cache($tableau[$numero_de_page]));
 
-        if (file_exists(CACHE . $page_demander . '.php')) {
+        if (file_exists(CACHE . $page_demander . '.html.php')) {
             return $this->recuperer_cache($tableau[$numero_de_page]);
         }
 
@@ -202,9 +202,9 @@ class Modules_pages extends Modules_outils
      */
     public function recuperer_cache(string $nom_page): bool|string
     {
-        $page = CACHE . $nom_page . '.php';
+        //$page = CACHE . $nom_page . '.html.php';
         //return file_get_contents($page);
-        return "./ressources/cache/$nom_page.php";
+        return "./ressources/cache/$nom_page.html.php";
     }
 
     /** Cette methode permet de récupérer le fichier .json d'un profil de page créé et d'en exploité les données
