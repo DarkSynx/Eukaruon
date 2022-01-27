@@ -16,12 +16,14 @@ class l7
     private $_map_syntaxe = array();
     private $_data = '';
     // const TABULATION_ONOFF = false;
+    private bool $tabilation_onoff;
     private $_special_syntaxe = array();
 
     public function __construct(&$liste_syntaxe, $tabulation = false)
     {
         $this->load_syntaxe($liste_syntaxe);
-        define("TABULATION_ONOFF", $tabulation);
+        $this->tabilation_onoff = $tabulation;
+        $this->cphp_eol = ($tabulation == false) ? '' : PHP_EOL;
     }
 
     private function load_syntaxe($array_file_list): void
@@ -65,7 +67,7 @@ class l7
     public function start($data): void
     {
         $this->_data = trim($data);
-        $this->cphp_eol = (TABULATION_ONOFF == false) ? '' : PHP_EOL;
+
         // gestion post include
         $cursize = strlen($this->_data) - 1;
         $size_loaded = strlen('loaded' . chr(32));
@@ -144,7 +146,7 @@ class l7
             $this, $val, $parts['extension'],
             $this->exploder_syntaxe_parent,
             $this->exploder_syntaxe_encaps,
-            TABULATION_ONOFF
+            $this->tabilation_onoff
         );
         return $val;
 
