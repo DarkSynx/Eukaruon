@@ -11,6 +11,7 @@ class Page_en_cache
         1 => 'inscription',
         2 => 'authentification',
         3 => 'tableau_de_bord',
+        4 => 'test',
     ];
 
     public function get_page_en_cache()

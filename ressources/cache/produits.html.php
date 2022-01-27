@@ -15,7 +15,7 @@
 <div id="lot_articles">
     test de produit
     <?php
-    echo 'xxxxxxx';
+    echo 'xxxxxxxzz';
     ?>
 </div>
 

@@ -1,0 +1,80 @@
+#!doctype( html PUBLIC "-//IETF//DTD HTML 2.0//EN" );
+	#html{
+		#head{}
+			#body{
+			@txt{ test de html }
+			html.form{
+
+					#label{login}
+					#input(id='login');
+					#br;
+					#label{password}
+					#input(id='password');
+
+					%var[barfoo](int){5}
+					&for(0; < barfoo; 2){
+						 php {
+							echo "--> test";
+						}
+					}
+
+					def.bundle[mafoobar]{
+						php{
+							echo 'test2';
+						}
+						php{
+							echo 'test3';
+						}
+					}
+
+					def.use[mafoobar];
+					%use[mafoobar];
+					%mafoobar;
+					def.mafoobar;
+
+
+					%var[foobar](ARRAY){int:1, bool:true, str:3}
+					%var[barfoo](STR){test de php4}
+
+					php[foobar,barfoo]{
+						echo 'test';
+					}
+
+					%var [bar] {string:test1}
+
+					%var [foo](string){
+						so <var:bar == test1> {
+							@txt{ test2 }
+							||
+							@txt{ test3 }
+						}
+					}
+
+					so <var:foo == test2> {
+						@txt{ text 1 }
+						||
+						@txt{ text 2 }
+					}
+
+					@mon_block_de_texte_de_bar_du_haut{
+					test de html
+					}
+
+					@block1{
+						#div{test de div1}
+						#div{test de div2}
+						#div{test de div3}
+						#div{test de div4}
+					}
+
+					package.block2{
+						#div{test de div1}
+						#div{test de div2}
+						#div{test de div3}
+						#div{test de div4}
+					}
+
+
+			}
+		}
+	}

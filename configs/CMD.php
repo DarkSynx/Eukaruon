@@ -7,6 +7,7 @@ class CMD
     const MODULES_UTILISATEURS = 'Modules_utilisateurs';
     const DONNEEUNIQUESERVEUR = 'DonneeUniqueServeur';
     const PAGEENCACHE = 'Page_en_cache';
+    const MODULES_LEVEL7 = 'Modules_Level7';
 
 
     const CMD_LISTE = [
@@ -16,5 +17,6 @@ class CMD
         3 => 'MODULES_UTILISATEURS',
         4 => 'DONNEEUNIQUESERVEUR',
         5 => 'PAGEENCACHE',
+        6 => 'MODULES_LEVEL7',
     ];
 }

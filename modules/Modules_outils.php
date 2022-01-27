@@ -38,13 +38,24 @@ class Modules_outils implements interfaces_modules
         '53' => 'E', '54' => 'L', '55' => 'S', '56' => 'Y',
         '57' => 'F', '58' => 'M', '59' => 'T', '60' => 'Z',
         '61' => 'G', '62' => 'N', '63' => ';', '64' => '_',
-        '65' => '+', '66' => '#', '67' => '!', '68' => '?'
+        '65' => '+', '66' => '#', '67' => '!', '68' => '@',
+        '69' => '|', '70' => '-'
     ];
+    // ; -> arguments
+    // _ -> espaces
+    // + -> encrage visuel accéder à une partie du document
+    // # -> coordonné et couleur de pixel #RRGGBBAAXXYY|RRGGBBAAXXYY
+    //  - -> compression d'un pixel 000000000000 = -, AAAAC3000002 = -4AC3-502, E111160AAAAA = E-4160-5A
+    //  @ -> definit la taille de l'image #@HHLL|
+    // ! -> lancer des scripts spécifique
     // produits = 0614021203052218
+    // créé une fonction qui générer une chaine ac
+    // via $alpha_codec
 
     protected array $arguments_url = array();
 
     protected ?object $Modules_bdd_utilisation_rapide = null;
+
 
     public function __construct($donnee_gestionnaire = null, bool $pas_de_post_construct = false)
     {
@@ -77,6 +88,132 @@ class Modules_outils implements interfaces_modules
 
         $this->Ajouter_donnee_dans_gestionnaire($donnee_gestionnaire);
     }
+
+    protected function codec_ac($chaine, $decoder = false)
+    {
+
+        $cellules = strlen($chaine) - 1;
+        $endec = '';
+
+        if ($decoder) {
+            $table_codec = $this->alpha_codec;
+            $saut = 2;
+        } else {
+            $table_codec = array_flip($this->alpha_codec);
+            $saut = 1;
+        }
+
+        for ($curseur = 0; $curseur < $cellules; $curseur += $saut) {
+            $portion = substr($chaine, $curseur, $saut);
+            if (array_key_exists($portion, $table_codec)) {
+                $endec .= $table_codec[$portion];
+            } else {
+                return null;
+            }
+        }
+        return $endec;
+    }
+
+
+    public function pixel_decodage($encoder)
+    {
+        // prototype à finir
+        // il est préférable d'utilisé un fichier
+        // de limité la chain URL à 128px donc 1674 caractére
+        // l'objectif est de pouvoir produire des QRcode de couleur
+
+        //$decoder = '000000000000|AAAAC3000002|E111160AAAAA';
+        //$encoder = '@05550444|-|-4AC3-502|E-4160-5A|-|-4AC3-502|E-4160-5A|';
+
+        //$taille = strlen($encoder) - 1;
+        $position1 = 0;
+        $nmb_portions = substr_count($encoder, '|');
+        $num_portion = 1;
+        //echo 'nbp:', $nmb_portions, '<br/><hr>';
+        $fabrique = false;
+        $image = null;
+
+        while ($num_portion <= $nmb_portions) {
+            $position2 = strpos($encoder, '|', $position1);
+            $extraction = substr($encoder, $position1, ($position2 - $position1));
+
+            if ($extraction[0] == '@') {
+                //echo 'pt:', $num_portion, '/', $nmb_portions, ' -> ', $extraction, '<br/>';
+                $hexa_tableau = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+                $hauteur = hexdec(substr($extraction, 1, 4));
+                $largeur = hexdec(substr($extraction, 5, 4));
+                // var_dump($hauteur,$largeur);
+                if ($hauteur <= 4096 && $largeur <= 4096 && $hauteur >= 1 && $largeur >= 1) {
+                    $image = imagecreatetruecolor($largeur, $hauteur);
+                }
+                $fabrique = true;
+            } else if ($fabrique) {
+                $decp = $this->decompress_pxc($extraction);
+
+                //echo 'pt:', $num_portion, '/', $nmb_portions, ' -> ', $extraction, ' :: ', $decp, '<br/>';
+
+                $R = hexdec(substr($decp, 0, 2));
+                $G = hexdec(substr($decp, 2, 2));
+                $B = hexdec(substr($decp, 4, 2));
+                $A = hexdec(substr($decp, 6, 2));
+                $X = hexdec(substr($decp, 8, 2));
+                $Y = hexdec(substr($decp, 10, 2));
+
+                // var_dump($R, $G, $B, $A, $X, $Y);
+
+                imagesetpixel($image, $X, $Y, imagecolorallocatealpha($image, $R, $G, $B, $A));
+
+            }
+
+            $num_portion++;
+            $position1 = $position2 + 1;
+        }
+        ob_start();
+        imagepng($image);
+        $imagedata = ob_get_clean();
+        imagedestroy($image);
+        return 'data:image/png;base64,' . base64_encode($imagedata);
+    }
+
+    protected function decompress_pxc($chaine)
+    {
+        if (strlen($chaine) > 12) return null;
+
+        if ($chaine === '-') return '000000000000';
+        else {
+
+            $nmb_moins = substr_count($chaine, '-');
+            $num_moins = 0;
+            $position1 = 0;
+            //verif si hexadecimal
+            // verif ne depasse pas 12car
+            // //$repeter = hexdec($extraction[1]);
+            // //$car_repeter = str_repeat($extraction[1],$repeter);
+            // //str_replace($chaine,)
+            $tableau_parties = array();
+            while ($num_moins < $nmb_moins) {
+                $position2 = strpos($chaine, '-', $position1);
+                $extraction = substr($chaine, $position2, 3);
+                $tableau_parties[] = $extraction;
+                $num_moins++;
+                $position1 = $position2 + 3;
+            }
+            //var_dump($tableau_parties);
+            $hexa_tableau = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+            foreach ($tableau_parties as $valeur) {
+                if (in_array($valeur[1], $hexa_tableau)) {
+                    $repeter = hexdec($valeur[1]);
+                    $car_repeter = str_repeat($valeur[2], $repeter);
+                    $chaine = str_replace($valeur, $car_repeter, $chaine);
+                } else {
+                    return null;
+                }
+            }
+            return $chaine;
+        }
+    }
+
+
 
     // seul post_construct est en minuscule
 

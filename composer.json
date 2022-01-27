@@ -15,6 +15,7 @@
   ],
   "require": {
     "ext-sqlite3": "*",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "ext-gd": "*"
   }
 }

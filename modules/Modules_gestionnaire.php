@@ -54,6 +54,7 @@ class Modules_gestionnaire
         $this->set_DonneeUniqueServeur();
         $this->set_Page_en_cache();
         $this->set_Modules_bdd();
+        $this->set_Modules_Level7();
         $this->set_Modules_autorisations();
 
 
@@ -98,6 +99,17 @@ class Modules_gestionnaire
         $this->liste_modules_instance($this->name_space('modules') . 'Modules_bdd', true);
         //$this->Modules_bdd->set_selection_module_bdd('Modules_bdd_sqlite');
     }
+
+    /** Permet de charger le module Level7
+     *
+     */
+    public function set_Modules_Level7()
+    {
+        $this->generer_drapeau_tableau('Modules_Level7');
+        $this->liste_modules_instance($this->name_space('modules') . 'Modules_Level7', true);
+        //$this->Modules_bdd->set_selection_module_bdd('Modules_bdd_sqlite');
+    }
+
 
     protected function set_Modules_autorisations()
     {

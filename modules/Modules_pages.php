@@ -163,17 +163,8 @@ class Modules_pages extends Modules_outils
                     $tableau = $page_en_cache->get_page_en_cache();
                     $flipped = array_flip($tableau);
 
-                    $cellules = strlen($donnee_parties[1]) - 1;
-                    $decode = '';
-                    for ($curseur = 0; $curseur < $cellules; $curseur += 2) {
-
-                        $deuxdigit = substr($donnee_parties[1], $curseur, 2);
-                        if (array_key_exists($deuxdigit, $this->alpha_codec)) {
-                            $decode .= $this->alpha_codec[$deuxdigit];
-                        } else {
-                            return null;
-                        }
-                    }
+                    $decode = $this->codec_ac($donnee_parties[1], decoder: true);
+                    //var_dump($decode);
 
                     if ($decode === '') return null;
 
@@ -258,6 +249,10 @@ class Modules_pages extends Modules_outils
 
     /** Cette methode permet de récupérer le fichier .json d'un profil de page créé et d'en exploité les données
      * cette fonction est necessaire à la génération d'une page avant ça mise en cache
+     * dans le Json il devra y avoir si dessous syntaxe pour definir l'exploitatation de L7
+     * "donnees": {
+     * "syntaxe": "L7"
+     *  }
      * @param $nom_profil
      * @return array|bool|string
      */
@@ -267,23 +262,36 @@ class Modules_pages extends Modules_outils
         $donnee = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.json');
         $tableau_donnee = json_decode($donnee, true);
         $nom_specifique = explode('_', basename($nom_profil));
-        if ($nom_specifique[0] == 'page') {
-            return $this->construction_page(
-                $nom_profil,
-                $tableau_donnee['corps'],
-                $tableau_donnee['donnees'],
-                true
-            );
-        } else {
 
+        if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
+                $tableau_donnee['donnees']['syntaxe'] == 'L7' ||
+                $tableau_donnee['donnees']['syntaxe'] == 'l7'
+            )) {
+
+
+            //$Modules_Level7 = new \Eukaruon\modules\Modules_Level7();
+
+            if (empty($this->donnee_gestionnaire['Modules_Level7']) || is_null($this->donnee_gestionnaire['Modules_Level7'])) {
+                include_once MODULES . 'Modules_Level7.php';
+                $Modules_Level7 = new Modules_Level7(null, true);
+                // var_dump($Modules_Level7);
+            } else {
+                var_dump($this->donnee_gestionnaire);
+                $Modules_Level7 = &$this->donnee_gestionnaire['Modules_Level7'];
+            }
+
+
+            $donee_exploite = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.l7');
+            return $Modules_Level7->generer_l7($donee_exploite);
+
+        } else {
             return $this->construction_page(
                 $nom_profil,
                 $tableau_donnee['corps'],
                 $tableau_donnee['donnees'],
-                false
+                (($nom_specifique[0] == 'page') ? true : false)
             );
         }
-
     }
 
     /** Cette methode permet de construire une page par rapport au profile de celle-ci
