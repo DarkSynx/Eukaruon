@@ -1,8 +1,8 @@
 #
 
-Gestion Administrative localhost/Eukaruon/administration/index.php
+Gestion Administrative >> http://localhost/Eukaruon/administration/index.php
 
-Page Utilisateur Webhttp://localhost/Eukaruon/index.php
+Page Utilisateur Web >> http://localhost/Eukaruon/index.php
 
 // fini de commenté chaque fonction 
 // créé un wiki
