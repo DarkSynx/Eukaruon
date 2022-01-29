@@ -1,5 +1,11 @@
 #
 
+Gestion Administrative localhost/Eukaruon/administration/index.php
+Page Utilisateur Webhttp://localhost/Eukaruon/index.php
+
+// fini de commenté chaque fonction 
+// créé un wiki
+
 Exemple :
 
 ![image](https://user-images.githubusercontent.com/9467611/136052482-6a6b2ac4-190b-4c44-92f1-2302d95eadf7.png)
