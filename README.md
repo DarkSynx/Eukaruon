@@ -5,7 +5,10 @@ Gestion Administrative >> http://localhost/Eukaruon/administration/index.php
 Page Utilisateur Web >> http://localhost/Eukaruon/index.php
 
 // fini de commenté chaque fonction 
+
 // créé un wiki
+
+// Gestion du format Level 7
 
 Exemple :
 
