@@ -28,7 +28,9 @@
         module_a_charger: 'Modules_pages',
         modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
     );
-    
+
+    $Modules_pages->gen_alpha();
+    var_dump($Modules_pages);
 
     ?>
 </div>

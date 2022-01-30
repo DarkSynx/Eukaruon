@@ -41,6 +41,7 @@ class Modules_outils implements interfaces_modules
         '65' => '+', '66' => '#', '67' => '!', '68' => '@',
         '69' => '|', '70' => '-'
     ];
+    // // ahoubipvcjqwdkrxelsyfmtzgn4702581369AHOUBIPVCJQWDKRXELSYFMTZGN;_+#!@|-
     // ; -> arguments
     // _ -> espaces
     // + -> encrage visuel accéder à une partie du document
@@ -56,6 +57,12 @@ class Modules_outils implements interfaces_modules
 
     protected ?object $Modules_bdd_utilisation_rapide = null;
 
+    public function gen_alpha()
+    {
+        foreach ($this->alpha_codec as $key => $val) {
+            echo $val;
+        }
+    }
 
     public function __construct($donnee_gestionnaire = null, bool $pas_de_post_construct = false)
     {
