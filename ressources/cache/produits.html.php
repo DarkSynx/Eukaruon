@@ -15,7 +15,21 @@
 <div id="lot_articles">
     test de produit
     <?php
-    echo 'xxxxxxxzz';
+
+    use Eukaruon\configs\CMD;
+    use Eukaruon\pilote;
+
+    $pilote = new pilote(
+        modules_primaire: pilote::MODULES_PRIMAIRE
+    //,forcer_sessionid: '12345678910111213141516'
+    );
+
+    $Modules_pages = $pilote->Charger_le_module(
+        module_a_charger: 'Modules_pages',
+        modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
+    );
+    
+
     ?>
 </div>
 
