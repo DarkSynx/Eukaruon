@@ -62,11 +62,13 @@ class pilote
     {
         if (!is_null($forcer_sessionid)) session_id($forcer_sessionid);
 
-        session_start();
+        if (session_status() != PHP_SESSION_ACTIVE) session_start();
 
 
         if (!is_null($modules_primaire)) {
             $this->Inclure_fichier($modules_primaire);
+        } else {
+            $this->Inclure_fichier(self::MODULES_PRIMAIRE);
         }
 
         $this->Modules_gestionnaire = new Modules_gestionnaire(self::LIST_EXCEPTION_MODULE, self::LIST_NAME_SPACE);

@@ -17,20 +17,26 @@
     <?php
 
     use Eukaruon\configs\CMD;
+    use Eukaruon\modules\Modules_habillage;
     use Eukaruon\pilote;
 
-    $pilote = new pilote(
-        modules_primaire: pilote::MODULES_PRIMAIRE
-    //,forcer_sessionid: '12345678910111213141516'
-    );
-
+    $pilote = new pilote();
     $Modules_pages = $pilote->Charger_le_module(
         module_a_charger: 'Modules_pages',
         modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
     );
 
-    $Modules_pages->gen_alpha();
-    var_dump($Modules_pages);
+
+    $output = Modules_habillage::de("  la réponse est Non   ")
+        ->appliquer("trim")
+        ->appliquer("htmlentities")
+        ->appliquer("h1", ['style' => 'color:red;'])
+        ->appliquer("body")
+        ->appliquer("html")
+        ->recuperer();
+
+
+    echo $output;
 
     ?>
 </div>

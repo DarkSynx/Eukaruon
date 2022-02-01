@@ -5,9 +5,11 @@ class produits
 {
     public function article()
     {
-        return "test de produit     
-        <?php
-        echo 'xxxxxxx';
-        ?>";
+        return <<<'EOD'
+            test de produit
+            <?php
+            echo 'xxxxxxx';
+            ?>";
+        EOD;
     }
 }
