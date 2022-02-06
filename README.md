@@ -1,5 +1,5 @@
 #
-![logoeukaruon](https://user-images.githubusercontent.com/9467611/152698264-9dea51c9-e783-44a2-b9f0-b88f7679a2a0.png)
+![logoeukaruon-128](https://user-images.githubusercontent.com/9467611/152698293-47133a25-137e-41ad-917b-c926ada910ba.png)
 
 
 Gestion Administrative >> http://localhost/Eukaruon/administration/index.php
@@ -22,3 +22,6 @@ Deux chargement différent d'un module
 $Modules_gestionnaire = $pilote->Utiliser_le_gestionnaire();
 
 $submodules_test = $Modules_gestionnaire->charger_le_modules('sousmodules_test');
+
+
+![logoeukaruon](https://user-images.githubusercontent.com/9467611/152698264-9dea51c9-e783-44a2-b9f0-b88f7679a2a0.png)
