@@ -26,7 +26,7 @@ class pilote
     const MODULES_PRIMAIRE = [
         'chemins.php',
         'journal.php',
-        'installation.php'
+        //'installation.php'
     ];
 
     const LIST_EXCEPTION_MODULE = [
