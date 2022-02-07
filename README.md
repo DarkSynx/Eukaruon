@@ -1,4 +1,7 @@
 #
+![logoeukaruon-128_2](https://user-images.githubusercontent.com/9467611/152698385-2b5f557c-7ec0-4e2b-8325-5b7197a694cb.png)
+
+
 
 Gestion Administrative >> http://localhost/Eukaruon/administration/index.php
 
@@ -20,3 +23,5 @@ Deux chargement différent d'un module
 $Modules_gestionnaire = $pilote->Utiliser_le_gestionnaire();
 
 $submodules_test = $Modules_gestionnaire->charger_le_modules('sousmodules_test');
+
+
