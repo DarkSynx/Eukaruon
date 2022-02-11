@@ -3,5 +3,5 @@ RewriteEngine On
 # Do not enable rewriting for files or directories that exist
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /Eukaruon/index.php/$2 [L]
+RewriteRule ^(.*)$ /Eukaruon/index.php?page=$1 [L]
 </IfModule>

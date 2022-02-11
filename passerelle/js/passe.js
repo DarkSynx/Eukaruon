@@ -18,7 +18,7 @@ function formulaire_action(nom_identifiant, list_nom_objet, appeller_une_page = 
                 alert(msg);
             }
             if (appeller_une_page !== '') {
-                window.open('?page=page_' + appeller_une_page);
+                window.open('page_' + appeller_une_page, "_self");
             }
         })
         .fail(function () {

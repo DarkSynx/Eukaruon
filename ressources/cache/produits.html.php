@@ -17,7 +17,7 @@
     test de produit
     <form method="post">
         <label>test
-            <input type="texte" name="test" value="test">
+            <input type="text" name="test" value="test">
         </label>
         <input type="submit" value="valider">
     </form>
@@ -25,13 +25,13 @@
 
     </script>
 
-    <?php $Modules_objets = new Modules_objets() ?>
+    <?php $Modules_objets = new  Modules_objets() ?>
 
     <?php $Modules_objets->formulaire(
         nom: '1',
         tableau_de_type: [
             ['name' => 'nom', 'type' => 'texte', 'value' => 'v1', 'placeholder' => '', 'class' => 'put'],
-            ['name' => 'prenom', 'type' => 'texte', 'value' => 'v2', 'placeholder' => '', 'class' => 'lut'],
+            ['name' => 'prenom', 'type' => 'password', 'value' => 'v2', 'placeholder' => '', 'class' => 'lut'],
         ],
         boutton_valider: 'ok',
         page_dappel: 'test',
@@ -41,8 +41,10 @@
                 border: 1px solid red;
             }
         Style
-    );
-    ?>
+    ) ?>
+
+
+
 
     <?php
 
@@ -77,6 +79,6 @@
     <div id="partie_central">{{PARTIE_CENTRAL}}</div>
     <div id="partie_basse">{{PARTIE_BASSE}}</div>
 </footer>
-<img alt=""/>
+<img src='' alt=""/>
 </body>
 </html>

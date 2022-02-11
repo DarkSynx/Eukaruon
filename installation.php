@@ -2,7 +2,7 @@
 
 include_once 'chemins.php';
 
-echo '<!DOCTYPE html><html><head><title>Eukaruon : Installation</title></head><body><h2>INSTALLATION</h2><div style="border:1px solid grey;width:95%;margin:auto;padding:15px;">';
+echo '<!DOCTYPE html><html lang="fr"><head><title>Eukaruon : Installation</title></head><body><h2>INSTALLATION</h2><div style="border:1px solid grey;width:95%;margin:auto;padding:15px;">';
 $folder = dirname($_SERVER['PHP_SELF']);
 
 $htaccess = <<<HTA
@@ -11,7 +11,7 @@ RewriteEngine On
 # Do not enable rewriting for files or directories that exist
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ $folder/index.php/$2 [L]
+RewriteRule ^(.*)$ /Eukaruon/index.php?page=$1 [L]
 </IfModule>
 HTA;
 
@@ -39,7 +39,6 @@ for ($curseur = 0; $curseur < $maxium_caractere; $curseur++) {
     $tableau_alpha_code['%' . $chiffre_en_lettre2] = $caractere_selectionner;
 }
 //var_dump($tableau_alpha_code);
-
 
 $donnees_serveur = [
     'PHP_VERSION' => (PHP_VERSION_ID >= 80000 ? PHP_VERSION_ID : 'ERROR_VERSION_PAS_PHP8_OU_SUPERIEUR'),
@@ -78,7 +77,6 @@ fwrite($DUSStream, 'const LISTING_VAR = ' . var_export(array_keys($donnees_serve
 
 /*
 fwrite($DUSStream, 'public function get_linsting_var() { return  self::LISTING_VAR; }' . PHP_EOL);
-
 foreach ($donnees_serveur as $cle => $valeurs) {
     fwrite($DUSStream, 'public function get_' . $cle . '() { return  self::' . $cle . '; }' . PHP_EOL);
 }

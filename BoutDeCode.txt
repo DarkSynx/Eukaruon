@@ -1,3 +1,46 @@
+
+
+//(?:(?:[<]E*.*\{(?:(?:(?:[^\{\}]|(?R)))*)\})(?:>*))
+
+(?:\{(?:(?:(?:[^\{\}]|(?R)))*)\})
+
+test voir : (?:{([[:<:]]E\:)*\W*.*(?:[^\{\}]|(?R))*})
+
+retenu : \{(?:[[:<:]]E\:)*\W*.*(?:[^\{\}]|(?R))*\}
+retenu : \{(E:)*(\W*.*)((?:[^\{\}]|(?R))*)\}
+
+-------------
+<\w+=\w+:(?:[^(\/]|(?R))*\/>
+<(\w+)=(\w+):((?:[^(\/]|(?R))*)\/>
+>>>
+<E=test:
+        nom='1';
+        tableau_de_type=[
+            ['name' : 'nom', 'type' : 'texte', 'value' : 'v1', 'placeholder' : '', 'class' : 'put'],
+            ['name' : 'prenom', 'type' : 'texte', 'value' : 'v2', 'placeholder' : '', 'class' : 'lut'],
+        ];
+        boutton_valider='ok';
+        page_dappel='test';
+        injection=['nom' : ['code html injecter', 'avant']];
+        stylecss=['.put' : ['border':'1px solid red']];
+/>
+
+https://regex101.com/r/3ZVw23/4
+>>>
+        nom='1';
+        tableau_de_type=[
+            ['name' : 'nom', 'type' : 'texte', 'value' : 'v1', 'placeholder' : '', 'class' : 'put'],
+            ['name' : 'prenom', 'type' : 'texte', 'value' : 'v2', 'placeholder' : '', 'class' : 'lut'],
+        ];
+        boutton_valider='ok';
+        page_dappel='test';
+        injection=['nom' : ['code html injecter', 'avant']];
+        stylecss=['.put' : ['border':'1px solid red']];
+
+        rettenu (\w+)=((?:[^\;$]|(?R))*)\;*
+
+
+--------------------
             $requette = "SELECT inscription.idsession, inscription.date_session, utilisateurs.nom, utilisateurs.mail,
                                 utilisateurs.bio, utilisateurs.url, utilisateurs.entreprise
                     FROM inscription JOIN lien

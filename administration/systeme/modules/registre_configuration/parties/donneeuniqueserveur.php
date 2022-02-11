@@ -15,7 +15,9 @@ foreach (DonneeUniqueServeur::LISTING_VAR as $index) {
             $plus = '';
             $type = 'text';
     }
-    $contenu .= "<tr><td><label><b>{$index}</b></label></td><td><input id='{$index}' class='input_donneeuniqueserveur' type='{$type}' name='{$index}' value='{$valeur}' placeholder='{$index}'></td><td>{$plus}</td></tr>";
+    if (!is_array($valeur)) {
+        $contenu .= "<tr><td><label><b>{$index}</b></label></td><td><input id='{$index}' class='input_donneeuniqueserveur' type='{$type}' name='{$index}' value='{$valeur}' placeholder='{$index}'></td><td>{$plus}</td></tr>";
+    }
 }
 $contenu .= <<<DEB
 </table>

@@ -79,6 +79,15 @@ class Modules_pages extends Modules_outils
         $this->identifiant_utilisateur = $identifiant_utilisateur;
     }
 
+    public function mise_en_stockage(array $variable = array())
+    {
+        $_SESSION['stockage'] = $variable;
+    }
+
+    public function recuperation_en_stockage(array $variable = array())
+    {
+        return $_SESSION['stockage'];
+    }
 
     /** Permet de préparer la Page par rapport au Cookies de l'utilisateur s'il a
      * une clé d'authentification mais aussi une page spécifique définit
@@ -709,8 +718,7 @@ class Modules_pages extends Modules_outils
      * @param int $page_specifique_demander
      * @return false
      */
-    private
-    function get_verifier_page_specifique_demander(int $page_specifique_demander): bool
+    private function get_verifier_page_specifique_demander(int $page_specifique_demander): bool
     {
 
         $Modules_bdd = &$this->Donnee_selectionner_du_gestionnaire('Modules_bdd');
