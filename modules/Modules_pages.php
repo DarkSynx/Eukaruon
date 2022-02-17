@@ -151,6 +151,23 @@ class Modules_pages extends Modules_outils
 
     }
 
+    public function tableau_page_en_cache()
+    {
+        $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
+        return $page_en_cache->get_page_en_cache();
+    }
+
+    public function dev_auto_generer_mise_en_cache($demande_de_page)
+    {
+        $tableau_page_en_cache = $this->tableau_page_en_cache();
+        $nom_page = $tableau_page_en_cache[$demande_de_page];
+        $this->preparation_mise_encache($nom_page);
+        $page_construite = $this->get_profile($nom_page);
+        $this->generer($nom_page . '.html', $page_construite);
+        $this->mise_en_cache($nom_page . '.html');
+    }
+
+
     // à tester !!
     public function recuperer_page_en_url($fonction_dutilisation = null): int|null
     {
@@ -583,8 +600,9 @@ class Modules_pages extends Modules_outils
         }
         // si non on construit
         $dossier_liste = ['b64', 'css', 'img', 'js', 'langues', 'scripts', 'autres'];
+
         foreach ($dossier_liste as $dossier) {
-            mkdir(CONTENUS . $nom_du_profil . '/' . $dossier, 0777, true);
+            @mkdir(CONTENUS . $nom_du_profil . '/' . $dossier, 0777, true);
         }
 
         /* on copy les fichiers contenu dans le profile */
@@ -614,7 +632,7 @@ class Modules_pages extends Modules_outils
     private
     function copyer_fichiers_dans($dossier_origine, $dossier_destination)
     {
-        var_dump($dossier_origine, $dossier_destination);
+        //var_dump($dossier_origine, $dossier_destination);
         $liste_fichiers = new FilesystemIterator($dossier_origine, FilesystemIterator::SKIP_DOTS);
         foreach ($liste_fichiers as $fichier) {
             $nom_fichier = $fichier->getBasename();

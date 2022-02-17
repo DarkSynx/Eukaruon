@@ -1,0 +1,143 @@
+body {
+    font-family: arial, sans-serif;
+}
+
+div#page {
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+header {
+    border: 1px solid red;
+    -moz-box-flex: 1;
+    flex-grow: 1;
+    -moz-box-align: end;
+    align-items: flex-end;
+    z-index: 3;
+    user-select: none;
+    -moz-box-align: stretch;
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+    align-items: stretch;
+    border: 0px solid black;
+    box-sizing: border-box;
+    display: flex;
+    flex-basis: auto;
+    flex-direction: column;
+    flex-shrink: 0;
+    margin: 0px;
+    min-height: 0px;
+    min-width: 0px;
+    padding: 0px;
+    position: relative;
+    z-index: 0;
+    pointer-events: none !important;
+    scrollbar-color: rgb(61, 65, 69) rgb(21, 24, 28);
+    font-size: 15px;
+}
+
+main {
+    border: 1px solid green;
+}
+
+
+div.boutton_ajustable {
+    width: 251px;
+    height: 58px;
+    border: 1px solid red;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+div.boutton_ajustable div.boutton_ajustable_block {
+    padding: 12px;
+    max-width: 100%;
+    border: 1px solid blue;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+div.boutton_ajustable div.boutton_ajustable_img {
+    width: 26px;
+    height: 26px;
+    border: 1px solid green;
+}
+
+div.boutton_ajustable div.boutton_ajustable_img img {
+    width: 21px;
+    height: 21px;
+    padding: 2px;
+
+}
+
+div.boutton_ajustable div.boutton_ajustable_text {
+    height: 26px;
+    border: 1px solid yellow;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+div.boutton_ajustable div.boutton_ajustable_text span {
+    border: 1px solid blue;
+    margin-left: 20px;
+    margin-right: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    line-height: 24px;
+    font-size: 20px;
+    overflow-wrap: break-word;
+    white-space: inherit;
+    box-sizing: border-box;
+
+}
+
+
+/* ------- F O R M --------- */
+form.objet_formulaire {
+    color: #313131;
+    font-size: 14px;
+    width: 480px;
+    border: 5px solid grey;
+    padding: 5px;
+
+}
+
+form.objet_formulaire div {
+    padding: 5px;
+}
+
+form.objet_formulaire label span {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+form.objet_formulaire label input {
+    width: calc(100% - 20px);
+    padding: 5px;
+    border: 3px solid darkgrey;
+}
+
+form.objet_formulaire input[type="button"] {
+    background-color: #f8f9fa;
+    border: 1px solid grey;
+    border-radius: 4px;
+    color: #3c4043;
+    margin: 11px 4px;
+    padding: 0 16px;
+    line-height: 27px;
+    height: 36px;
+    min-width: 54px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}

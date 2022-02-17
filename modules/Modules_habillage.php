@@ -15,7 +15,7 @@ class Modules_habillage
             'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strike', 'strong', 'style',
             'sub', 'summary', 'sup', 'svg', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time',
             'title', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr'];
-    private array $liste_tag_exception = ['img', '!DOCTYPE', 'br', 'hr', 'input'];
+    private array $liste_tag_exception = ['img', '!DOCTYPE', 'br', 'hr', 'input', 'link'];
 
     public function __construct($value)
     {
@@ -50,6 +50,11 @@ class Modules_habillage
         return $this->value;
     }
 
+    public function afficher()
+    {
+        echo $this->value;
+    }
+
     private function trim($value)
     {
         return trim($value);
@@ -62,12 +67,12 @@ class Modules_habillage
 
     private function text($value, $argument)
     {
-        return "$argument$value";
+        return "<span>$argument</span>$value";
     }
 
     private function text_apres($value, $argument)
     {
-        return "$value$argument";
+        return "$value<span>$argument</span>";
     }
 
     private function tag($tag, $value, $argument)

@@ -41,6 +41,32 @@ https://regex101.com/r/3ZVw23/4
 
 
 --------------------
+json profil
+
+{
+  "corps": "corps.html",
+  "donnees": {
+    "LANGUE": "fr",
+    "TITRE": "test de page",
+    /*
+    "ARTICLES": {
+      "type": "CLASS",
+      "class": "accueil",
+      "methode": "article",
+      "options": [
+        "option1",
+        "option2"
+      ]*/
+    }
+  }
+}
+
+
+
+
+
+
+-----------------------
             $requette = "SELECT inscription.idsession, inscription.date_session, utilisateurs.nom, utilisateurs.mail,
                                 utilisateurs.bio, utilisateurs.url, utilisateurs.entreprise
                     FROM inscription JOIN lien

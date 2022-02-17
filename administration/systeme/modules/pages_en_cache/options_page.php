@@ -12,11 +12,13 @@ include REROOT_ADMIN . 'chemins.php';
 $administration_outils = new administration_outils();
 if ($administration_outils->tester_la_validiter_de_la_demande()) {
 
-    include CHEMIN_SITE . 'chemins.php';
 
+    include CHEMIN_SITE . 'chemins.php';
+    include CONFIGS . 'DonneeUniqueServeur.php';
     include INTERFACES . 'interfaces_modules.php';
     include MODULES . 'Modules_outils.php';
     include MODULES . 'Modules_pages.php';
+
 
     $Modules_pages = new Modules_pages();
 

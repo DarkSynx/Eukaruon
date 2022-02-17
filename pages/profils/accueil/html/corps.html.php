@@ -7,7 +7,7 @@ use Eukaruon\pilote;
 
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{LANGUE}}">
 <head>
     <meta charset="UTF-8"/>
     <?php
@@ -15,7 +15,7 @@ use Eukaruon\pilote;
         Modules_objets::autoload('page_produits');
     endif
     ?>
-    <title>test de page</title>
+    <title>{{TITRE}}</title>
     <?php Modules_objets::StyleTheme('grey', true) ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <?php Modules_objets::ScriptTheme('grey', true) ?>

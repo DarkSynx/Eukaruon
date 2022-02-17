@@ -1,37 +1,7 @@
 {
-  "corps": "corps.html",
+  "corps": "corps.html.php",
   "donnees": {
     "LANGUE": "fr",
-    "TITRE": "test de page",
-    "BUSTE_NORMAL": {
-      "type": "PAGE",
-      "page": "buste.html"
-    },
-    "JAMBES_NORMAL": {
-      "type": "PAGE",
-      "page": "jambes.html"
-    },
-    "ARTICLES": {
-      "type": "CLASS",
-      "class": "accueil",
-      "methode": "article",
-      "options": [
-        "option1",
-        "option2"
-      ]
-    },
-    "PARTIE_CENTRAL": {
-      "type": "LANGUE",
-      "langue": "fr",
-      "index": "text1"
-    },
-    "JSTEST": {
-      "type": "INCLURE_JS",
-      "inclure_js": "myjavascripttest.js"
-    },
-    "IMAGE_TEST": {
-      "type": "IMG",
-      "img": "toto.png"
-    }
+    "TITRE": "test de page"
   }
 }

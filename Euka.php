@@ -22,11 +22,18 @@ class Euka
 
         if (is_null($demande_de_page)) $demande_de_page = -1;
 
-
+        /* -- ---------------------------------------------------------- -- */
+        /* -- DEV auto génrer et mise en cache à supprimer en production -- */
+        /* -- ---------------------------------------------------------- -- */
+        $Modules_pages->dev_auto_generer_mise_en_cache($demande_de_page);
+        /* -- ---------------------------------------------------------- -- */
+        /* -- ---- --D E V // D E V // D E V // D E V // D E V //-- ---- -- */
+        /* -- ---------------------------------------------------------- -- */
 
         $Modules_pages->affichage(
             $Modules_pages->afficher_la_page($demande_de_page)
         );
+
 
         /*
         //var_dump($pilote->gestion_url());
