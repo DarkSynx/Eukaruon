@@ -1,5 +1,6 @@
 <?php namespace Eukaruon\modules;
 
+use Eukaruon\configs\DonneeUniqueServeur;
 use FilesystemIterator;
 
 /** Ce module à pour objectif la gestion des pages il gérera donc aussi bien la construction de profils
@@ -174,102 +175,119 @@ class Modules_pages extends Modules_outils
         // utilisé ?page={numero}/{page_{nom}}
         if (array_key_exists('page', $_GET)) {
             $page_potentiel = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING);
-            $page_potentiel = str_replace(['$', '.', '!', '*', '\'', '(', ')', ',', '{', '}', '|',
-                '\\', '^', '~', '[', ']', '`', '<', '>', '#', '%', '"', ';',
-                '/', '?', ':', '@', '&', '='], '', $page_potentiel);
-
-            if (strlen($page_potentiel) == 0) return null;
-
-            if (str_contains($page_potentiel, '_')) {
-                $donnee_parties = explode('_', $page_potentiel);
-                //var_dump($this->donnee_gestionnaire_ID);
-                if ($donnee_parties[0] == 'ac') {
-
-                    $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
-                    $tableau = $page_en_cache->get_page_en_cache();
-                    $flipped = array_flip($tableau);
-
-                    $decode = $this->codec_ac($donnee_parties[1], decoder: true);
-                    //var_dump($decode);
-
-                    if ($decode === '') return null;
-
-                    // var_dump($decode);
-                    // ne pas oublier la gestion des ';' avec alpha_codec
-                    // pour une gestion argument multiple
-                    if (str_contains($decode, ';')) {
-                        $separer = explode(';', $decode);
-                        $this->arguments_url = $separer;
-                        $decode = $separer[0];
-                    }
-                    // var_dump($this->arguments_url);
-                    // var_dump($decode);
-
-                    if (array_key_exists($decode, $flipped)) {
-                        $page_num_demander = $flipped[$decode];
-                    } else {
-                        return null;
-                    }
-
-                    if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
-                        return intval($page_num_demander);
-                    }
-
-                    if (is_null($fonction_dutilisation)) {
-                        return intval($page_num_demander);
-                    } else {
-                        return null;
-                    }
 
 
-                } else if ($donnee_parties[0] == 'page') {
+            $path_parts = pathinfo($page_potentiel);
+            $lien_intern_valide = DonneeUniqueServeur::LIEN_INTERNE_VALIDE;
 
-                    $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
-                    $tableau = $page_en_cache->get_page_en_cache();
-                    $flipped = array_flip($tableau);
+            //var_dump($path_parts);
+            //var_dump($lien_intern_valide);
+            //var_dump(in_array('/' . $path_parts['dirname'], $lien_intern_valide));
 
-                    if (array_key_exists($donnee_parties[1], $flipped)) {
-                        $page_num_demander = $flipped[$donnee_parties[1]];
-                    } else {
-                        return null;
-                    }
-
-                    if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
-                        return intval($page_num_demander);
-                    }
-
-                    if (is_null($fonction_dutilisation)) {
-                        return intval($page_num_demander);
-                    } else {
-                        return null;
-                    }
-
-                } else {
-                    return null;
-                }
-
+            if (in_array('/' . $path_parts['dirname'], $lien_intern_valide)) {
+                include RACINE . "erreur.php";
+                exit;
             } else {
 
 
-                $page_potentiel = filter_var($page_potentiel, FILTER_SANITIZE_NUMBER_INT);
+                $page_potentiel = str_replace(['$', '.', '!', '*', '\'', '(', ')', ',', '{', '}', '|',
+                    '\\', '^', '~', '[', ']', '`', '<', '>', '#', '%', '"', ';',
+                    '/', '?', ':', '@', '&', '='], '', $page_potentiel);
+
 
                 if (strlen($page_potentiel) == 0) return null;
 
-                if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
-                    return intval($page_potentiel);
-                }
+                if (str_contains($page_potentiel, '_')) {
+                    $donnee_parties = explode('_', $page_potentiel);
+                    //var_dump($this->donnee_gestionnaire_ID);
+                    if ($donnee_parties[0] == 'ac') {
 
-                if (is_null($fonction_dutilisation)) {
-                    return intval($page_potentiel);
+                        $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
+                        $tableau = $page_en_cache->get_page_en_cache();
+                        $flipped = array_flip($tableau);
+
+                        $decode = $this->codec_ac($donnee_parties[1], decoder: true);
+                        //var_dump($decode);
+
+                        if ($decode === '') return null;
+
+                        // var_dump($decode);
+                        // ne pas oublier la gestion des ';' avec alpha_codec
+                        // pour une gestion argument multiple
+                        if (str_contains($decode, ';')) {
+                            $separer = explode(';', $decode);
+                            $this->arguments_url = $separer;
+                            $decode = $separer[0];
+                        }
+                        // var_dump($this->arguments_url);
+                        // var_dump($decode);
+
+                        if (array_key_exists($decode, $flipped)) {
+                            $page_num_demander = $flipped[$decode];
+                        } else {
+                            return null;
+                        }
+
+                        if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
+                            return intval($page_num_demander);
+                        }
+
+                        if (is_null($fonction_dutilisation)) {
+                            return intval($page_num_demander);
+                        } else {
+                            return null;
+                        }
+
+
+                    } else if ($donnee_parties[0] == 'page') {
+
+                        $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
+                        $tableau = $page_en_cache->get_page_en_cache();
+                        $flipped = array_flip($tableau);
+
+                        if (array_key_exists($donnee_parties[1], $flipped)) {
+                            $page_num_demander = $flipped[$donnee_parties[1]];
+                        } else {
+                            return null;
+                        }
+
+                        if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
+                            return intval($page_num_demander);
+                        }
+
+                        if (is_null($fonction_dutilisation)) {
+                            return intval($page_num_demander);
+                        } else {
+                            return null;
+                        }
+
+                    } else {
+                        return null;
+                    }
+
                 } else {
-                    return null;
+
+
+                    $page_potentiel = filter_var($page_potentiel, FILTER_SANITIZE_NUMBER_INT);
+
+                    if (strlen($page_potentiel) == 0) return null;
+
+                    if (is_callable($fonction_dutilisation) && $fonction_dutilisation()) {
+                        return intval($page_potentiel);
+                    }
+
+                    if (is_null($fonction_dutilisation)) {
+                        return intval($page_potentiel);
+                    } else {
+                        return null;
+                    }
                 }
             }
         } else {
             return null;
         }
 
-
+        return null;
     }
 
 

@@ -20,6 +20,7 @@ class Euka
 
         $demande_de_page = $Modules_pages->recuperer_page_en_url();
 
+
         if (is_null($demande_de_page)) $demande_de_page = -1;
 
         /* -- ---------------------------------------------------------- -- */

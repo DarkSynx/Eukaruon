@@ -1,6 +1,10 @@
 <?php namespace Eukaruon;
 
+
+use FilesystemIterator;
+
 include_once 'chemins.php';
+
 
 echo '<!DOCTYPE html><html lang="fr"><head><title>Eukaruon : Installation</title></head><body><h2>INSTALLATION</h2><div style="border:1px solid grey;width:95%;margin:auto;padding:15px;">';
 $folder = dirname($_SERVER['PHP_SELF']);
@@ -38,13 +42,17 @@ for ($curseur = 0; $curseur < $maxium_caractere; $curseur++) {
     //var_dump($chiffre_en_lettre2);
     $tableau_alpha_code['%' . $chiffre_en_lettre2] = $caractere_selectionner;
 }
+
 //var_dump($tableau_alpha_code);
+$recurcive_path = [];
+rdir(RACINE, $recurcive_path);
 
 $donnees_serveur = [
     'PHP_VERSION' => (PHP_VERSION_ID >= 80000 ? PHP_VERSION_ID : 'ERROR_VERSION_PAS_PHP8_OU_SUPERIEUR'),
     'IDSERVEUR' => bin2hex($bytes),
     'MODULES_UTILISATEUR_INSCRIT' => 'Modules_bdd_sqlite',
-    'ALPHACODE' => [$tableau_alpha_code, false]
+    'ALPHACODE' => [$tableau_alpha_code, false],
+    'LIEN_INTERNE_VALIDE' => [$recurcive_path, false]
 ];
 
 echo 'INSTALLATION 1/2: donnees_serveur <br>';
@@ -93,4 +101,26 @@ function var_export_style($valeur): string
     return str_replace(
         ['array (', ')', "[\n    ]", "=> \n    [", "[\n]", "=> \n  [", "\r", "\n", chr(32), '%'],
         ['[', ']', '[]', "=> [", '[]', "=> [", '', '', '', ''], var_export($valeur, true));
+}
+
+function rdir(string $path, array &$recurcive_path): string
+{
+    if ($path != '') {
+        $extract = substr(RACINE, 0, -1);
+        $save_path = str_replace([$extract, '\\'], ['', '/'], $path);
+        if ($save_path != '' && $save_path != '/') $recurcive_path[] = $save_path;
+
+        $array_list = iterator_to_array(new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS));
+        foreach ($array_list as $name) {
+            $pathname = $name->getpathname();
+            if (is_dir($pathname) && $name->getfilename()[0] != '.'
+                && $name->getfilename() != 'administration'
+                // on va exclure le dossier administration
+            ) {
+                $path = rdir($pathname, $recurcive_path);
+            }
+        }
+        return $path;
+    }
+    return '';
 }

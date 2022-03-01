@@ -83,7 +83,7 @@ class Modules_objets
     public static function scripttheme($name, $actualiser = false)
     {
         Modules_habillage::de()
-            ->appliquer("script", ['src' => 'ressources/themes/' . $name . '/action.js' . ($actualiser ? '?t=' . time() : ''), 'rel' => "stylesheet"])
+            ->appliquer("script", ['src' => 'ressources/themes/' . $name . '/actions.js' . ($actualiser ? '?t=' . time() : ''), 'rel' => "stylesheet"])
             ->afficher();
     }
 

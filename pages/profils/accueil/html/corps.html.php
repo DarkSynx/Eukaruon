@@ -26,57 +26,55 @@ use Eukaruon\pilote;
     <?php if (Modules_objets::session('utilisateur', 'inscript')):
         /* Vide si utilisateur inscrit */
     else: ?>
-        <div id="colone_menu">
+        <header>
+            <div id="colone_menu">
+                <?php Modules_objets::boutton_ajustable('Accueil', 'logoeukaruon-128_2.png'); ?>
+                <?php Modules_objets::boutton_ajustable('sqdlkjsqdqsd', 'logoeukaruon-128_2.png'); ?>
+                <?php Modules_objets::boutton_ajustable('Accqsdqsueil', 'logoeukaruon-128_2.png'); ?>
+                <?php Modules_objets::boutton_ajustable('ssl', 'logoeukaruon-128_2.png'); ?>
+                <?php Modules_objets::boutton_ajustable('eoiroirtirotiotirtiit', 'logoeukaruon-128_2.png'); ?>
+            </div>
+        </header>
+        <main>
+            <div id="colone_article">
+
+                <?php Modules_objets::formulaire(
+                    nom: 'inscription',
+                    tableau_de_type: [
+                        'Label text1' => ['name' => 'nom', 'type' => 'texte', 'value' => 'v1', 'placeholder' => '', 'class' => 'put'],
+                        'Label text2' => ['name' => 'prenom', 'type' => 'password', 'value' => 'v2', 'placeholder' => '', 'class' => 'lut'],
+                    ],
+                    boutton_valider: 'ok',
+                    page_dappel: 'test',
+                    injection: ['nom' => ['<h3>INSCRIPTION</h3>', 'avant']]
+                ) ?>
+
+            </div>
+            <div id="colone_infos">
+
+                <?php
+                $pilote = new pilote();
+                $Modules_pages = $pilote->Charger_le_module(
+                    module_a_charger: 'Modules_pages',
+                    modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
+                );
 
 
-        </div>
-        <div id="colone_article">
+                $output = Modules_habillage::de("  la réponse est Non   ")
+                    ->appliquer("trim")
+                    ->appliquer("htmlentities")
+                    ->appliquer("h1", ['style' => 'color:red;'])
+                    ->appliquer("body")
+                    ->appliquer("html")
+                    ->recuperer();
 
 
-        </div>
-        <div id="colone_infos">
+                echo $output;
 
+                ?>
+            </div>
+        </main>
 
-        </div>
-
-        <?php Modules_objets::boutton_ajustable('Accueil', 'logoeukaruon-128_2.png'); ?>
-        <?php Modules_objets::boutton_ajustable('sqdlkjsqdqsd', 'logoeukaruon-128_2.png'); ?>
-        <?php Modules_objets::boutton_ajustable('Accqsdqsueil', 'logoeukaruon-128_2.png'); ?>
-        <?php Modules_objets::boutton_ajustable('ssl', 'logoeukaruon-128_2.png'); ?>
-        <?php Modules_objets::boutton_ajustable('eoiroirtirotiotirtiit', 'logoeukaruon-128_2.png'); ?>
-
-        <?php Modules_objets::formulaire(
-            nom: 'inscription',
-            tableau_de_type: [
-                'Label text1' => ['name' => 'nom', 'type' => 'texte', 'value' => 'v1', 'placeholder' => '', 'class' => 'put'],
-                'Label text2' => ['name' => 'prenom', 'type' => 'password', 'value' => 'v2', 'placeholder' => '', 'class' => 'lut'],
-            ],
-            boutton_valider: 'ok',
-            page_dappel: 'test',
-            injection: ['nom' => ['<h3>INSCRIPTION</h3>', 'avant']]
-        ) ?>
-
-
-        <?php
-        $pilote = new pilote();
-        $Modules_pages = $pilote->Charger_le_module(
-            module_a_charger: 'Modules_pages',
-            modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
-        );
-
-
-        $output = Modules_habillage::de("  la réponse est Non   ")
-            ->appliquer("trim")
-            ->appliquer("htmlentities")
-            ->appliquer("h1", ['style' => 'color:red;'])
-            ->appliquer("body")
-            ->appliquer("html")
-            ->recuperer();
-
-
-        echo $output;
-
-        ?>
 
     <?php endif ?>
 </div>
