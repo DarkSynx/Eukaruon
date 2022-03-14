@@ -18,4 +18,5 @@ class DonneeUniqueServeur
         3 => 'ALPHACODE',
         4 => 'LIEN_INTERNE_VALIDE',
     );
+
 }

@@ -1,65 +1,62 @@
+:root {
+    color: #D9D9D9;
+}
+
 body {
     font-family: arial, sans-serif;
     height: 100%;
     margin: 0;
     font-size: 15px;
     scrollbar-color: rgb(61, 65, 69) rgb(21, 24, 28);
+    background-color: #0C0C0D;
+    color: #D9D9D9;
+    /*background: url("bg.svg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;*/
 }
 
 div#page {
-    border: 1px solid black;
-    justify-content: left;
-    height: 100%;
+    /*
+    border: 10px solid greenyellow;
+     */
+
     scrollbar-color: rgb(61, 65, 69) rgb(21, 24, 28);
     font-size: 15px;
     -moz-box-align: stretch;
     box-sizing: border-box;
-    position: relative;
+    position: absolute;
     z-index: 0;
+    /*
     min-height: 774px;
+     */
+    height: 100%;
     width: 100%;
     pointer-events: auto;
-    align-items: stretch;
+
     flex-shrink: 0;
     margin: 0;
     padding: 0;
     min-width: 0;
-    display: flex;
+
     flex-basis: auto;
     -moz-box-direction: normal;
     -moz-box-orient: horizontal;
-}
 
-
-main {
     display: flex;
-    flex-basis: auto;
-    position: relative;
-    z-index: 0;
-    pointer-events: auto;
-    scrollbar-color: rgb(61, 65, 69) rgb(21, 24, 28);
-    font-size: 15px;
-    -moz-box-align: stretch;
     align-items: stretch;
-    -moz-box-pack: justify;
-    -moz-box-flex: 1;
-    flex-grow: 1;
-    -moz-box-direction: normal;
-    -moz-box-orient: horizontal;
+    justify-content: center;
+
     flex-direction: row;
-    min-height: 100%;
-    border: 0 solid black;
-    box-sizing: border-box;
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0;
-    min-width: 0;
 }
 
 header {
-    border: 1px solid red;
-    -moz-box-flex: 1;
-    flex-grow: 1;
+    /*
+     border: 1px solid red;
+     */
+    border-right: 1px solid #2F3336;
+
     user-select: none;
     -moz-box-direction: normal;
     -moz-box-orient: vertical;
@@ -79,97 +76,295 @@ header {
     font-size: 15px;
     -moz-box-align: end;
     align-items: flex-end;
+    font-family: inherit;
+
+    -moz-box-flex: 1;
+    flex-grow: 1;
+
 }
 
 header div#colone_menu {
-    width: 275px;
+    max-width: 275px;
+    pointer-events: auto !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
+
+main {
+    /*
+     border: 4px solid deeppink;
+     */
+    overflow-y: auto;
+    display: flex;
+    color: #D9D9D9;
+    flex-shrink: 1;
+    -moz-box-flex: 1;
+    flex-grow: 1.8;
+}
+
+/* ------ colone_article ---------- */
 main div#colone_article {
+    /*
+    border: 4px solid green;
+     */
+    z-index: 2;
     max-width: 600px;
-    z-index: 1;
-    width: 100%;
-    border-style: solid;
-    -moz-box-align: stretch;
-    -moz-box-direction: normal;
-    -moz-box-orient: vertical;
-    align-items: stretch;
-    box-sizing: border-box;
-    display: flex;
-    flex-basis: auto;
-    flex-direction: column;
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    min-width: 0;
-    min-height: 0;
-    pointer-events: none !important;
-    scrollbar-color: rgb(61, 65, 69) rgb(21, 24, 28);
-    font-size: 15px;
+    flex-grow: 1;
+    background-color: rgb(12, 12, 13);
+    border-right: 1px solid #2F3336;
+    margin-left: 0;
 }
 
-main div#colone_infos {
-    width: 350px;
-    backface-visibility: hidden;
-    overflow: hidden;
-    -moz-box-align: stretch;
-    -moz-box-direction: normal;
-    -moz-box-orient: vertical;
-    align-items: stretch;
-    border-style: solid;
-    box-sizing: border-box;
-    display: flex;
-    flex-basis: auto;
-    flex-direction: column;
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0;
-    z-index: 0;
-    position: relative;
-    min-width: 0;
-    min-height: 0;
-    pointer-events: none !important;
-    scrollbar-color: rgb(61, 65, 69) rgb(21, 24, 28);
-    font-size: 15px;
-}
+main div#colone_article div#bar_principal {
+    /*
+     border:4px solid blue;
+     */
+    border-bottom: 1px solid #2F3336;
+    height: 54px;
+    top: 0;
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: rgba(12, 12, 13, 0.96);
 
-
-div.boutton_ajustable {
-    width: 251px;
-    height: 58px;
-    border: 1px solid red;
-    padding: 4px;
     display: flex;
     align-items: center;
     justify-content: left;
+    padding-left: 12px;
+}
+
+main div#colone_article div#lot {
+    /*
+     border:4px solid orangered;
+     */
+    -webkit-box-shadow: 3px 0 15px -5px #000000;
+    box-shadow: 3px 0 15px -5px #000000;
+}
+
+main div#colone_article div#pied_article {
+    /*
+    border:4px solid orangered;
+     */
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0C0C0D;
+}
+
+/* ------ colone_infos ---------- */
+main div#colone_infos {
+    max-width: 400px;
+
+    /*
+     border: 4px solid yellow;
+    */
+    margin-left: -1px;
+    border-left: 1px solid #2F3336;
+    top: 0;
+    position: -webkit-sticky;
+    position: sticky;
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+main div#colone_infos div#bar_secondaire {
+    /*
+    border:4px solid mediumslateblue;
+     */
+
+    border-bottom: 1px solid #2F3336;
+    height: 54px;
+    top: 0;
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: rgba(12, 12, 13, 0.96);
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+
+/* ------ bar_secondaire zone_de_recherche ---------- */
+div#zone_de_recherche {
+
+    height: 42px;
+    max-width: none;
+    width: 100%;
+    padding: unset;
+    margin-right: 10px;
+}
+
+div#zone_de_recherche:hover {
+    background-color: rgba(25, 25, 25, 1);
+    -webkit-border-top-right-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    -moz-border-radius-bottomright: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+input#bar_de_recherche {
+    opacity: 1;
+    -webkit-user-select: none;
+    text-align: left;
+    resize: none;
+    appearance: none;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0);
+    font-family: inherit;
+    outline-style: none;
+    width: 100%;
+    border-radius: 0;
+    border-width: 0;
+    padding: 12px;
+    font-weight: 400;
+    line-height: 20px;
+    overflow-wrap: break-word;
+    font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    line-height: normal;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    white-space: pre-wrap;
+    cursor: text;
+    color: #D9D9D9;
+}
+
+
+main div#colone_infos div#lot_informations {
+    /*
+    border:4px solid black;
+     */
+    overflow: auto;
+    position: relative;
+    width: calc(100% - 10px);
+
+}
+
+
+/* ------ boutton_ajustable menu ---------- */
+header div#colone_menu div.boutton_ajustable:hover {
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    -moz-border-radius-topleft: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: #202020;
+}
+
+header div#colone_menu div.boutton_ajustable {
+    position: relative;
+    z-index: 10;
+
+}
+
+header div#colone_menu div.boutton_ajustable.boutton_ajustable_config {
+    /*
+    border: 5px solid orangered;
+     */
+    bottom: 15px;
+    right: 0;
+    position: absolute;
+    z-index: 10;
+    background-color: #8a0b0b; /*#a40b0b*/
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    -moz-border-radius-topleft: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    max-width: 213px;
+
+
+}
+
+
+header div#colone_menu div#logo_boutton_ajustable:hover {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+}
+
+header div#colone_menu div#logo_boutton_ajustable div.boutton_ajustable_img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header div#colone_menu div#logo_boutton_ajustable div.boutton_ajustable_img,
+header div#colone_menu div#logo_boutton_ajustable div.boutton_ajustable_img img {
+    height: 30px;
+    width: 30px;
+
+}
+
+header div#colone_menu div#logo_boutton_ajustable div.boutton_ajustable_img:hover {
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    background-color: #202020;
+}
+
+/* ------ boutton_ajustable ---------- */
+div.boutton_ajustable {
+    max-width: 251px;
+    height: 58px;
+    /*
+    border: 1px solid red;
+     */
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 4px 12px;
 }
 
 div.boutton_ajustable div.boutton_ajustable_block {
     padding: 12px;
     max-width: 100%;
+    /*
     border: 1px solid blue;
+     */
     display: flex;
     align-items: center;
     justify-content: left;
+
+
 }
+
 
 div.boutton_ajustable div.boutton_ajustable_img {
     width: 26px;
     height: 26px;
-    border: 1px solid green;
+    /*
+     border: 1px solid green;
+     */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*
+    background-color: cornsilk;
+     */
 }
 
 div.boutton_ajustable div.boutton_ajustable_img img {
-    width: 21px;
-    height: 21px;
+    width: 100%;
+    height: 100%;
     padding: 2px;
-
+    -webkit-filter: invert(1);
+    filter: invert(1);
 }
 
 div.boutton_ajustable div.boutton_ajustable_text {
     height: 26px;
-    border: 1px solid yellow;
+    /*
+     border: 1px solid yellow;
+     */
     display: flex;
     align-items: center;
     justify-content: left;
@@ -180,7 +375,9 @@ div.boutton_ajustable div.boutton_ajustable_text {
 }
 
 div.boutton_ajustable div.boutton_ajustable_text span {
-    border: 1px solid blue;
+    /*
+      border: 1px solid blue;
+     */
     margin-left: 20px;
     margin-right: 16px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -194,14 +391,66 @@ div.boutton_ajustable div.boutton_ajustable_text span {
 }
 
 
+/* ------ CAPSULE ---------- */
+main div#colone_article div.capsule {
+    /*
+       width: 100%;
+     */
+    /*
+    border: 2px solid red;
+     */
+    border-bottom: 1px solid dimgrey;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+main div#colone_article div.capsule:hover {
+    /*
+       width: 100%;
+     */
+    /*
+    border: 2px solid red;
+     */
+    border-bottom: 1px solid dimgrey;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background: rgba(18, 18, 18, 098);
+}
+
+
+main div#colone_infos div.capsule {
+    height: 64px;
+    width: auto;
+    /*
+     border: 4px solid forestgreen;
+     */
+
+    padding: 5px 5px 5px 10px;
+    margin-top: 10px;
+
+    margin-bottom: 10px;
+
+    background-color: #124586; /*#15181C*/
+    -webkit-border-top-right-radius: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-topright: 20px;
+    -moz-border-radius-bottomright: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+
 /* ------- F O R M --------- */
 form.objet_formulaire {
+    /*
     color: #313131;
+     */
     font-size: 14px;
-    width: 480px;
-    border: 5px solid grey;
+    width: 100%;
     padding: 5px;
-
+    color: inherit;
 }
 
 form.objet_formulaire div {
@@ -219,11 +468,15 @@ form.objet_formulaire label input {
     border: 3px solid darkgrey;
 }
 
+form.objet_formulaire label input:hover {
+    border: 3px solid #27AE60;
+}
+
 form.objet_formulaire input[type="button"] {
-    background-color: #f8f9fa;
-    border: 1px solid grey;
+    background-color: #124586; /*#f8f9fa;*/
+    border: 0;
     border-radius: 4px;
-    color: #3c4043;
+    color: white;
     margin: 11px 4px;
     padding: 0 16px;
     line-height: 27px;
@@ -232,4 +485,5 @@ form.objet_formulaire input[type="button"] {
     text-align: center;
     cursor: pointer;
     user-select: none;
+    font-size: large;
 }

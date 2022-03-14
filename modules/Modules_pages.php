@@ -286,8 +286,6 @@ class Modules_pages extends Modules_outils
         } else {
             return null;
         }
-
-        return null;
     }
 
 

@@ -24,4 +24,4 @@ $Euka->index($pilote); // vous devez coder votre premier page dans Euka.php->ind
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 
-echo PHP_EOL . PHP_EOL . "temps d'execution : $time secondes" . PHP_EOL;
+//echo PHP_EOL . PHP_EOL . "temps d'execution : $time secondes" . PHP_EOL;

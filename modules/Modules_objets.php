@@ -2,7 +2,7 @@
 
 namespace Eukaruon\modules;
 
-class Modules_objets
+class Modules_objets //extends Modules_habillage
 {
 
 
@@ -37,50 +37,76 @@ class Modules_objets
 
     }
 
-    //364x463
-    // 1280 < icone > icone + texte
-    public static function boutton_ajustable($texte, $image = '', $id = '', $class = '')
+    public static function bare_de_texte($texte = '', $valeur = '', $type = 'text', $id = '', $class = '', $retour = false)
     {
-        if ($id == '') $id = time();
+
+        if ($id == '') $id = 'input_baredetexte_' . time();
         if ($class != '') $class = chr(32) . $class;
 
         $output = Modules_habillage::de()
-            ->appliquer('img', ['src' => 'ressources/themes/images/' . $image])
+            ->appliquer('input', [
+                'titre' => $type,
+                'value' => $valeur,
+                'placeholder' => $texte,
+                'id' => $id,
+                'class' => 'input_baredetexte' . $class])
+            ->recuperer();
+        if (!$retour) echo $output;
+        return $output;
+    }
+
+    //364x463
+    // 1280 < icone > icone + texte
+    public static function boutton_ajustable($donnee, $image = '', $id = '', $class = '', $theme = 'grey')
+    {
+
+        if ($id == '') $id = 'boutton_ajustable_' . time();
+        if ($class != '') $class = chr(32) . $class;
+
+        $output = Modules_habillage::de()
+            ->appliquer('img', ['src' => "ressources/themes/images/$theme/$image"])
             ->appliquer('div', ['class' => 'boutton_ajustable_img'])
             ->recuperer();
 
-        $output .= Modules_habillage::de($texte)
+        $output .= Modules_habillage::de($donnee)
             ->appliquer('span')
             ->appliquer('div', ['class' => 'boutton_ajustable_text'])
             ->recuperer();
 
         Modules_habillage::de($output)
             ->appliquer('div', ['class' => 'boutton_ajustable_block'])
-            ->appliquer('div', ['id' => 'boutton_ajustable_' . $id, 'class' => 'boutton_ajustable' . $class])
+            ->appliquer('div', ['id' => $id, 'class' => 'boutton_ajustable' . $class])
             ->afficher();
 
     }
 
-    public static function session($clef, $egale_a)
+    public
+    static function session($clef, $egale_a)
     {
         return (array_key_exists($clef, $_SESSION) && $_SESSION[$clef] == $egale_a);
     }
 
-    public static function styletheme($name, $actualiser = false)
+    public
+    static function styletheme($name, $actualiser = false)
     {
+
         Modules_habillage::de()
             ->appliquer("link", ['href' => 'ressources/themes/' . $name . '/style.css' . ($actualiser ? '?t=' . time() : ''), 'rel' => "stylesheet"])
             ->afficher();
+
+        return $name;
     }
 
-    public static function autoload($url)
+    public
+    static function autoload($url)
     {
         Modules_habillage::de()
             ->appliquer('meta', ['http-equiv' => 'REFRESH', 'content' => '0; url=' . $url])
             ->afficher();
     }
 
-    public static function scripttheme($name, $actualiser = false)
+    public
+    static function scripttheme($name, $actualiser = false)
     {
         Modules_habillage::de()
             ->appliquer("script", ['src' => 'ressources/themes/' . $name . '/actions.js' . ($actualiser ? '?t=' . time() : ''), 'rel' => "stylesheet"])
@@ -88,7 +114,8 @@ class Modules_objets
     }
 
 
-    public static function formulaire(string $nom, $tableau_de_type, $boutton_valider = 'valider', $method = 'POST', $page_dappel = '', $injection = '', $stylecss = '', $output = '')
+    public
+    static function formulaire(string $nom, $tableau_de_type, $boutton_valider = 'valider', $method = 'POST', $page_dappel = '', $injection = '', $stylecss = '', $output = '', $retour = false)
 
     {
 
@@ -141,13 +168,26 @@ class Modules_objets
                 ->recuperer();
         }
 
-        Modules_habillage::de($output)
+        $output = Modules_habillage::de($output)
             ->appliquer("form", ['action' => '',
                 'id' => 'formulaire_' . $nom,
                 'class' => 'objet_formulaire',
                 'method' => $method])
-            ->afficher();
+            ->appliquer('div', ['class' => 'capsule'])
+            ->recuperer();
 
+        if (!$retour) echo $output;
+        return $output;
+    }
+
+    public static function tag($tag = 'span', $donee = '', $option = [], $retour = false)
+    {
+        $output = Modules_habillage::de($donee)
+            ->appliquer($tag, $option)
+            ->recuperer();
+
+        if (!$retour) echo $output;
+        return $output;
     }
 
 

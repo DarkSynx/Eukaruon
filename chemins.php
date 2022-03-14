@@ -15,6 +15,7 @@ const BDD = RACINE . 'bdd' . '/';
 const PAGES = RACINE . 'pages' . '/';
 const PROFILS = PAGES . 'profils' . '/';
 const RESSOURCES = RACINE . 'ressources' . '/';
+const THEMES = RESSOURCES . 'themes' . '/';
 const GENERER = RESSOURCES . 'generer' . '/';
 const CACHE = RESSOURCES . 'cache' . '/';
 const TEMP = RESSOURCES . 'temp' . '/';
