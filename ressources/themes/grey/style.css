@@ -241,7 +241,6 @@ main div#colone_infos div#lot_informations {
     overflow: auto;
     position: relative;
     width: calc(100% - 10px);
-
 }
 
 
@@ -259,7 +258,6 @@ header div#colone_menu div.boutton_ajustable:hover {
 header div#colone_menu div.boutton_ajustable {
     position: relative;
     z-index: 10;
-
 }
 
 header div#colone_menu div.boutton_ajustable.boutton_ajustable_config {
@@ -278,8 +276,6 @@ header div#colone_menu div.boutton_ajustable.boutton_ajustable_config {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     max-width: 213px;
-
-
 }
 
 
@@ -300,7 +296,6 @@ header div#colone_menu div#logo_boutton_ajustable div.boutton_ajustable_img,
 header div#colone_menu div#logo_boutton_ajustable div.boutton_ajustable_img img {
     height: 30px;
     width: 30px;
-
 }
 
 header div#colone_menu div#logo_boutton_ajustable div.boutton_ajustable_img:hover {
@@ -317,7 +312,6 @@ div.boutton_ajustable {
     /*
     border: 1px solid red;
      */
-
     display: flex;
     align-items: center;
     justify-content: left;
@@ -333,8 +327,6 @@ div.boutton_ajustable div.boutton_ajustable_block {
     display: flex;
     align-items: center;
     justify-content: left;
-
-
 }
 
 

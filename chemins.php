@@ -6,9 +6,11 @@ $racine = defined("RACINE_ADMIN") ? dirname(RACINE_ADMIN, 1) . '/' : dirname(__F
 
 define("RACINE", $racine);
 const MODULES = RACINE . 'modules' . '/';
+const ERREURS = RACINE . 'erreurs' . '/';
+const ARCHIVES = ERREURS . 'archives' . '/';
+const LOGS = ERREURS . 'logs' . '/';
 const SOUSMODULES = MODULES . 'sousmodules' . '/';
 const INTERFACES = MODULES . 'interfaces' . '/';
-
 const CONFIGS = RACINE . 'configs' . '/';
 const JOURNAUX = RACINE . 'journaux' . '/';
 const BDD = RACINE . 'bdd' . '/';

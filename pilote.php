@@ -3,6 +3,7 @@
 use Eukaruon\modules\Modules_gestionnaire;
 use Exception;
 
+
 /** Cette Class est là pour piloté l'application elle se distingue du reste par
  * ce quelle prend la main sur le module Gestionnaire pour facilité son utilisation
  * ainsi que d'autre fonctionnalité en somme pilote est bien là pour exploiter
@@ -60,8 +61,9 @@ class pilote
      */
     public function __construct(array $modules_primaire = null, string $forcer_sessionid = null)
     {
-        if (!is_null($forcer_sessionid)) session_id($forcer_sessionid);
 
+
+        if (!is_null($forcer_sessionid)) session_id($forcer_sessionid);
         if (session_status() != PHP_SESSION_ACTIVE) session_start();
 
 
@@ -70,6 +72,8 @@ class pilote
         } else {
             $this->Inclure_fichier(self::MODULES_PRIMAIRE);
         }
+
+        //new Modules_erreurs();
 
         $this->Modules_gestionnaire = new Modules_gestionnaire(self::LIST_EXCEPTION_MODULE, self::LIST_NAME_SPACE);
         $this->journal = new journal();
@@ -172,7 +176,8 @@ spl_autoload_register(
                     include_once CONFIGS . 'Page_en_cache.php';
                     break;
                 default:
-                    switch ($dossier_a_charger) {
+
+                switch ($dossier_a_charger) {
                         case 'interfaces':
                             include_once INTERFACES . $class_name . '.php';
                             break;

@@ -115,10 +115,18 @@ class Modules_pages extends Modules_outils
         return CACHE . $nom_page . '.html.php';
     }
 
-    public function affichage($page)
+    public function affichage($page, $headerhtml = false)
     {
-        header('Content-type: text/html; charset=utf-8');
+        /* if($headerhtml) {
+             header('Content-type: text/html; charset=utf-8');
+             include_once($page);
+         }
+         else {
+             var_dump($page);*/
         include_once($page);
+        //echo file_get_contents($page);
+        // }
+
         // die();
     }
 
@@ -310,7 +318,6 @@ class Modules_pages extends Modules_outils
                 $tableau_donnee['donnees']['syntaxe'] == 'l7'
             )) {
 
-
             //$Modules_Level7 = new \Eukaruon\modules\Modules_Level7();
 
             if (empty($this->donnee_gestionnaire['Modules_Level7']) || is_null($this->donnee_gestionnaire['Modules_Level7'])) {
@@ -318,7 +325,7 @@ class Modules_pages extends Modules_outils
                 $Modules_Level7 = new Modules_Level7(null, true);
                 // var_dump($Modules_Level7);
             } else {
-                var_dump($this->donnee_gestionnaire);
+                //var_dump($this->donnee_gestionnaire);
                 $Modules_Level7 = &$this->donnee_gestionnaire['Modules_Level7'];
             }
 
@@ -487,8 +494,6 @@ class Modules_pages extends Modules_outils
                     $tableau[] = $valeur;
                 }
             }
-
-
         }
 
         /* partie expérimental qui reconstruit les moustaches comme nous
@@ -522,31 +527,50 @@ class Modules_pages extends Modules_outils
 
         $chemin_encache = CACHE . $nom_fichier_genrer;
         /* on vérifie le temps max d'un fichier mise en cache */
-        if (@filemtime($chemin_encache) < time() - $temps_max || $force) {
+
+        if ((
+                !empty($chemin_encache) &&
+                // is_file($chemin_encache) &&
+                // file_exists($chemin_encache) &&
+                @filemtime($chemin_encache) < time() - $temps_max
+            ) || $force) {
 
             //---------
-            //ob_start();
+            ob_start();
             // revoir cette partie
 
             /* contenu mise en cache et pas afficher
              * echo htmlspecialchars($_COOKIE["tc"],  ENT_QUOTES, 'UTF-8');
              * die();
              */
-            //echo //htmlspecialchars(
-            //    file_get_contents(GENERER . $nom_fichier_genrer)
-            //, ENT_QUOTES, 'UTF-8')
-            // ;
 
-            //$cache_contenu = ob_get_contents();
+            eval(
+                // on retir ici le <?php pour déclencher l'évaluation
+                // ça reste un moment senssible donc pas oublier de réalisé un
+                // analyseur de code pour n'utiliser que des modules
+            substr(
+                file_get_contents(GENERER . $nom_fichier_genrer), 5)
+            );
+
+            $cache_contenu = ob_get_contents();
+
             //ob_end_flush();
+            ob_end_clean();
             //------------
 
+            //var_dump($cache_contenu);
+            $fd = fopen($chemin_encache . '.php', 'w');
+            if ($fd) {
+                fwrite($fd, '<?php error_reporting(0); header("Content-type: text/html; charset=utf-8"); ?>' . $cache_contenu);
+                fclose($fd);
+            }
+
+            /*
             $fd = fopen($chemin_encache . '.php', 'w');
             if ($fd) {
                 fwrite($fd, file_get_contents(GENERER . $nom_fichier_genrer));
                 fclose($fd);
-            }
-
+            }*/
             //die();
 
         } else {

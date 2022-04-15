@@ -2,95 +2,139 @@
 
 use Eukaruon\configs\CMD;
 use Eukaruon\modules\Modules_objets as MO;
+use Eukaruon\modules\Modules_actions as AC;
 use Eukaruon\pilote;
 
 define('THEMEUSE', 'grey');
 
-?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8"/>
-    <?php
-    if (MO::session('utilisateur', 'inscript')):
-        MO::autoload('page_produits');
-    endif
-    ?>
-    <title>test de page</title>
-    <?php MO::StyleTheme(THEMEUSE, true) ?>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-<div id="page">
-    <?php if (MO::session('utilisateur', 'inscript')):
-        /* Vide si utilisateur inscrit */
-    else: ?>
-    <header>
-        <div id="colone_menu">
-            <?php MO::boutton_ajustable('', 'svg/fi-rr-chart-tree.svg', 'logo_boutton_ajustable', theme: THEMEUSE); ?>
-            <?php MO::boutton_ajustable('Accueil', 'svg/fi-rr-home.svg', theme: THEMEUSE); ?>
-            <?php MO::boutton_ajustable('Explore', 'svg/fi-rr-comment-alt.svg', theme: THEMEUSE); ?>
-            <?php MO::boutton_ajustable('Messages', 'svg/fi-rr-envelope.svg', theme: THEMEUSE); ?>
-            <?php MO::boutton_ajustable('Notification', 'svg/fi-rr-bell.svg', theme: THEMEUSE); ?>
-            <?php MO::boutton_ajustable('Profile', 'svg/fi-rr-settings.svg', class: 'boutton_ajustable_config', theme: THEMEUSE); ?>
-        </div>
-    </header>
-    <!-- - MAIN - -->
-    <main>
-        <div id="colone_article">
-            <div id="bar_principal"><h2>Accueil</h2></div>
-            <div id="lot">
-                <?php
-                    MO::formulaire(
-                        nom: 'inscription',
-                        tableau_de_type: [
-                            'Label text1' => ['name' => 'nom', 'type' => 'texte', 'value' => 'v1', 'placeholder' => '',
-                'class' => 'put'],
-                'Label text2' => ['name' => 'prenom', 'type' => 'password', 'value' => 'v2', 'placeholder' => '',
-                'class' => 'lut'],
-                ],
-                boutton_valider: 'ok',
-                page_dappel: 'test',
-                injection: ['nom' => [
-                MO::tag('h3', 'INSCRIPTION', retour: true)
-                , 'avant']]
-                )
-                ?>
-            </div>
-            <div id="pied_article">
-                <?php MO::tag('img', '', ['src' => 'ressources/themes/images/animated-loading-icon.gif']) ?>
-            </div>
-        </div>
-        <!-- - COLONE INFO - -->
-        <div id="colone_infos">
-            <div id="bar_secondaire">
-                <?php
-                    $bar_de_recherche = MO::bare_de_texte(id: 'bar_de_recherche', retour: true);
-                    MO::boutton_ajustable($bar_de_recherche, image: '/svg/fi-rr-search.svg', id: 'zone_de_recherche', theme: THEMEUSE);
-                    ?>
-            </div>
-            <div id="lot_informations">
-                <div class="capsule">Block de TEST</div>
-                <div class="capsule">Block de TEST</div>
-                <div class="capsule">Block de TEST</div>
-                <div class="capsule">Block de TEST</div>
-                <div class="capsule">Block de TEST</div>
+MO::doctype();
+MO::tete();
 
-                <?php
-                    $pilote = new pilote();
-                    $Modules_pages = $pilote->Charger_le_module(
-                module_a_charger: 'Modules_pages',
-                modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
-                );
+MO::meta(['charset' => 'UTF-8']);
+if (MO::session('utilisateur', 'inscript'))
+MO::autoload('page_produits');
 
-                ?>
-            </div>
-        </div>
-    </main>
+MO::titre('test de page');
+MO::css(THEMEUSE, true);
+MO::js(src: 'https://code.jquery.com/jquery-3.6.0.min.js');
+
+MO::corp();
+MO::debutDiv(id: 'page');
+
+if (MO::session('utilisateur', 'inscript')) {
+// Vide si utilisateur inscrit
+} else {
+
+MO::debutHeader();
+echo 'test de page';
+AC::activiter('test', ['argument1', '$vare2', 'argument3']);
+MO::debutDiv(id: 'colone_menu');
 
 
-    <?php endif ?>
-</div>
-<?php MO::ScriptTheme('grey', true) ?>
-</body>
-</html>
+MO::boutton_ajustable(
+texte: '',
+image: 'svg/fi-rr-chart-tree.svg',
+class: 'logo_boutton_ajustable',
+theme: THEMEUSE,
+lien: '',
+injecter: ['tag' => 'img', 'injecter' => 'test_dinjection']
+);
+MO::boutton_ajustable(
+texte: 'Accueil',
+image: 'svg/fi-rr-home.svg',
+theme: THEMEUSE,
+lien: 'page_accueil'
+);
+MO::boutton_ajustable(
+texte: 'Explore',
+image: 'svg/fi-rr-comment-alt.svg',
+theme: THEMEUSE,
+lien: 'page_explore'
+);
+MO::boutton_ajustable(
+texte: 'Messages',
+image: 'svg/fi-rr-envelope.svg',
+theme: THEMEUSE,
+lien: 'page_messages'
+);
+MO::boutton_ajustable(
+texte: 'Notification',
+image: 'svg/fi-rr-bell.svg',
+theme: THEMEUSE,
+lien: 'page_notification'
+);
+MO::boutton_ajustable(
+texte: 'Options',
+image: 'svg/fi-rr-settings.svg',
+class: 'boutton_ajustable_config',
+theme: THEMEUSE,
+lien: 'page_options'
+);
+
+MO::finDiv();
+MO::finHeader();
+
+MO::debutMain();
+MO::debutDiv(id: 'colone_article');
+MO::debutDiv(id: 'bar_principal');
+MO::tag('h2', 'Accueil');
+MO::finDiv();
+
+MO::debutDiv(id: 'lot');
+MO::formulaire(
+nom: 'inscription',
+tableau_de_type: [
+'Label text1' => ['name' => 'nom', 'type' => 'texte', 'value' => 'v1', 'placeholder' => '', 'class' => 'put'],
+'Label text2' => ['name' => 'prenom', 'type' => 'password', 'value' => 'v2', 'placeholder' => '', 'class' => 'lut'],
+],
+boutton_valider: 'ok',
+page_dappel: 'test',
+injection: [
+'nom' => [
+MO::tag('h3', 'INSCRIPTION', retour: true)
+, 'avant']
+]
+);
+
+MO::finDiv();
+MO::debutDiv(id: 'pied_article');
+MO::tag('img', '', ['src' => 'ressources/themes/images/animated-loading-icon.gif']);
+MO::finDiv();
+MO::finDiv();
+MO::debutDiv(id: 'colone_infos');
+MO::debutDiv(id: 'bar_secondaire');
+
+// <!-- - COLONE INFO - -->
+
+MO::boutton_ajustable(
+MO::bare_de_texte(id: 'bar_de_recherche', retour: true)[0],
+image: '/svg/fi-rr-search.svg',
+id: 'zone_de_recherche',
+theme: THEMEUSE,
+no_tag_a: true
+);
+
+MO::finDiv();
+MO::debutDiv(id: 'lot_informations');
+
+MO::div(donee: 'Block de TEST', class: 'capsule');
+MO::div(donee: 'Block de TEST', class: 'capsule');
+MO::div(donee: 'Block de TEST', class: 'capsule');
+MO::div(donee: 'Block de TEST', class: 'capsule');
+MO::div(donee: 'Block de TEST', class: 'capsule');
+MO::div(donee: 'Block de TEST', class: 'capsule');
+
+$pilote = new pilote();
+$Modules_pages = $pilote->Charger_le_module(
+module_a_charger: 'Modules_pages',
+modules_primaire: [CMD::PAGEENCACHE, CMD::MODULES_BDD]
+);
+
+MO::finDiv();
+MO::finDiv();
+MO::Mainfin();
+}
+
+MO::debutDiv('END');
+MO::ScriptTheme('grey', true);
+MO::fin();

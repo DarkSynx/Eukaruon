@@ -2,6 +2,9 @@
 
 namespace Eukaruon\modules;
 
+use Eukaruon\modules\Modules_habillage as MH;
+
+
 class Modules_objets //extends Modules_habillage
 {
 
@@ -43,7 +46,7 @@ class Modules_objets //extends Modules_habillage
         if ($id == '') $id = 'input_baredetexte_' . time();
         if ($class != '') $class = chr(32) . $class;
 
-        $output = Modules_habillage::de()
+        $output = MH::de()
             ->appliquer('input', [
                 'titre' => $type,
                 'value' => $valeur,
@@ -51,71 +54,74 @@ class Modules_objets //extends Modules_habillage
                 'id' => $id,
                 'class' => 'input_baredetexte' . $class])
             ->recuperer();
-        if (!$retour) echo $output;
+        if (!$retour) echo $output[0];
         return $output;
     }
 
     //364x463
     // 1280 < icone > icone + texte
-    public static function boutton_ajustable($donnee, $image = '', $id = '', $class = '', $theme = 'grey')
+    public static function boutton_ajustable($texte, $image = '', $id = '', $class = '', $theme = 'grey', $lien = '', array $injecter = [], $no_tag_a = false)
     {
 
         if ($id == '') $id = 'boutton_ajustable_' . time();
         if ($class != '') $class = chr(32) . $class;
 
-        $output = Modules_habillage::de()
+        $output = MH::de(injection: $injecter, arbre_noms: $id)
             ->appliquer('img', ['src' => "ressources/themes/images/$theme/$image"])
             ->appliquer('div', ['class' => 'boutton_ajustable_img'])
             ->recuperer();
 
-        $output .= Modules_habillage::de($donnee)
+
+        $output = MH::de([$texte, $output[1]], injection: $injecter, arbre_noms: $id)
             ->appliquer('span')
             ->appliquer('div', ['class' => 'boutton_ajustable_text'])
-            ->recuperer();
+            ->recuperer($output);
 
-        Modules_habillage::de($output)
+
+        $output = MH::de($output, injection: $injecter, arbre_noms: $id)
             ->appliquer('div', ['class' => 'boutton_ajustable_block'])
             ->appliquer('div', ['id' => $id, 'class' => 'boutton_ajustable' . $class])
-            ->afficher();
+            ->recuperer();
+
+        $no_tag_a ?
+            MH::de($output, injection: $injecter, arbre_noms: $id)->afficher()
+            :
+            MH::de($output, injection: $injecter, arbre_noms: $id)
+                ->appliquer('a', ['href' => $lien])
+                ->afficher();
 
     }
 
-    public
-    static function session($clef, $egale_a)
+    public static function session($clef, $egale_a)
     {
         return (array_key_exists($clef, $_SESSION) && $_SESSION[$clef] == $egale_a);
     }
 
-    public
-    static function styletheme($name, $actualiser = false)
+    public static function css($name, $actualiser = false)
     {
-
-        Modules_habillage::de()
+        MH::de()
             ->appliquer("link", ['href' => 'ressources/themes/' . $name . '/style.css' . ($actualiser ? '?t=' . time() : ''), 'rel' => "stylesheet"])
             ->afficher();
 
         return $name;
     }
 
-    public
-    static function autoload($url)
+    public static function autoload($url)
     {
-        Modules_habillage::de()
+        MH::de()
             ->appliquer('meta', ['http-equiv' => 'REFRESH', 'content' => '0; url=' . $url])
             ->afficher();
     }
 
-    public
-    static function scripttheme($name, $actualiser = false)
+    public static function scripttheme($name, $actualiser = false)
     {
-        Modules_habillage::de()
+        MH::de()
             ->appliquer("script", ['src' => 'ressources/themes/' . $name . '/actions.js' . ($actualiser ? '?t=' . time() : ''), 'rel' => "stylesheet"])
             ->afficher();
     }
 
 
-    public
-    static function formulaire(string $nom, $tableau_de_type, $boutton_valider = 'valider', $method = 'POST', $page_dappel = '', $injection = '', $stylecss = '', $output = '', $retour = false)
+    public static function formulaire(string $nom, $tableau_de_type, $boutton_valider = 'valider', $method = 'POST', $page_dappel = '', $injection = '', $stylecss = '', array $output = ['', 0], $retour = false)
 
     {
 
@@ -124,38 +130,47 @@ class Modules_objets //extends Modules_habillage
             $key_existe_dans_injection = key_exists($valeur['name'], $injection);
 
             if ($key_existe_dans_injection && $injection[$valeur['name']][1] == 'avant') {
-                $output .= $injection[$valeur['name']][0];
+
+                //$output = MH::concatenation($output, $injection[$valeur['name']][0]);
+                $output = MH::de($injection[$valeur['name']][0])->recuperer($output);
             }
+
             $list_identifiant[] = '"' . $valeur['name'] . '"';
 
-            $output .= Modules_habillage::de()
-                ->appliquer("input", $valeur)
-                ->appliquer("text", $label)
-                ->appliquer("label")
-                ->appliquer("div")
-                ->recuperer();
+            $output =
+                MH::de(['', $output[1]])
+                    ->appliquer("input", $valeur)
+                    ->appliquer("text", $label)
+                    ->appliquer("label")
+                    ->appliquer("div")
+                    ->recuperer($output);
 
             if ($key_existe_dans_injection && $injection[$valeur['name']][1] == 'apres') {
-                $output .= $injection[$valeur['name']][0];
+                //$output = MH::concatenation($output, $injection[$valeur['name']][0]);
+                $output = MH::de($injection[$valeur['name']][0])->recuperer($output);
             }
 
         }
         $list_identifiant_pour_js = '[' . implode(',', $list_identifiant) . ']';
 
-        $output .= Modules_habillage::de()
-            ->appliquer("hr")
-            ->appliquer("br")
-            ->recuperer();
+        $output =
+            MH::de(['', $output[1]])
+                ->appliquer("hr")
+                ->appliquer("br")
+                ->recuperer($output);
 
-        $output .= Modules_habillage::de()
-            ->appliquer("input", ['type' => 'button', 'value' => $boutton_valider, 'onclick' => 'formulaire_action("formulaire_' . $nom . '",' . $list_identifiant_pour_js . ',"' . $page_dappel . '" );'])
-            ->recuperer();
+        $output =
+            MH::de(['', $output[1]])
+                ->appliquer("input", ['type' => 'button', 'value' => $boutton_valider, 'onclick' => 'formulaire_action("formulaire_' . $nom . '",' . $list_identifiant_pour_js . ',"' . $page_dappel . '" );'])
+                ->recuperer($output);
 
-        $output .= Modules_habillage::de()->appliquer("br")->recuperer();
+        $output =
+            MH::de(['', $output[1]])->appliquer("br")->recuperer($output);
 
-        $output .= Modules_habillage::de()
-            ->appliquer("script", ['src' => 'passerelle/js/passe.js'])
-            ->recuperer();
+        $output =
+            MH::de(['', $output[1]])
+                ->appliquer("script", ['src' => 'passerelle/js/passe.js'])
+                ->recuperer($output);
 
         if ($stylecss != '') {
             $stylecss = str_replace(
@@ -163,12 +178,13 @@ class Modules_objets //extends Modules_habillage
                 ['formulaire_' . $nom, 'form#formulaire_' . $nom],
                 $stylecss);
 
-            $output .= Modules_habillage::de($stylecss)
-                ->appliquer("style")
-                ->recuperer();
+            $output =
+                MH::de([$stylecss, $output[1]])
+                    ->appliquer("style")
+                    ->recuperer($output);
         }
 
-        $output = Modules_habillage::de($output)
+        $output = MH::de($output)
             ->appliquer("form", ['action' => '',
                 'id' => 'formulaire_' . $nom,
                 'class' => 'objet_formulaire',
@@ -176,19 +192,128 @@ class Modules_objets //extends Modules_habillage
             ->appliquer('div', ['class' => 'capsule'])
             ->recuperer();
 
-        if (!$retour) echo $output;
+        if (!$retour) echo $output[0];
         return $output;
     }
 
-    public static function tag($tag = 'span', $donee = '', $option = [], $retour = false)
+    public static function tag($tag = 'span', $donee = '', $argument = [], $retour = false, $id = '', $class = '')
     {
-        $output = Modules_habillage::de($donee)
-            ->appliquer($tag, $option)
+        if ($id !== '') $argument['id'] = $id;
+        if ($class !== '') $argument['class'] = $class;
+
+        $output = MH::de($donee)
+            ->appliquer($tag, $argument)
             ->recuperer();
 
-        if (!$retour) echo $output;
+        if (!$retour) echo $output[0];
         return $output;
     }
 
+    public static function div($donee = '', $argument = [], $retour = false, $id = '', $class = '')
+    {
+        if ($id !== '') $argument['id'] = $id;
+        if ($class !== '') $argument['class'] = $class;
 
+        $output = MH::de($donee)
+            ->appliquer('div', $argument)
+            ->recuperer();
+
+        if (!$retour) echo $output[0];
+        return $output;
+    }
+
+    /* ------------------------------------------ */
+    // 'img', '!DOCTYPE', 'br', 'hr', 'input', 'link'
+
+    public static function doctype($argument = ['html'])
+    {
+        MH::de()
+            ->appliquer('!DOCTYPE', $argument, no_aid: true)
+            ->afficher();
+    }
+
+
+    public static function debutHeader(array|string $argument = [])
+    {
+        $argument == 'END' ?
+            MH::de()->appliquer('endheader', no_aid: true)->afficher()
+            :
+            MH::de()->appliquer('startheader', $argument)->afficher();
+    }
+
+    public static function finHeader()
+    {
+        MH::de()->appliquer('endheader', no_aid: true)->afficher();
+    }
+
+    public static function debutMain(array|string $argument = [])
+    {
+        $argument == 'END' ?
+            MH::de()->appliquer('endmain', no_aid: true)->afficher()
+            :
+            MH::de()->appliquer('startmain', $argument)->afficher();
+    }
+
+    public static function Mainfin()
+    {
+        MH::de()->appliquer('endmain', no_aid: true)->afficher();
+    }
+
+    public static function meta($argument = [])
+    {
+        MH::de()->appliquer('meta', $argument, no_aid: true)->afficher();
+    }
+
+    public static function titre($valeur)
+    {
+        MH::de($valeur)->appliquer('title', no_aid: true)->afficher();
+    }
+
+    public static function debutDiv(array|string $argument = [], $id = '', $class = '')
+    {
+        if ($id !== '') $argument['id'] = $id;
+
+        if ($class !== '') $argument['class'] = $class;
+
+        $argument == 'END' ?
+            MH::de()->appliquer('enddiv', no_aid: true)->afficher()
+            :
+            MH::de()->appliquer('startdiv', $argument)->afficher();
+    }
+
+    public static function finDiv()
+    {
+        MH::de()->appliquer('enddiv', no_aid: true)->afficher();
+    }
+
+
+    public static function js($argument = [], $src = '')
+    {
+        if ($src !== '') $argument['src'] = $src;
+
+        MH::de()->appliquer('script', $argument, no_aid: true)->afficher();
+    }
+
+    public static function tete($argument = ['lang' => 'fr'])
+    {
+        MH::de()->appliquer('startHTML', $argument, no_aid: true)->afficher();
+        MH::de()->appliquer('startHead', [], no_aid: true)->afficher();
+    }
+
+    public static function corp(array|string $argument = [])
+    {
+        if ($argument == 'END') {
+            MH::de()->appliquer('endBody')->afficher();
+            MH::de()->appliquer('endHTML')->afficher();
+        } else {
+            MH::de()->appliquer('endHead')->afficher();
+            MH::de()->appliquer('startBody', $argument, no_aid: true)->afficher();
+        }
+    }
+
+    public static function fin($argument = [])
+    {
+        MH::de()->appliquer('endBody')->afficher();
+        MH::de()->appliquer('endHTML')->afficher();
+    }
 }

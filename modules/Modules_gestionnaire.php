@@ -48,6 +48,7 @@ class Modules_gestionnaire
      */
     public function __construct(array $liste_exception_module = array(), array $liste_name_space = array())
     {
+
         $this->_liste_exception_module = $liste_exception_module;
         $this->_liste_espace_de_nom = $liste_name_space;
 
