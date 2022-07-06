@@ -1,16 +1,16 @@
-<?php error_reporting(0); header("Content-type: text/html; charset=utf-8"); ?><!DOCTYPE html>
+<?php error_reporting(0); header("Content-type: text/html; charset=utf-8"); ?><?php $time_start = microtime(true); ?><!DOCTYPE html>
 <html lang='fr'>
 <head>
     <meta charset='UTF-8'>
     <title>test de page</title>
-    <link href='ressources/themes/grey/style.css?t=1649843778' rel='stylesheet' data-aid='1'></link>
+    <link href='ressources/themes/grey/style.css?t=1650138595' rel='stylesheet' data-aid='1'></link>
     <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
 </head>
 <body>
 <div id='page'>
-    <header>test de page<?= 'ok'; ?>
+    <header>test de page
         <div id='colone_menu'><a href data-aid='7'>
-                <div id='boutton_ajustable_1649843778' class='boutton_ajustable logo_boutton_ajustable' data-aid='6'>
+                <div id='boutton_ajustable_1650138595' class='boutton_ajustable logo_boutton_ajustable' data-aid='6'>
                     <div class='boutton_ajustable_block' data-aid='5'>
                         <div class='boutton_ajustable_img' data-aid='2'>test_dinjection<img
                                     src='ressources/themes/images/grey/svg/fi-rr-chart-tree.svg' data-aid='1'></div>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </a><a href='page_accueil' data-aid='7'>
-                <div id='boutton_ajustable_1649843778' class='boutton_ajustable' data-aid='6'>
+                <div id='boutton_ajustable_1650138595' class='boutton_ajustable' data-aid='6'>
                     <div class='boutton_ajustable_block' data-aid='5'>
                         <div class='boutton_ajustable_img' data-aid='2'><img
                                     src='ressources/themes/images/grey/svg/fi-rr-home.svg' data-aid='1'></div>
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </a><a href='page_explore' data-aid='7'>
-                <div id='boutton_ajustable_1649843778' class='boutton_ajustable' data-aid='6'>
+                <div id='boutton_ajustable_1650138595' class='boutton_ajustable' data-aid='6'>
                     <div class='boutton_ajustable_block' data-aid='5'>
                         <div class='boutton_ajustable_img' data-aid='2'><img
                                     src='ressources/themes/images/grey/svg/fi-rr-comment-alt.svg' data-aid='1'></div>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </a><a href='page_messages' data-aid='7'>
-                <div id='boutton_ajustable_1649843778' class='boutton_ajustable' data-aid='6'>
+                <div id='boutton_ajustable_1650138595' class='boutton_ajustable' data-aid='6'>
                     <div class='boutton_ajustable_block' data-aid='5'>
                         <div class='boutton_ajustable_img' data-aid='2'><img
                                     src='ressources/themes/images/grey/svg/fi-rr-envelope.svg' data-aid='1'></div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </a><a href='page_notification' data-aid='7'>
-                <div id='boutton_ajustable_1649843778' class='boutton_ajustable' data-aid='6'>
+                <div id='boutton_ajustable_1650138595' class='boutton_ajustable' data-aid='6'>
                     <div class='boutton_ajustable_block' data-aid='5'>
                         <div class='boutton_ajustable_img' data-aid='2'><img
                                     src='ressources/themes/images/grey/svg/fi-rr-bell.svg' data-aid='1'></div>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </a><a href='page_options' data-aid='7'>
-                <div id='boutton_ajustable_1649843778' class='boutton_ajustable boutton_ajustable_config' data-aid='6'>
+                <div id='boutton_ajustable_1650138595' class='boutton_ajustable boutton_ajustable_config' data-aid='6'>
                     <div class='boutton_ajustable_block' data-aid='5'>
                         <div class='boutton_ajustable_img' data-aid='2'><img
                                     src='ressources/themes/images/grey/svg/fi-rr-settings.svg' data-aid='1'></div>
@@ -111,6 +111,9 @@
         </div>
     </main>
 </div>
-<script src='ressources/themes/grey/actions.js?t=1649843778' rel='stylesheet' data-aid='1'></script>
-</body>
+<script src='ressources/themes/grey/actions.js?t=1650138595' rel='stylesheet' data-aid='1'></script><?php
+$time_end = microtime(true);
+$time = $time_end - $time_start;
+echo "temps d'execussion de la page: $time secondes\n"
+?></body>
 </html>

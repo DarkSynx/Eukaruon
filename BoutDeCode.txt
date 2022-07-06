@@ -1,5 +1,443 @@
 
+L7 expérimental test évolution de code
+https://regex101.com/r/xFyKJB/1
 
+
+PHPML 2.9:
+https://regex101.com/r/mh8AKd/1
+https://regex101.com/r/dyiyTT/1
+---
+https://regex101.com/r/itPaTo/1
+--
+https://regex101.com/r/3Co5DF/1
+https://regex101.com/r/gKmN0x/1
+
+
+PHPML2.8:
+https://regex101.com/r/c9pEO7/1
+
+
+PHPML 2.7:
+version simplifier detecteur de PHPML
+->https://regex101.com/r/ovRi32/1
+(*UTF16)(*UCP)(?|<(?<tag>phpml)\s*(?|(?#
+------------------------------------------------------------------------------
+)(?:(?# FORME 1 :
+data-actions:)(?:\s*(?|data-actions|actions)="(?:(?(R)\w++|[^""]*+)|(?R))*"\s*)?(?#
+data-exploit:)(?:\s*(?|data-exploit|exploit)="(?:(?(R)\w++|[^""]*+)|(?R))*"\s*)?)|(?#
+------------------------------------------------------------------------------
+)(?:(?# FORME 2 : :foo.bar@element1#element2 | :foo.bar[test] | :foo.bar="foobar" not use $
+data-actions:)(?:\s*:\w+\.\w+(?|(?:\@\w+(?:\#\w+)?)|(?:\((?:(?(R)\w++|[^()]*+)|(?R))*\)))?\s*)(?#
+data-exploit:)(?:="(?:(?(R)\w++|[^""]*+)|(?R))*"\s*)?))(?#
+------------------------------------------------------------------------------
+data-inserts:)(?:(?|data-inserts|inserts)="(?:(?(R)\w++|[^""]*+)|(?R))*"\s*)?(?#
+------------------------------------------------------------------------------
+PIED >foobar</phpml>
+FIN:)\s*>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>|(?#
+------------------------------------------------------------------------------
+FORME non PHPML reconnu:<tag> | <tag></tag>
+FORME A:)(?#
+FORME B:)(?:<\w*\s*[[:word:][:cntrl:][:blank:]+*-="'\/\\.,;:[\](){}\x20?#&%|@]*\s*>))
+
+
+PHPML 2.6:
+-> https://regex101.com/r/IIuEK0/1
+amélioration du cde
+(*UTF16)(*UCP)(?|<(?<tag>phpml)\s*(?|(?#
+------------------------------------------------------------------------------
+)(?:(?# FORME 1 :
+data-actions:)(?:\s*(?|data-actions|actions)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?(?#
+data-exploit:)(?:\s*(?|data-exploit|exploit)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?)|(?#
+------------------------------------------------------------------------------
+)(?:(?# FORME 2 : :foo.bar@element1#element2 | :foo.bar[test] | :foo.bar="foobar" not use $
+data-actions:)(?:\s*:(\w+\.\w+(?|(?:\@\w+(?:\#\w+)?)|(?:\((\$?\w+.*\$?\w+)\)))?)\s*)(?#
+data-exploit:)(?:="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?))(?#
+------------------------------------------------------------------------------
+data-inserts:)(?:(?|data-inserts|inserts)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?(?#
+------------------------------------------------------------------------------
+PIED >foobar</phpml>
+FIN:)\s*>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>|(?#
+------------------------------------------------------------------------------
+FORME non PHPML reconnu:<tag> | <tag></tag>
+FORME A:)(?#
+FORME B:)(?:<(\w*)\s*[[:word:][:cntrl:][:blank:]+*-="'\/\\.,;:[\](){}\x20?#&%|@]*\s*>))
+
+
+PHPML 2.5:
+-> https://regex101.com/r/sGtcdJ/1
+--
+https://regex101.com/r/NdUmCD/1
+(*UTF16)(*UCP)<(?|(?<tag>phpml)\s*(?|(?#
+------------------------------------------------------------------------------
+)(?:(?# FORME 1 :
+data-actions:)(?:\s*(?|data-actions|actions)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?(?#
+data-exploit:)(?:\s*(?|data-exploit|exploit)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?)|(?#
+------------------------------------------------------------------------------
+)(?:(?# FORME 2 : :foo.bar@element1#element2 | :foo.bar[test] | :foo.bar="foobar"
+data-actions:)(?:\s*:(\w+\.\w+(?|(?:\@\w*(?:\#\w*)?)|(?:\(((?:(?(R)\w++|[^()]*+)|(?R))*)\)))?)\s*)(?#
+data-exploit:)(?:="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?))(?#
+------------------------------------------------------------------------------
+data-inserts:)(?:(?|data-inserts|inserts)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?(?#
+------------------------------------------------------------------------------
+PIED >foobar</phpml>
+FIN:)\s*>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>|(?#
+------------------------------------------------------------------------------
+FORME non PHPML reconnu:<tag> | <tag></tag>
+FORME A:)(?:(?<tag>\w*)\s*([[:word:][:cntrl:][:blank:]:+*-.="'\/\\,;[\](){}\x20]*)\s*>)|(?#
+FORME B:)(?:(?<tag>\w*)\s*([[:word:][:cntrl:][:blank:]:+*-.="'\/\\,;[\](){}\x20]*)\s*\/?>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/\g{tag}>))
+
+
+
+
+PHPML 2.4 finalisation 1:
+(*UTF16)(*UCP)<(?|(?<tag>phpml)\s*(?|(?#
+partie1 data-actions/exploit)(?:(?#
+actions:)(?:\s*(?|data-actions|actions)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?(?#
+exploit:)(?:\s*(?|data-exploit|exploit)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?)|(?#
+partie2 data-actions/exploit)(?:(?#
+actions:)(?:\s*:(\w+\.\w+(?|(?:\@\w*(?:\#\w*)?)|(?:\(((?:(?(R)\w++|[^()]*+)|(?R))*)\)))?)\s*)(?#
+exploit:)(?:="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?))(?#
+data-inserts)(?:(?|data-inserts|inserts)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?\s*>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>|(?:(?<tag>\w*)\s*([[:word:][:cntrl:][:blank:]:+*-.="'\/\\,;[\](){}\x20]*)\s*>)|(?:(?<tag>\w*)\s*([[:word:][:cntrl:][:blank:]:+*-.="'\/\\,;[\](){}\x20]*)\s*\/?>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/\g{tag}>))
+--
+https://regex101.com/r/uya2LM/1
+
+
+
+
+PHPML 2.3 teste :
+(*UTF16)(*UCP)<(?|(phpml)\s*(?|(?#
+partie1 data-actions/exploit)(?:(?|data-actions|actions)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*(?:(?|data-exploit|exploit)="((?:(?(R)\w++|[^""]*+)|(?R))*)")?\s*)|(?#
+partie2 data-actions/exploit)(?::(\w*\.\w*)\s*="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*))(?#
+data-inserts)(?:(?|data-inserts|inserts)="((?:(?(R)\w++|[^""]*+)|(?R))*)"\s*)?\s*>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>|(\w*)\s*([[:word:][:cntrl:][:blank:]:+*-.="'\/\\,;[\](){}\x20]*)\s*\/?>.*)
+
+
+PHPML 2.2 experimental concept 3
+(*UTF16)(*UCP)<(?:(phpml)|\w*)\s*([[:word:][:cntrl:][:blank:]:\-.="'\/\\,;[\](){}\x20]*)\s*\/?>.*(?:((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>)?
+https://regex101.com/r/EQSj2S/1
+phase de test 1 réussit!
+syntaxe retenu :
+<phpml data-actions="class.methode" data-exploite="var1,var2">contenu HTML</phpml>
+ou moins conventionel au xml et HTML
+<phpml:class.methode="var1,var2">contenu HTML</phpml>
+Affinage et amélioration :
+https://regex101.com/r/cfCOss/1
+pas de forme réduite comme <phpml:class.methode="var1,var2">
+il y a obligation d'une balise fermante ou
+de la forme ouvrante/fermante <xyz/>
+<phpml:class.methode="var1,var2" />
+https://regex101.com/r/ktox7o/1
+et pour le moment l'impossibilité d'utilisé des balise phpml imbriqué comme si dessous :
+<phpml xyz>
+<div>foo<phpml uvw..>bar</phpml></div>
+</phpml>
+c'est a évité bien que dans certaine condition c'est possible
+il n'y aura pas d'interprétation de cette balise;
+le phpml étant un asserment d'application d'un code ou d'exploitation d'un contenu.
+la forme réduite sera de préférence interdite
+-> forme strict retenu :
+https://regex101.com/r/8bGaGD/1
+
+<phpml data-actions="class.methode" data-exploite="test2" data-injection="" >contenu</phpml>
+<phpml actions="class.methode" exploite="test2" injection="">contenu</phpml>
+<phpml:class.methode="test1" injection="">contenu</phpml>
+https://regex101.com/r/mftPSb/1
+(*UTF16)(*UCP)<(?|(phpml)\s*([[:word:][:cntrl:][:blank:]:\+*-.="'\/\\,;[\](){}\x20]*)\s*>((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>|(\w*)\s*([[:word:][:cntrl:][:blank:]:\+*-.="'\/\\,;[\](){}\x20]*)\s*\/?>.*)
+https://regex101.com/r/Fxfeoh/1
+
+
+
+
+PHPML 2.1 experimental concep 3 https://regex101.com/r/V64JRF/1
+https://regex101.com/r/V64JRF/1
+<(?:(phpml)|\w*)\s*([[:word:][:cntrl:][:blank:]:\-.="'\/\\,;[\](){}\x20]*)\s*\/?>.*(?:((?:(?(R)\w++|[^><]*+)|(?R))*)<\/phpml>)?
+---
+<phpml data-actions="class.methode" data-exploite="qsqsqs">
+<php></php>
+<php>
+<php>dfdfdfdfdfdfddddddddddddddd
+<img src="">lklkl
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</phpml>
+
+<phpml data-actions="class.methode" data-exploite="">
+<tag></tag>
+<tag/>
+<tag>
+<html langue="ererererr"></html>
+</phpml>
+
+
+PHPML 2.0 analyse et recherche :
+https://regex101.com/r/yVxnBU/1
+
+HTML 1
+PHP-ML 2.0 :
+https://regex101.com/r/lnXfsH/1
+
+
+PHP-ML
+prototype finalisation visuel forme 1 xml compatible et forme 2 forme réduite
+https://regex101.com/r/Iqw24l/1
+<(?#
+forme1 :)(?#
+tête:)(?|phpml\s*(?#
+action:)\sdata-actions="(\w+):([[[:word:]._'><!+-\/*()|]*)\"\s*(?#
+data-exploit:)(?:\sdata-exploit="((?:(?(R)\w++|[^""]*+)|(?R)))\")?(?#
+forme2 :)|(?#
+action:)(\w+):([[[:word:]._'><!+-\/*()|]*)\s*(?#
+data-exploit:)(?:="((?:(?(R)\w++|[^""]*+)|(?R)))\")?)\s*>
+--- test -->
+
+forme 1:
+<phpml data-actions="alias:Math.equal(3,4)">
+<phpml data-actions="bouton_droite:Modules_objets.boutton_ajustable" data-exploit="
+data:'test'
+">
+
+forme 2:
+<alias:Math.equal(3,4)>
+<bouton_droite:Modules_objets.boutton_ajustable="
+data:'test'
+">
+<bouton_droite:Modules_objets.boutton_ajustable>
+
+<-- test fin ---
+
+PHP-ML
+prototype 5: https://regex101.com/r/yeoOYy/1
+phase 1:
+<\w+:[[[:word:]:._="'><!+-\/*]*\s*(?:\[(?:(?(R)\w++|[^[\]]*+)|(?R))\])?\s*(?:\((?:(?(R)\w++|[^()]*+)|(?R))\))?\s*(?:{(?:(?(R)\w++|[^{}]*+)|(?R))}\s*)*\s*>
+phase 2:
+<(\w+):([[[:word:]:._="'><!+-\/*]*)\s*(?:\[((?:(?(R)\w++|[^[\]]*+)|(?R)))\])?\s*(?:\(((?:(?(R)\w++|[^()]*+)|(?R)))\))?\s*(?:{((?:(?(R)\w++|[^{}]*+)|(?R)))}\s*)*\s*>
+
+
+ave proto 4:
+https://regex101.com/r/FxgscG/1
+<(\w+):([[[:word:]:._="'><!+-\/*]*)\s?(?:\[((?:(?(R)\w++|[^[\]]*+)|(?R))*)\])?\s?(?:\(((?:(?(R)\w++|[^()]*+)|(?R))*)\))?\s?(?:{((?:(?(R)\w++|[^{}]*+)|(?R))*)})?>
+
+save prototype 3 final
+https://regex101.com/r/Zl6tqD/2
+<(\w+):([[[:word:]:.]*)\s?(?:\[((?:(?(R)\w++|[^[\]]*+)|(?R))*)\])?\s?(?:\(((?:(?(R)\w++|[^()]*+)|(?R))*)\))?\s?(?:{((?:(?(R)\w++|[^{}]*+)|(?R))*)})?>
+<alias:class.methode[in][out]{data}>
+
+
+save : https://regex101.com/r/Zl6tqD/1
+<(\w+):([[[:word:]:.]*)([[:word:][:cntrl:][:blank:]:\-.="'\/\\,;[\](){}\x20]*)(?:{((?:(?(R)\w++|[^{}]*+)|(?R))*)})?>
+
+évolution de la syntax PHP-ML detection uniquement du PHP-ML
+<alias:class.methode arguments {
+elements exotique
+}>
+
+
+save nuit:
+(?#
+DEFINITIONS:
+)(?(DEFINE)(?'head'[[:word:]]+))(?#
+)(?(DEFINE)(?'arg'[[:word:][:cntrl:][:blank:]:\-.="'\/\\,;[\](){}\x20]*))(?#
+)(?(DEFINE)(?'corps'>(?:[^<>]|(?R))*))(?#
+)(?(DEFINE)(?'endtag'(?:<\/\g{5}\s?>|>)))(?#
+ANALYSE:
+)<(?:((?P>head))(?(R)\w++|[^<>]*+)|(?R))*((?P>corps))(?:<\/\g{5}\s?>)?
+
+
+
+prototype final 5 : https://regex101.com/r/VAXBYC/1
+(?#
+tête: <alias:class.methode argument...
+)<([0-9a-zA-Z]+)[0-9a-zA-Z:_\-.="'\/\\,;[\](){}\x0A\x20]*>(?#
+corps: recuper tous entre ><
+)(?:(?:[^><]|(?R))*(?#
+la queueu:
+)<\/\g{1}\s?>)?
+
+
+
+prototype 4 mini detect: https://regex101.com/r/UY9FMu/1
+(?#
+tête: <alias
+)\<([0-9a-zA-Z:\_\.]+)\s*((?:[^\<>]|(?R))*)\>(?#
+corps: recuper tous entre ><
+)(?:((?:[^\>\<]|(?R))*)(?#
+la queueu:
+)\<\/\g{1}\s?\>)?
+
+
+
+prototype 3 little detect:
+https://regex101.com/r/HKJw8L/1
+(?#
+tête: <alias
+)\<(?:([0-9a-zA-Z:\_\.]+))((?:(?:[^\<>]|(?R))\s*)*)\>(?#
+corps: recuper tous entre ><
+)((?:[^\>\<]|(?R))*)(?#
+la queueu:
+)(?:\<\/\g{1}\s?\>)?
+
+
+
+v15 proto 2 :
+https://regex101.com/r/GhG3Rh/1
+(?:(?:\<\s*(?<alias>\w+)(?:(?|\s+|\:(\w+)\.(\w+)\s*\n?)((?:(?:[^\s>]|(?R))\s*)*))?\>)(?:(?:(?:[^\>\<]|(?R))*)(?:\<\s*\/\s*(?>(\k<alias>))(?:\:(?>(\w+)\.(\w+)))?\s*\>))?)
+
+
+
+
+test proto
+(?:\<\s*(?<alias>\w+)(?:\s*(?:(?:[^\s>|\/>]|(?R))\s*\/?)*\s*)?\>(?:(?:(?:[^\>\<]|(?R))*)(?:\<\s*\/\s*(?>(\k<alias>))\s*\>))?)
+
+
+-------
+v14 phase 1
+save2: https://regex101.com/r/UaU40n/1
+save: https://regex101.com/r/OT1o0m/2
+(?:(?:(?#
+test1.A:
+)(?:\<\s*(?<ml1>\w+)(?:\s*(?:(?:[^\s\>]|(?R))\s*\/?)*\s*\>)?(?:(?:(?:[^\>\<]|(?R))*)(?:\<\s*\/\s*(?>(\k<ml1>))\s*\>))?)(?#
+test1.B:
+))|(?:(?#
+test2.A:
+)(?:<(\w+)\:(\w+)\.(\w+)\s*(?:\(((?:[^\(\)]|(?R))*)\))?\s*\>(?#)((?:[^\>\<]|(?R))*)(?#)\<\s*\/\s*(?>g{1})\:?(?>\w+\.\w+)\s*>)|(?#
+test2.B:
+)(?:<(\w+)\:(\w+)\.(\w+)\s*(?:\(((?:[^\(\)]|(?R))*)\))?\s*\/?>)))
+-----
+<cccc test="" test="">
+<b test="" test="" >
+</cccc>
+<b test="" test="" />
+
+<php:Modules_objets.boutton_ajustable(
+        texte:"",
+        image:"svg/fi-rr-chart-tree.svg",
+        class:"logo_boutton_ajustable",
+        theme:"THEMEUSE",
+        lien:"",
+        injecter:"['tag' => 'img', 'injecter' => 'test_dinjection']"
+        )></php>
+
+
+
+
+
+v13 finalisation compatibilité HTML
+phase 1
+(?|(?:\<\s*(\w*)(?:\s*(?:(?:[^\s\>]|(?R))\s*)*\s*\>+)?\>*(?:(?:[^\>\<]|(?R))*\<\s*\/\s*(?>\g{1})\s*\>))|(?:\<\s*\w*(?:\s+(?:(?:[^\s\>]|(?R))\s*)*)?\>)|(?:<\s*(\w*)\:*\w*\.*\w*\s*(?:\((?:[^\(\)]|(?R))*\))?\s*\>(?:[^\>\<]|(?R))*\<\s*\/\s*(?>\g{1})\:?(?>\w*\.*\w*)\s*>)|(?:<\s*\w*\:?\w*\.*\w*\s*(?:\((?:[^\(\)]|(?R))*\))?\s*\/?>))
+phase 2 https://regex101.com/r/YcUd4E/1
+(?|(?:\<\s*(\w*)(?:\s*(?:(?:[^\s\>]|(?R))\s*)*\s*\>+)?\>*(?:((?:[^\>\<]|(?R))*)\<\s*\/\s*(?>\g{1})\s*\>))|(?:\<\s*\w*(?:\s+(?:(?:[^\s\>]|(?R))\s*)*)?\>)|(?:<\s*(\w*)(\:)*(\w*\.*\w*)\s*(?:\(((?:[^\(\)]|(?R))*)\))?\s*\>((?:[^\>\<]|(?R))*)\<\s*\/\s*(?>\g{1})\:?(?>\w*\.*\w*)\s*>)|(?:<\s*(\w*)(\:?)(\w*\.*\w*)\s*(?:\(((?:[^\(\)]|(?R))*)\))?\s*\/?>))
+
+
+
+v12 : ajustement // https://regex101.com/r/GGoppy/3
+phase 1
+(?|<\s*(\w*)\:?\w*\.*\w*\s*(?:\((?:[^\(\)]|(?R))*\))?\s*\>(?:[^\>\<]|(?R))*\<\s*\/\s*(?>\g{1})\:?(?>\w*\.*\w*)\s*>|<\s*\w*\:?\w*\.*\w*\s*(?:\((?:[^\(\)]|(?R))*\))?\s*\/?>)
+phase 2 : https://regex101.com/r/GGoppy/4
+(?|<\s*(\w*)(\:?)(\w*\.*\w*)\s*(?:\(((?:[^\(\)]|(?R))*)\))?\s*\>((?:[^\>\<]|(?R))*)\<\s*\/\s*(?>\g{1})\:?(?>\w*\.*\w*)\s*>|<\s*(\w*)(\:?)(\w*\.*\w*)\s*(?:\(((?:[^\(\)]|(?R))*)\))?\s*\/?>)
+
+évolution forme final v11
+(?|<\s*(\w*)(:*)(\w*\.*\w*)\s*\(*((?:[^\(\)]|(?R))*)\)*\s*\>+((?:[^\>\<]|(?R))*)\<+\s*\/\s*(?>\g{1}):*(?>\w*\.*\w*)\s*>|<\s*(\w*):*(\w*\.*\w*)\s*\(*((?:[^\(\)]|(?R))*)\)*\s*\/*>)
+
+
+v10 phase 1:
+/(?|<\s*(\w*):*\w*\.*\w*\s*(?:\w*\=\".*\"\s*)*\s*\>+(?:[^\>\<]|(?R))*\<+\s*\/\s*(?>\g{1})\s*>|<\s*\w*:*\w*\.*\w*\s*(?:\w*\=\".*\"\s*)*\s*\/*>)/g
+phase 2 :
+(?|<\s*(\w*):*(\w*\.*\w*)\s*(\w*\=\".*\"\s*)*\s*\>+((?:[^\>\<]|(?R))*)\<+\s*\/\s*(?>\g{1})\s*>|<\s*(\w*):*(\w*\.*\w*)\s*(\w*\=\".*\"\s*)*\s*\/*>)
+
+https://regex101.com/r/F7La8C/6
+
+
+sav8 final :
+v2:
+(?|<\s*(?<tag>\w*):*(\w*\.*\w*)\s*(?<arg>(?:\w*\=\".*\"\s*)*)\s*\>+((?:[^\>\<]|(?R))*)\<+\s*\/\s*(?:\k{tag})\s*>|<\s*(\w*):*(\w*\.*\w*)\s*(?<arg>(?:\w*\=\".*\"\s*)*)\s*\/*>)
+
+v1:
+(?|<\s*(?'tag'\w*):*(\w*\.*\w*)\s*(?'arg'(?:\w*\=\".*\"\s*)*)\s*\>+((?:[^\>\<]|(?R))*)\<+\s*\/\s*(?:\k{tag})\s*>|<\s*(\w*):*(\w*\.*\w*)\s*(?'arg'(?:\w*\=\".*\"\s*)*)\s*\/*>)
+
+
+sv7 final :
+(?|<\s*(?'tag'\w*):*(\w*\.*\w*)\s*(?'arg'(?:\w*\=\".*\"\s*)*)\s*\>+((?:[^\>\<]|(?R))*)\<+\s*\/\s*(\k{tag})\s*>|<\s*(\w*):*(\w*\.*\w*)\s*(?'arg'(?:\w*\=\".*\"\s*)*)\s*\/*>)
+
+sv6 prototype 1
+(?|<\s*(?'first'\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;:,{}[\]()="'\s\&\?\@]*)\"*\s*\>+((?:[^\>\<]|(?R))*)\<+\s*\/\s*(\k{first})\s*>|<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;:,{}[\]()="'\s\&\?\@]*)\s*\/>)
+
+
+sv5.1 FINAL:
+(?|<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;:,{}[\]()="'\s\&\?\@]*)>\>*((?:[^\>\<]|(?R))*)\<*<\s*\/\s*(\w*)\s*>|<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;:,{}[\]()="'\s\&\?\@]*)\s*\/>)
+
+
+SV4.2 FINAL :
+(?:(?:<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;:,{}[\]()="'\s\&\?\@]*)>((?:\>*(?:(?:(?:[^\>\<]|(?R)))*)\<*))<\s*\/\s*(\w*)\s*>)|<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;:,{}[\]()="'\s\&\?\@]*)\s*\/>)
+protocole:
+<tag></tag>
+<tag/>
+<tag:objet.methode argument=""></tag>
+<tag:objet.methode argument=""/>
+<img src="test\test" /> (pour le moment !ne pas utilisé / et du : dans lien)
+<img src="[https]\test\test" /> il y a une utilisation du \ comme remplacement
+
+exemple
+{
+<php:objet.bare_chargement valeur="0;100" src="[https]\test\test.com">
+<test:objet.microtime valeur="debut"/>
+<b>
+<div>test</div>
+</b>
+<b/>
+<div tabindex="0"></div>
+<test:objet.microtime valeur="fin"/>
+
+<div dir="auto" class="css-901oao r-1nao33i r-37j5jr r-a023e6 r-16dba41 r-rjixqe r-bcqeeo r-bnwqim r-qvutc0" id="id__qk9nvc5e0xl" data-testid="tweetText" lang="fr"><span class="css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0">Un acteur de seconde zone qui fait l’ouverture d’un festival de navets organisé par des bananes !</span></div>
+<img src="https:\\test\test.:@.fr" />
+
+
+</php>
+<php:objet.bare_chargement valeur="0;100">
+<test:objet.microtime valeur="debut"/>
+<b>
+<div>test</div>
+</b>
+<test:objet.microtime valeur="fin"/>
+</php>
+}
+---------
+sv3 finl
+(?:(?:<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;,{}[\]()="'\s\:\&\?]*)>((?:\>*(?:(?:(?:[^\>\<]|(?R)))*)\<*))<\s*\/\s*(\w*)\s*>)|<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;,{}[\]()="']*)\s*\/>)
+
+sv2 final
+(?:<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;,{}[\]()="']*)>((?:\>*(?:(?:(?:[^\>\<]|(?R)))*)\<*))<\s*\/\s*(\w*)\s*>|<\s*\w*\s*\/>|<\s*(\w*):*(\w*\.*\w*)\s*([0-9a-zA-Z+\\\-*_.;,{}[\]()="']*)\s*\/>)
+
+sv1 final
+<\s*\w*[:|#]\w*:*\w*[^>]*>(?:(?:\>*(?:(?:(?:[^\>\<]|(?R)))*)\<*))<\s*\/\s*\w*[:|#]*\w*:*\w*>
+
+<\s*\w*:\w*[^>]*>(?:(?:\>*(?:(?:(?:[^\>*\<*]|(?R)))*)\<*))<\s*\/\s*\w*:\w*>
+
+----------
+<\s*i:test[^>]*>([\t*|\n*].*?[\t*|\n*])<\s*\/\s*i:test>
+
+----
+(?>(?>\<)?i)(?:(?>\:)?([0-9a-zA-Z_]+)?(?>\s*)(.*))(?:\{(?:(?:(?:[^\{\}]|(?R)))*)(?:\}(?>\>)?))
+<i:head1 teste="" teste2="" {
+ i:test1_{
+ i:test2{test}
+}
+}>
+
+i:head1{
+ i:test1_{
+ i:test2{test}
+}
+}
+
+----
+phase 1
+(?>\<)(?:([0-9a-zA-Z_]*)(?>\:)?([0-9a-zA-Z_]+)?(?>\s*)(.*))(?:\>((?:.*(?:[^\>\<]|(?R))\W*.*)*)\<\/|\n\<\/|\r\n\<\/)([0-9a-zA-Z_]+)(?>\>)
+
+(?>\<)(([a-zA-Z]*)(?>\:)([a-zA-Z]+)(?>\s*)(.*))(?:\>((?:.*(?:[^\>\<]|(?R))\W*.*)*)\<\/|\n\<\/|\r\n\<\/)([a-zA-Z]+)(?>\>)
+phase 2
+(?:(\w*)(?>=["|\'])([0-9a-zA-Z\/\\\[\]\(\)\{\}\`\,\;\:\.\r\n\-\@\"\']*)(?>["|\']\s*))
+
+
+--------------
 //(?:(?:[<]E*.*\{(?:(?:(?:[^\{\}]|(?R)))*)\})(?:>*))
 
 (?:\{(?:(?:(?:[^\{\}]|(?R)))*)\})

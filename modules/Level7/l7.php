@@ -16,13 +16,13 @@ class l7
     private $_map_syntaxe = array();
     private $_data = '';
     // const TABULATION_ONOFF = false;
-    private bool $tabilation_onoff;
+    private bool $tabulation_onoff;
     private $_special_syntaxe = array();
 
     public function __construct(&$liste_syntaxe, $tabulation = false)
     {
         $this->load_syntaxe($liste_syntaxe);
-        $this->tabilation_onoff = $tabulation;
+        $this->tabulation_onoff = $tabulation;
         $this->cphp_eol = ($tabulation == false) ? '' : PHP_EOL;
     }
 
@@ -146,7 +146,7 @@ class l7
             $this, $val, $parts['extension'],
             $this->exploder_syntaxe_parent,
             $this->exploder_syntaxe_encaps,
-            $this->tabilation_onoff
+            $this->tabulation_onoff
         );
         return $val;
 

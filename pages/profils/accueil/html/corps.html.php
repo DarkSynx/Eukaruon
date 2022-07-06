@@ -7,6 +7,52 @@ use Eukaruon\pilote;
 
 define('THEMEUSE', 'grey');
 
+$test = 4;
+
+$donnee = <<<TAG
+<phpml>
+<phpml id="1" actions="test.test" exploit="user" inserts="$test"></phpml>
+<phpml id="2" actions="test.test" exploit="{
+'doctype':'html',
+'lang':'fr',
+'title':'test',
+'base':'',
+'head':{
+    'meta':'',
+    'link':[
+            {'rel':'alternate', 'href':'https://www.php.net/manual/en/control-structures.if.php', 'hreflang':'en'},
+            {'rel':'alternate', 'href':'https://www.php.net/manual/en/control-structures.if.php', 'hreflang':'en'},
+            {'rel':'alternate', 'href':'https://www.php.net/manual/en/control-structures.if.php', 'hreflang':'en'}
+        ]
+    }
+}"></phpml>
+<if id="3" actions="test.test" user="2">
+    <done>
+        <div>test 1</div>
+        <div>test 2</div>
+        <div>test 3</div>
+    </done>
+    <elseif user="3">
+        <div>test 4</div>
+        <div>test 5</div>
+        <div>test 6</div>
+    </elseif>
+    <else>
+        <div>test 7</div>
+        <div>test 8</div>
+        <div>test 9</div>
+    </else>
+</if>
+<phpml id="4" actions="test.test" exploit="end"><footer></footer></phpml>
+</phpml>
+TAG;
+
+$tag = new AC();
+$tag->ctag2($donnee);
+
+exit;
+
+AC::debutTempTest();
 MO::doctype();
 MO::tete();
 
@@ -27,7 +73,7 @@ if (MO::session('utilisateur', 'inscript')) {
 
     MO::debutHeader();
     echo '{{TITRE}}';
-    AC::activiter('test', ['argument1', '$vare2', 'argument3']);
+
     MO::debutDiv(id: 'colone_menu');
 
 
@@ -137,4 +183,5 @@ if (MO::session('utilisateur', 'inscript')) {
 
 MO::debutDiv('END');
 MO::ScriptTheme('grey', true);
+AC::finTempTest();
 MO::fin();
