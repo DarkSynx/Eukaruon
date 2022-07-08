@@ -3,6 +3,7 @@
 use Eukaruon\configs\CMD;
 use Eukaruon\modules\Modules_actions as AC;
 use Eukaruon\modules\Modules_objets as MO;
+use Eukaruon\modules\Modules_phpml as PHPML;
 use Eukaruon\pilote;
 
 define('THEMEUSE', 'grey');
@@ -11,8 +12,8 @@ $test = 4;
 
 $donnee = <<<TAG
 <phpml>
-<phpml id="1" actions="test.test" exploit="user" inserts="$test"></phpml>
-<phpml id="2" actions="test.test" exploit="{
+<test></test>
+<class id="2" actions="test.test" exploit="{
 'doctype':'html',
 'lang':'fr',
 'title':'test',
@@ -25,7 +26,11 @@ $donnee = <<<TAG
             {'rel':'alternate', 'href':'https://www.php.net/manual/en/control-structures.if.php', 'hreflang':'en'}
         ]
     }
-}"></phpml>
+}">
+<div>test de div</div>
+<div>test de div2</div>
+<label>test de div3<input type="texte" value="test"/></label>
+</class>
 <if id="3" actions="test.test" user="2">
     <done>
         <div>test 1</div>
@@ -43,12 +48,11 @@ $donnee = <<<TAG
         <div>test 9</div>
     </else>
 </if>
-<phpml id="4" actions="test.test" exploit="end"><footer></footer></phpml>
 </phpml>
 TAG;
 
-$tag = new AC();
-$tag->ctag2($donnee);
+$tag = new PHPML($donnee);
+
 
 exit;
 

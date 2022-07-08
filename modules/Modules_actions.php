@@ -2,7 +2,6 @@
 
 namespace Eukaruon\modules;
 
-use DOMDocument;
 use Exception;
 
 
@@ -54,6 +53,7 @@ class Modules_actions
     const ACTIONS = '/(*UCP)(\w+)(?:\.(\w*))?(?|(\@)(\w+)(?:\#(\w+))?|(\()(.*)\))?/';
 
     private array $_gen_var_phpml;
+    private object $_phpml;
 
     protected $_contenu_final = ""; // va contenir l'interprétation du contenu
 
@@ -62,29 +62,8 @@ class Modules_actions
         $this->_gen_var_phpml = array();
     }
 
-    // CMAV: class tag
-    public function ctag2(string $chaine, bool $lien = false)
-    {
-        $fonctions = ['if', 'phpml'];
 
-
-        $dom = new DOMDocument();
-
-        $dom->loadXML($chaine);
-        $start = $dom->getElementsByTagName('phpml')[0];
-
-        foreach ($start->childNodes as $childNode) {
-            // var_dump($childNode);
-            echo $childNode->nodeName, PHP_EOL, ' | ';
-            echo $childNode->getAttribute('actions'), PHP_EOL, ' | ';
-            echo $childNode->getAttribute('exploit'), PHP_EOL, ' | ';
-            echo $childNode->getAttribute('inserts'), PHP_EOL, '<hr/>';
-        }
-
-
-    }
-
-    // CMAV: class tag
+// CMAV: class tag
     public function ctag(string $chaine, bool $lien = false)
     {
         // var_dump($chaine);
