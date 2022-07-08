@@ -1,0 +1,9 @@
+{
+  "corps": "exemple.php",
+  "donnees": {
+    "extension_force": "php",
+    "syntaxe": "php",
+    "LANGUE": "fr",
+    "TITRE": "test de page"
+  }
+}

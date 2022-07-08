@@ -7,6 +7,8 @@ class Modules_habillage
     protected $injection;
     protected $arbre_noms;
 
+    private string $_big_data = '';
+
     private array $liste_tag =
         ['a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article', 'aside',
             'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'big', 'blockquote', 'body', 'button', 'canvas', 'caption',
@@ -98,6 +100,7 @@ class Modules_habillage
             $this->value = [$output[0] . $this->value[0], $this->value[1]];
         }
 
+        //$this->_big_data .= $this->value[0];
         echo $this->value[0];
         return $this->value;
     }

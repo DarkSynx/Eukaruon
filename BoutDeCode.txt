@@ -1,6 +1,25 @@
 
 L7 expérimental test évolution de code
 https://regex101.com/r/xFyKJB/1
+SV
+
+            /*
+            $fch_xplt = file_get_contents(GENERER . $nom_fichier_genrer);
+            if (substr($fch_xplt, 0, 5) == '<?php') {
+                $fch_xplt = substr($fch_xplt, 5);
+                eval(
+                    // on retir ici le <?php pour déclencher l'évaluation
+                    // ça reste un moment senssible donc pas oublier de réalisé un
+                    // analyseur de code pour n'utiliser que des modules
+                $fch_xplt
+                );
+            }
+            else {
+                echo $fch_xplt;
+            }
+            */
+
+
 
 /\/\||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 SAVE SCRIPT TOPGONE

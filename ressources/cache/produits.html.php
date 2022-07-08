@@ -1,9 +1,4 @@
-<?php error_reporting(0);
-header("Content-type: text/html; charset=utf-8"); ?>
-<pre class='xdebug-var-dump' dir='ltr'>
-<small>C:\Users\synxcinaty\PhpstormProjects\Eukaruon\modules\Modules_pages.php:566:</small><small>string</small> <font
-            color='#cc0000'>'produits.html'</font> <i>(length=13)</i>
-</pre><!DOCTYPE html>
+<?php error_reporting(0); header("Content-type: text/html; charset=utf-8"); ?><!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">

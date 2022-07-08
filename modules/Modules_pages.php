@@ -322,12 +322,16 @@ class Modules_pages extends Modules_outils
     {
         $nom_specifique = explode('_', basename($nom_profil));
         $tableau_donnee = self::options_profil($nom_profil);
-
         if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
+                $tableau_donnee['donnees']['syntaxe'] == 'PHP' ||
+                $tableau_donnee['donnees']['syntaxe'] == 'php'
+            )) {
+            return file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.php');
+        } else if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
                 $tableau_donnee['donnees']['syntaxe'] == 'PHPML' ||
                 $tableau_donnee['donnees']['syntaxe'] == 'phpml'
             )) {
-            var_dump(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml');
+            //var_dump(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml');
             //$donee_exploite = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml');
             $phpml = new PHPML(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml', true);
             return $phpml->get_gen_data();
@@ -578,19 +582,23 @@ class Modules_pages extends Modules_outils
              * echo htmlspecialchars($_COOKIE["tc"],  ENT_QUOTES, 'UTF-8');
              * die();
              */
-            var_dump($nom_fichier_genrer);
+            // var_dump($nom_fichier_genrer);
             $path_parts = pathinfo(GENERER . $nom_fichier_genrer);
 
             if ($path_parts['extension'] == 'php') {
                 try {
-                    if (!method_exists(GENERER . $nom_fichier_genrer, 'gen')) {
+
+                    // var_dump(GENERER . $path_parts['basename']);
+                    include GENERER . $path_parts['basename'];
+                    $execute = new $path_parts['filename']();
+                    if (method_exists($execute, 'page')) {
+
+                        $execute->page();
+
+                    } else {
                         throw new Exception(
                             "Erreur => [ GENERER : $nom_fichier_genrer ] manque la methode gen <br/>"
                             . PHP_EOL);
-                    } else {
-                        include GENERER . $nom_fichier_genrer;
-                        $execute = new $path_parts['filename']();
-                        echo $execute->gen();
                     }
                 } catch
                 (Exception $e) {
@@ -598,25 +606,12 @@ class Modules_pages extends Modules_outils
                     exit;
                 }
 
-
             } else {
+
                 echo file_get_contents(GENERER . $nom_fichier_genrer);
+
             }
-            /*
-            $fch_xplt = file_get_contents(GENERER . $nom_fichier_genrer);
-            if (substr($fch_xplt, 0, 5) == '<?php') {
-                $fch_xplt = substr($fch_xplt, 5);
-                eval(
-                    // on retir ici le <?php pour déclencher l'évaluation
-                    // ça reste un moment senssible donc pas oublier de réalisé un
-                    // analyseur de code pour n'utiliser que des modules
-                $fch_xplt
-                );
-            }
-            else {
-                echo $fch_xplt;
-            }
-            */
+
 
             $cache_contenu = ob_get_contents();
 
@@ -624,8 +619,10 @@ class Modules_pages extends Modules_outils
             ob_end_clean();
             //------------
 
-            //var_dump($cache_contenu);
-            if ($path_parts['extension'] != 'php') $chemin_encache .= '.php';
+
+            if ($path_parts['extension'] == 'php') {
+                $chemin_encache = CACHE . $path_parts['filename'] . '.html.php';
+            }
 
             $fd = fopen($chemin_encache, 'w');
 
