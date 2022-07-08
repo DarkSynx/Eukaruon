@@ -30,21 +30,28 @@ if ($administration_outils->tester_la_validiter_de_la_demande()) {
 
     var_dump($donnees_serveur);
 
+    $extention = $Modules_pages::recup_extention(
+        $Modules_pages::options_profil($donnees_serveur['valeur'])
+    );
+
     switch ($donnees_serveur['option']) {
         case 'generer':
             $Modules_pages->preparation_mise_encache($donnees_serveur['valeur']);
             /* Fini la gestion des pages non profile  */
             $page_construite = $Modules_pages->get_profile($donnees_serveur['valeur']);
-            $Modules_pages->generer($donnees_serveur['valeur'] . '.html', $page_construite);
+
+            $Modules_pages->generer("{$donnees_serveur['valeur']}.$extention", $page_construite);
             // echo 'Generer!' . PHP_EOL;
             break;
         case 'cache':
-            $Modules_pages->mise_en_cache($donnees_serveur['valeur'] . '.html');
+
+            $Modules_pages->mise_en_cache("{$donnees_serveur['valeur']}.$extention");
             //echo 'Mise en cache!' . PHP_EOL;
             break;
         case 'supprimer':
             @unlink(CACHE . $donnees_serveur['valeur'] . '.html.php');
             @unlink(GENERER . $donnees_serveur['valeur'] . '.html');
+            @unlink(GENERER . $donnees_serveur['valeur'] . '.php');
             @delTree(CONTENUS . $donnees_serveur['valeur']);
             //echo 'Supprimer!' . PHP_EOL;
             break;

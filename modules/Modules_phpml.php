@@ -8,25 +8,29 @@ class Modules_phpml
 {
 
     private string $_data = '';
+    private string $_gen_data = '';
 
     public function __construct($data, $lien = false)
     {
         $this->_data = $data;
-        $this->phpml($lien);
+        $this->_gen_data = $this->phpml($lien);
+    }
+
+    public function get_gen_data(): string
+    {
+        return $this->_gen_data;
     }
 
     // CMAV: class tag
-    public function phpml(bool $lien = false, $pageGenerer = '')
+    public function phpml(bool $lien_utiliser = false, $pageGenerer = ''): string
     {
-        if ($lien) $chaine = file_get_contents(PROFILS . $this->_data);
+        if ($lien_utiliser) $this->_data = file_get_contents($this->_data);
 
         $dom = new DOMDocument();
         $dom->loadXML($this->_data);
         $start = $dom->getElementsByTagName('phpml')[0];
 
-        echo '//--------------------\\<br/>';
-        var_dump($this->childNodes_exploitation($start->childNodes, $pageGenerer));
-        echo '//--------------------\\<br/>';
+        return $this->childNodes_exploitation($start->childNodes, $pageGenerer);
 
     }
 
@@ -34,36 +38,23 @@ class Modules_phpml
     {
         $balise = '';
         foreach ($start_childNodes as $childNode) {
-
-            var_dump($childNode);
-
+            //var_dump($childNode);
             if ($childNode->nodeType == 1) {
-
-                echo '--------------------[<br/>';
+                //echo '--------------------[<br/>';
                 $exploit_childNode = ($childNode->childElementCount > 0 ?
                     $this->childNodes_exploitation($childNode->childNodes, $pageGenerer)
                     : $childNode->nodeValue);
-                echo ']--------------------<br/>';
-
-
+                //echo ']--------------------<br/>';
                 $balise .= $this->generer(
                     $childNode->nodeName,
                     $this->get_attributs($childNode->attributes),
                     $exploit_childNode,
                 );
 
-
-                //var_dump($balise);
-
-
             } elseif ($childNode->nodeType == 3) {
                 $balise .= $childNode->nodeValue;
-
             }
-
-
         }
-
         return $balise;
     }
 

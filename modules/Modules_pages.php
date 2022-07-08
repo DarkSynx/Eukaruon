@@ -1,6 +1,9 @@
 <?php namespace Eukaruon\modules;
 
 use Eukaruon\configs\DonneeUniqueServeur;
+use Eukaruon\modules\Modules_Level7 as L7;
+use Eukaruon\modules\Modules_phpml as PHPML;
+use Exception;
 use FilesystemIterator;
 
 /** Ce module à pour objectif la gestion des pages il gérera donc aussi bien la construction de profils
@@ -171,9 +174,14 @@ class Modules_pages extends Modules_outils
         $tableau_page_en_cache = $this->tableau_page_en_cache();
         $nom_page = $tableau_page_en_cache[$demande_de_page];
         $this->preparation_mise_encache($nom_page);
+
+        $extention = self::recup_extention(
+            self::options_profil($nom_page)
+        );
+
         $page_construite = $this->get_profile($nom_page);
-        $this->generer($nom_page . '.html', $page_construite);
-        $this->mise_en_cache($nom_page . '.html');
+        $this->generer("$nom_page.$extention", $page_construite);
+        $this->mise_en_cache("$nom_page.$extention");
     }
 
 
@@ -303,17 +311,29 @@ class Modules_pages extends Modules_outils
      * "donnees": {
      * "syntaxe": "L7"
      *  }
+     * forcer l'utilisation d'une page PHP non classique
+     *  "donnees": {
+     * "extension_force": "php"
+     * }
      * @param $nom_profil
      * @return array|bool|string
      */
-    public
-    function get_profile($nom_profil): array|bool|string
+    public function get_profile($nom_profil): bool|string
     {
-        $donnee = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.json');
-        $tableau_donnee = json_decode($donnee, true);
         $nom_specifique = explode('_', basename($nom_profil));
+        $tableau_donnee = self::options_profil($nom_profil);
 
         if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
+                $tableau_donnee['donnees']['syntaxe'] == 'PHPML' ||
+                $tableau_donnee['donnees']['syntaxe'] == 'phpml'
+            )) {
+            var_dump(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml');
+            //$donee_exploite = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml');
+            $phpml = new PHPML(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml', true);
+            return $phpml->get_gen_data();
+
+
+        } else if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
                 $tableau_donnee['donnees']['syntaxe'] == 'L7' ||
                 $tableau_donnee['donnees']['syntaxe'] == 'l7'
             )) {
@@ -321,8 +341,8 @@ class Modules_pages extends Modules_outils
             //$Modules_Level7 = new \Eukaruon\modules\Modules_Level7();
 
             if (empty($this->donnee_gestionnaire['Modules_Level7']) || is_null($this->donnee_gestionnaire['Modules_Level7'])) {
-                include_once MODULES . 'Modules_Level7.php';
-                $Modules_Level7 = new Modules_Level7(null, true);
+                //include_once MODULES . 'Modules_Level7.php';
+                $Modules_Level7 = new L7(null, true);
                 // var_dump($Modules_Level7);
             } else {
                 //var_dump($this->donnee_gestionnaire);
@@ -341,6 +361,21 @@ class Modules_pages extends Modules_outils
                 (($nom_specifique[0] == 'page') ? true : false)
             );
         }
+    }
+
+    public static function options_profil($nom_profil)
+    {
+        $donnee = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.json');
+        return json_decode($donnee, true);
+    }
+
+    public static function recup_extention($tableau_donnee)
+    {
+        if (array_key_exists('extension_force', $tableau_donnee['donnees']) &&
+            $tableau_donnee['donnees']['extension_force'] == 'php') {
+            return 'php';
+        }
+        return 'html';
     }
 
     /** Cette methode permet de construire une page par rapport au profile de celle-ci
@@ -543,14 +578,45 @@ class Modules_pages extends Modules_outils
              * echo htmlspecialchars($_COOKIE["tc"],  ENT_QUOTES, 'UTF-8');
              * die();
              */
+            var_dump($nom_fichier_genrer);
+            $path_parts = pathinfo(GENERER . $nom_fichier_genrer);
 
-            eval(
-                // on retir ici le <?php pour déclencher l'évaluation
-                // ça reste un moment senssible donc pas oublier de réalisé un
-                // analyseur de code pour n'utiliser que des modules
-            substr(
-                file_get_contents(GENERER . $nom_fichier_genrer), 5)
-            );
+            if ($path_parts['extension'] == 'php') {
+                try {
+                    if (!method_exists(GENERER . $nom_fichier_genrer, 'gen')) {
+                        throw new Exception(
+                            "Erreur => [ GENERER : $nom_fichier_genrer ] manque la methode gen <br/>"
+                            . PHP_EOL);
+                    } else {
+                        include GENERER . $nom_fichier_genrer;
+                        $execute = new $path_parts['filename']();
+                        echo $execute->gen();
+                    }
+                } catch
+                (Exception $e) {
+                    echo 'FATAL::' . $e->getMessage();
+                    exit;
+                }
+
+
+            } else {
+                echo file_get_contents(GENERER . $nom_fichier_genrer);
+            }
+            /*
+            $fch_xplt = file_get_contents(GENERER . $nom_fichier_genrer);
+            if (substr($fch_xplt, 0, 5) == '<?php') {
+                $fch_xplt = substr($fch_xplt, 5);
+                eval(
+                    // on retir ici le <?php pour déclencher l'évaluation
+                    // ça reste un moment senssible donc pas oublier de réalisé un
+                    // analyseur de code pour n'utiliser que des modules
+                $fch_xplt
+                );
+            }
+            else {
+                echo $fch_xplt;
+            }
+            */
 
             $cache_contenu = ob_get_contents();
 
@@ -559,7 +625,10 @@ class Modules_pages extends Modules_outils
             //------------
 
             //var_dump($cache_contenu);
-            $fd = fopen($chemin_encache . '.php', 'w');
+            if ($path_parts['extension'] != 'php') $chemin_encache .= '.php';
+
+            $fd = fopen($chemin_encache, 'w');
+
             if ($fd) {
                 fwrite($fd, '<?php error_reporting(0); header("Content-type: text/html; charset=utf-8"); ?>' . $cache_contenu);
                 fclose($fd);

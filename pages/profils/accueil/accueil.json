@@ -1,6 +1,7 @@
 {
-  "corps": "corps.html.php",
+  "corps": "accueil.phpml",
   "donnees": {
+    "syntaxe": "PHPML",
     "LANGUE": "fr",
     "TITRE": "test de page"
   }

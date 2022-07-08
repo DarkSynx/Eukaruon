@@ -1,0 +1,40 @@
+<phpml>
+    <test></test>
+    <class id="2" actions="test.test" exploit="{
+'doctype':'html',
+'lang':'fr',
+'title':'test',
+'base':'',
+'head':{
+    'meta':'',
+    'link':[
+            {'rel':'alternate', 'href':'https://www.php.net/manual/en/control-structures.if.php', 'hreflang':'en'},
+            {'rel':'alternate', 'href':'https://www.php.net/manual/en/control-structures.if.php', 'hreflang':'en'},
+            {'rel':'alternate', 'href':'https://www.php.net/manual/en/control-structures.if.php', 'hreflang':'en'}
+        ]
+    }
+}">
+        <div>test de div</div>
+        <div>test de div2</div>
+        <label>test de div3
+            <input type="texte" value="test"/>
+        </label>
+    </class>
+    <if id="3" actions="test.test" user="2">
+        <done>
+            <div>test 1</div>
+            <div>test 2</div>
+            <div>test 3</div>
+        </done>
+        <elseif user="3">
+            <div>test 4</div>
+            <div>test 5</div>
+            <div>test 6</div>
+        </elseif>
+        <else>
+            <div>test 7</div>
+            <div>test 8</div>
+            <div>test 9</div>
+        </else>
+    </if>
+</phpml>
