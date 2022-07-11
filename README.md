@@ -16,3 +16,8 @@ pswd : 1234567
 Page Utilisateur Web >> http://localhost/Eukaruon/index.php
 
 
+Vous avez la possibilité d'utilisé 3 forme de language pour créé vos pages
+1. en PHPobjet 
+2. en PHP et HTML
+3. en L7 un language qui permet une représentation de PHP, HTML, JS sous un même language
+4. en PHPML une version XML de qui regroupe PHP et HTML sous la même syntaxe
