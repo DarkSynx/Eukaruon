@@ -3,7 +3,12 @@
 use JetBrains\PhpStorm\Pure;
 
 /**
- *
+ * ce Module est utilisé avec le module action et objets
+ * pour réalisé du PHP décorator
+ * ce module est donc là pour offrir des fonctionnalités
+ * différente dit fonctionnalité en amont comme tester le temps
+ * d'execution du script
+ * Modules_habillage est le décorateur réalisé en Monade
  */
 class Modules_habillage
 {

@@ -2,7 +2,9 @@
 
 
 /**
- *
+ * module utilisateur l'objectif de ce module
+ * c'est de proposé un ensemble d'outils qui permet
+ * la gestion des utilisateurs
  */
 class Modules_utilisateurs extends Modules_outils
 {
@@ -62,13 +64,13 @@ class Modules_utilisateurs extends Modules_outils
      *  en remplissant cette spécificité on peut démarrer l'annalyse de si l'utilisateur est celui du serveur
      *  sinon on le renvoie directement l'accueil -1
      */
-
     public function utilisateur_est_il_ok()
     {
         $this->utilisateur_bdd_ok = $this->verifier_lutilisateur();
     }
 
-    /**
+    /** permet de vérifier l'utilisateur si celui-ci est bien
+     * en BDD et s'il est valide
      * @return bool
      */
     public function verifier_lutilisateur(): bool
@@ -280,7 +282,7 @@ class Modules_utilisateurs extends Modules_outils
 
     /*------------------------------------------------------------------------------------*/
 
-    /** Vérifie_Cookie
+    /** Vérifie les Cookies
      * @return int
      */
     public function verifier_cookie_existe(): int
@@ -309,7 +311,8 @@ class Modules_utilisateurs extends Modules_outils
         );
     }
 
-    /**
+    /** permet de récuperer utilisateur_page_direction
+     * la page ou l'on va rediriger l'utilisateur
      * @return int
      */
     public function get_utilisateur_page_direction(): int
@@ -393,7 +396,7 @@ class Modules_utilisateurs extends Modules_outils
     }
 
 
-    /**
+    /** récuperer les informations DonneeUniqueServeur
      * @return mixed
      */
     public function &get_DonneeUniqueServeur()

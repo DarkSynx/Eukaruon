@@ -3,7 +3,7 @@
 class Modules_erreurs
 {
     /**
-     *
+     * module de gestion d'erreur pas terminer
      */
     public function __construct()
     {

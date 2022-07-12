@@ -87,7 +87,7 @@ class Modules_pages extends Modules_outils
         $this->identifiant_utilisateur = $identifiant_utilisateur;
     }
 
-    /**
+    /** stockage d'un tableau en session
      * @param array $variable
      */
     public function mise_en_stockage(array $variable = array())
@@ -95,11 +95,11 @@ class Modules_pages extends Modules_outils
         $_SESSION['stockage'] = $variable;
     }
 
-    /**
+    /** lecture de stockage d'une valeur
      * @param array $variable
      * @return mixed
      */
-    public function recuperation_en_stockage(array $variable = array())
+    public function recuperation_en_stockage()
     {
         return $_SESSION['stockage'];
     }
@@ -129,7 +129,7 @@ class Modules_pages extends Modules_outils
         return CACHE . $nom_page . '.html.php';
     }
 
-    /**
+    /** prototype pas finalisé
      * @param $page
      * @param false $headerhtml
      */
@@ -148,7 +148,8 @@ class Modules_pages extends Modules_outils
         // die();
     }
 
-    /**
+    /** permet de controler l'affichage de la page
+     * par défault vide va renvoyer à l'acceuil
      * @param int|null $numero_de_page
      * @return bool|string
      */
@@ -182,7 +183,7 @@ class Modules_pages extends Modules_outils
 
     }
 
-    /**
+    /** recupére le tableau_page_en_cache
      * @return mixed
      */
     public function tableau_page_en_cache()
@@ -191,7 +192,12 @@ class Modules_pages extends Modules_outils
         return $page_en_cache->get_page_en_cache();
     }
 
-    /**
+    /** en mode developpement cela permet
+     * à l'utilisateur de générer et mettre en cache le contenu exploitable
+     * ! pensé à créé un identifiant de visualisation pour le devellopeur
+     * exemple &idev=10321254565546554
+     * et de renvoyer le client sur une page d'erreur s'il n'a pas l'idev
+     * les chances d'obtenir le idev sont casiment nul
      * @param $demande_de_page
      */
     public function dev_auto_generer_mise_en_cache($demande_de_page)
@@ -210,9 +216,8 @@ class Modules_pages extends Modules_outils
     }
 
 
-    // à tester !!
-
-    /**
+    /** prototype à tester
+     * recuperation d'une page via un nom : page_nom ou par numero page=1
      * @param null $fonction_dutilisation
      * @return int|null
      */
@@ -396,7 +401,8 @@ class Modules_pages extends Modules_outils
         return self::tableau_donnee_config($tableau_donnee, 'syntaxe', $valeur);
     }
 
-    /**
+    /** permet de recuperer la syntaxe utilisé par le dev et définit dans le json
+     * du profils/foobar/foobar.json
      * @param $tableau_donnee
      * @param $label
      * @param $valeur
@@ -410,7 +416,8 @@ class Modules_pages extends Modules_outils
                 $tableau_donnee['config'][$label] == $valeur));
     }
 
-    /**
+    /** recupération du contenu du json pour l'exploité
+     * profils/foobar/foobar.json
      * @param $nom_profil
      * @return mixed
      */
@@ -420,7 +427,12 @@ class Modules_pages extends Modules_outils
         return json_decode($donnee, true);
     }
 
-    /**
+    /** recupération de l'extention du fichier dans profils/foobar/foobar.json
+     * cette extention permet de forcé l'utilisation d'un fichier PHP
+     * vous avez plusieurs mode de codage et quand celui-ci est générer
+     * vous pouvez spécifier que c'est du PHP qui sera envoyer dans générer.
+     * parce que vous utilisé une méthode 100% qui produira du html via un
+     * décorateur
      * @param $tableau_donnee
      * @return string
      */
@@ -442,8 +454,7 @@ class Modules_pages extends Modules_outils
      * @param array $parties_relier
      * @return array|false|string|string[]
      */
-    public
-    function construction_page(string $nom_profil, string|null $fichier_corps = '', array|null $parties_relier = array(), bool $pages_non_profil = false): array|bool|string
+    public function construction_page(string $nom_profil, string|null $fichier_corps = '', array|null $parties_relier = array(), bool $pages_non_profil = false): array|bool|string
     {
         /*if ($pages_non_profil == true) {
 
@@ -608,8 +619,7 @@ class Modules_pages extends Modules_outils
      * @param bool $force
      * @param int|float $temps_max
      */
-    public
-    function mise_en_cache(
+    public function mise_en_cache(
         string $nom_fichier_genrer,
         bool   $force = false,
         int    $temps_max = (60 * 60 * 24 * 14) // 3600s x 24h x 14j
@@ -735,8 +745,7 @@ class Modules_pages extends Modules_outils
      *      vous devrez mettre vos fichier spécifique ici
      * @param $nom_du_profil
      */
-    public
-    function preparation_mise_encache($nom_du_profil)
+    public function preparation_mise_encache($nom_du_profil)
     {
 
         if ($this->cedossier_existe_il(CONTENUS . $nom_du_profil)) {
@@ -779,8 +788,7 @@ class Modules_pages extends Modules_outils
      * @param $dossier
      * @return bool
      */
-    private
-    function cedossier_existe_il($dossier): bool
+    private function cedossier_existe_il($dossier): bool
     {
         return (file_exists($dossier) && is_dir($dossier));
     }
@@ -789,8 +797,7 @@ class Modules_pages extends Modules_outils
      * @param $dossier_origine
      * @param $dossier_destination
      */
-    private
-    function copyer_fichiers_dans($dossier_origine, $dossier_destination)
+    private function copyer_fichiers_dans($dossier_origine, $dossier_destination)
     {
         //var_dump($dossier_origine, $dossier_destination);
         $liste_fichiers = new FilesystemIterator($dossier_origine, FilesystemIterator::SKIP_DOTS);
@@ -811,8 +818,7 @@ class Modules_pages extends Modules_outils
      * @param string $nom_page
      * @param string $donnee_page
      */
-    public
-    function generer(string $nom_page, string $donnee_page)
+    public function generer(string $nom_page, string $donnee_page)
     {
         $fp = fopen(GENERER . $nom_page, 'w');
         fwrite($fp, $donnee_page);
@@ -824,8 +830,7 @@ class Modules_pages extends Modules_outils
      * @param string $nom_page
      * @return false|string
      */
-    public
-    function recuperer_generer(string $nom_page): bool|string
+    public function recuperer_generer(string $nom_page): bool|string
     {
         return file_get_contents(GENERER . $nom_page);
     }
@@ -834,8 +839,7 @@ class Modules_pages extends Modules_outils
      * c'est le dernier element qui indique ou se trouve l'utilisateur
      * @return int
      */
-    public
-    function get_page_specifique(): int
+    public function get_page_specifique(): int
     {
         return $this->page_specifique;
     }
@@ -868,8 +872,7 @@ class Modules_pages extends Modules_outils
      * [$charger_nom_page_non_valider] vers la variable [$charger_nom_page_valider]
      *
      */
-    public
-    function charger_page_valider()
+    public function charger_page_valider()
     {
         $this->charger_nom_page_valider = $this->charger_nom_page_non_valider;
     }
@@ -878,8 +881,7 @@ class Modules_pages extends Modules_outils
      * @param string $clee_authentification_temporaire
      * @return array
      */
-    private
-    function get_verification_clee_authentification_temporaire(string $clee_authentification_temporaire): array
+    private function get_verification_clee_authentification_temporaire(string $clee_authentification_temporaire): array
     {
         return array();
     }
@@ -887,8 +889,7 @@ class Modules_pages extends Modules_outils
     /** permet d'actualisé le temps d'utilisation de la clé authentifiacation
      *
      */
-    private
-    function set_actualisation_temps_restant()
+    private function set_actualisation_temps_restant()
     {
     }
 

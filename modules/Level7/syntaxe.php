@@ -262,7 +262,7 @@ class syntaxe
         return true;
     }
 
-    /**
+    /** permet la gestion d'un projet L7
      * @param $l7_obj_used
      * @param $thematchesg
      */

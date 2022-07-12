@@ -3,6 +3,14 @@
 use Exception;
 
 
+/**
+ * ce Module est là pour la gestion du cache utilisateur
+ * ici on fera une différence avec la generation en cache
+ * d'une page.
+ * Ce module est bien un module qui gére de la donné mise en cache
+ * dans ressources/temp donc à ne pas confondre avec
+ * ressources/cache qui lui est destiné aux pages créé
+ */
 class Modules_cache extends Modules_outils
 {
 
@@ -19,7 +27,7 @@ class Modules_cache extends Modules_outils
      */
     private string|bool|null|object $_data_exploite = null;
 
-    /* utilisation :
+    /** utilisation :
      * $Modules_cache->cache( 'test', 10, 120, 'userID001124/')
      * -> va créé un fichier 'test' dans le dossier 'temp/userID001124/'
      *
@@ -38,9 +46,6 @@ class Modules_cache extends Modules_outils
      *  return 'teste_de_class';
      *  }}
      *  CODE);
-     */
-
-    /**
      * @param string $nom_donnee
      * @param mixed|null $donnee
      * @param int|null $temp_cache_seconds
@@ -83,6 +88,7 @@ class Modules_cache extends Modules_outils
     }
 
     /**
+     * permet de recuperer un fichier du cache et de le lire
      * @param string $fichier
      * @param bool $force
      * @return bool|object|string|null
@@ -95,7 +101,7 @@ class Modules_cache extends Modules_outils
         return $this->_data_exploite;
     }
 
-    /**
+    /** permet d'écrire un fichier en cache
      * @param string $fichier
      * @param mixed|null $donnee
      * @param int|null $temp_cache_seconds
@@ -146,7 +152,8 @@ class Modules_cache extends Modules_outils
      * cela offre une compatibilité avec la fonction principal
      */
 
-    /**
+    /** maclassexploiter permet de recuperer un fichier et de l'exploité
+     * par la fonction run()
      * @param $fichier
      * @return mixed|void
      */
@@ -176,7 +183,7 @@ class Modules_cache extends Modules_outils
 
     }
 
-    /**
+    /**  écrire un fichier pour fonction ecrire_cache
      * @param $fichier
      * @param $donnee
      * @return mixed
@@ -189,7 +196,7 @@ class Modules_cache extends Modules_outils
         return $donnee;
     }
 
-    /**
+    /** supprimer fichier, dossier en cache
      * @param string $nom_donnee
      * @param string $dossier
      */

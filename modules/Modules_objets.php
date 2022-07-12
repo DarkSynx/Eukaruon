@@ -12,7 +12,7 @@ class Modules_objets //extends Modules_habillage
 {
 
 
-    /**
+    /** pas encore implimenter
      *
      */
     public static function bar_de_recherche()
@@ -20,7 +20,7 @@ class Modules_objets //extends Modules_habillage
 
     }
 
-    /**
+    /** pas encore implimenter
      *
      */
     public static function menu_deroulant()
@@ -28,7 +28,7 @@ class Modules_objets //extends Modules_habillage
 
     }
 
-    /**
+    /** pas encore implimenter
      *
      */
     public static function bar_de_chargement()
@@ -36,7 +36,7 @@ class Modules_objets //extends Modules_habillage
 
     }
 
-    /**
+    /** pas encore implimenter
      *
      */
     public static function boutton_action()
@@ -44,7 +44,7 @@ class Modules_objets //extends Modules_habillage
 
     }
 
-    /**
+    /** pas encore implimenter
      *
      */
     public static function bar_slider()
@@ -52,7 +52,7 @@ class Modules_objets //extends Modules_habillage
 
     }
 
-    /**
+    /** pas encore implimenter
      *
      */
     public static function tab()
@@ -61,7 +61,8 @@ class Modules_objets //extends Modules_habillage
 
     }
 
-    /**
+    /** permet de créé un input appeler bare de texte pardefault
+     * mais celui-ci est modifiable
      * @param string $texte
      * @param string $valeur
      * @param string $type
@@ -88,9 +89,8 @@ class Modules_objets //extends Modules_habillage
         return $output;
     }
 
-    //364x463
-    // 1280 < icone > icone + texte
-    /**
+
+    /** permet de créé un bouton ajustable
      * @param $texte
      * @param string $image
      * @param string $id
@@ -132,7 +132,7 @@ class Modules_objets //extends Modules_habillage
 
     }
 
-    /**
+    /**permet la gestion de la clé de session
      * @param $clef
      * @param $egale_a
      * @return bool
@@ -142,7 +142,7 @@ class Modules_objets //extends Modules_habillage
         return (array_key_exists($clef, $_SESSION) && $_SESSION[$clef] == $egale_a);
     }
 
-    /**
+    /** parmet de créé la balise pour charger un fichier css
      * @param $name
      * @param false $actualiser
      * @return mixed
@@ -156,7 +156,7 @@ class Modules_objets //extends Modules_habillage
         return $name;
     }
 
-    /**
+    /** permet de créé la balise meta pour un autoload d'une page
      * @param $url
      */
     public static function autoload($url)
@@ -166,7 +166,7 @@ class Modules_objets //extends Modules_habillage
             ->afficher();
     }
 
-    /**
+    /** permet de créé la balise de chargement d'un script
      * @param $name
      * @param false $actualiser
      */
@@ -178,7 +178,21 @@ class Modules_objets //extends Modules_habillage
     }
 
 
-    /**
+    /** permet la fabrication d'un formulaire
+     * MO::formulaire(
+     * nom: 'inscription',
+     * tableau_de_type: [
+     * 'Label text1' => ['name' => 'nom', 'type' => 'texte', 'value' => 'v1', 'placeholder' => '', 'class' => 'put'],
+     * 'Label text2' => ['name' => 'prenom', 'type' => 'password', 'value' => 'v2', 'placeholder' => '', 'class' => 'lut'],
+     * ],
+     * boutton_valider: 'ok',
+     * page_dappel: 'test',
+     * injection: [
+     * 'nom' => [
+     * MO::tag('h3', 'INSCRIPTION', retour: true)
+     * , 'avant']
+     * ]
+     * );
      * @param string $nom
      * @param $tableau_de_type
      * @param string $boutton_valider
@@ -265,7 +279,7 @@ class Modules_objets //extends Modules_habillage
         return $output;
     }
 
-    /**
+    /** permet de créé une balise spécifique dont un span pardéfaut
      * @param string $tag
      * @param string $donee
      * @param array $argument
@@ -287,7 +301,7 @@ class Modules_objets //extends Modules_habillage
         return $output;
     }
 
-    /**
+    /** permet de créé une balise div
      * @param string $donee
      * @param array $argument
      * @param false $retour
@@ -311,7 +325,7 @@ class Modules_objets //extends Modules_habillage
     /* ------------------------------------------ */
     // 'img', '!DOCTYPE', 'br', 'hr', 'input', 'link'
 
-    /**
+    /** permet l'ajout du !DOCTYPE en début de page
      * @param string[] $argument
      */
     public static function doctype($argument = ['html'])
@@ -322,7 +336,7 @@ class Modules_objets //extends Modules_habillage
     }
 
 
-    /**
+    /** permet de créé le Header balise de début et de fin
      * @param array|string $argument
      */
     public static function debutHeader(array|string $argument = [])
@@ -334,14 +348,15 @@ class Modules_objets //extends Modules_habillage
     }
 
     /**
-     *
+     * permet de créé la balise header de fin si debutHeader('END') vous semble
+     * pas logique. sachez que les deux sont possible
      */
     public static function finHeader()
     {
         MH::de()->appliquer('endheader', no_aid: true)->afficher();
     }
 
-    /**
+    /** permet de créé le Main balise de début et de fin
      * @param array|string $argument
      */
     public static function debutMain(array|string $argument = [])
@@ -353,14 +368,14 @@ class Modules_objets //extends Modules_habillage
     }
 
     /**
-     *
+     * permet de créé le Main balise de fin
      */
     public static function Mainfin()
     {
         MH::de()->appliquer('endmain', no_aid: true)->afficher();
     }
 
-    /**
+    /** permet de créer une balise meta
      * @param array $argument
      */
     public static function meta($argument = [])
@@ -368,7 +383,7 @@ class Modules_objets //extends Modules_habillage
         MH::de()->appliquer('meta', $argument, no_aid: true)->afficher();
     }
 
-    /**
+    /** permet de créé le titre de la page
      * @param $valeur
      */
     public static function titre($valeur)
@@ -376,7 +391,7 @@ class Modules_objets //extends Modules_habillage
         MH::de($valeur)->appliquer('title', no_aid: true)->afficher();
     }
 
-    /**
+    /** permet de créer une div spécifique
      * @param array|string $argument
      * @param string $id
      * @param string $class
@@ -394,7 +409,7 @@ class Modules_objets //extends Modules_habillage
     }
 
     /**
-     *
+     * permet de créer la balise div de fin
      */
     public static function finDiv()
     {
@@ -402,7 +417,7 @@ class Modules_objets //extends Modules_habillage
     }
 
 
-    /**
+    /** permet de créé la balise de chargement d'un fichier javascript
      * @param array $argument
      * @param string $src
      */
@@ -413,7 +428,7 @@ class Modules_objets //extends Modules_habillage
         MH::de()->appliquer('script', $argument, no_aid: true)->afficher();
     }
 
-    /**
+    /** permet de créé les balises de début <HTML><HEAD>
      * @param string[] $argument
      */
     public static function tete($argument = ['lang' => 'fr'])
@@ -422,7 +437,7 @@ class Modules_objets //extends Modules_habillage
         MH::de()->appliquer('startHead', [], no_aid: true)->afficher();
     }
 
-    /**
+    /** permet de créé les balises de corps </HEAD><BODY> et </BODY></HTML>
      * @param array|string $argument
      */
     public static function corp(array|string $argument = [])
@@ -436,7 +451,7 @@ class Modules_objets //extends Modules_habillage
         }
     }
 
-    /**
+    /** permet de créé la fin de la page </BODY></HTML>
      * @param array $argument
      */
     public static function fin($argument = [])

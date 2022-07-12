@@ -5,7 +5,11 @@ namespace Eukaruon\modules;
 use DOMDocument;
 
 /**
- *
+ * ce module comme le module L7 permet de créé via la syntaxe XML un code
+ * PHP et HTML sous la même syntaxe c'est à vous de propose l'implémentation
+ * du code qui sera interpréter pour le moment ce module est expérimental
+ * dans le futur il sera certainement plus complet avec des functions de base
+ * exploitable come IF SWITCH VAR etc...
  */
 class Modules_phpml
 {
@@ -29,7 +33,9 @@ class Modules_phpml
         $this->_gen_data = $this->phpml($lien);
     }
 
-    /**
+    /** permet d'obtenir la donné produite
+     * votre code PHPML interpréter sera contenu dans
+     * _gen_data
      * @return string
      */
     public function get_gen_data(): string
@@ -39,7 +45,7 @@ class Modules_phpml
 
     // CMAV: class tag
 
-    /**
+    /** permet d'interpréter la donné PHPML ou un lien vers cette donnée
      * @param bool $lien_utiliser
      * @param string $pageGenerer
      * @return string
@@ -56,7 +62,7 @@ class Modules_phpml
 
     }
 
-    /**
+    /** permet d'exploité et d'auto exploité en boucle les enfants d'une balise
      * @param $start_childNodes
      * @param $pageGenerer
      * @return string
@@ -85,7 +91,8 @@ class Modules_phpml
         return $balise;
     }
 
-    /**
+    /** permet de récupérer les attributs d'une balise avec une priorité pour
+     * actions exploit et inserts les autres seront misent dans une sous cathégorie autre => ...
      * @param $childNode_attributes
      * @return array
      */
@@ -115,7 +122,11 @@ class Modules_phpml
 
     //_______________________________________________________
 
-    /**
+    /** permet d'appeler la fonction en lien avec la balise
+     * pour créé une balise qui sera interpréter il faudra
+     * la nommer tag_LeNomDeMaBalise
+     * tag_ permettra de pas proposé de nom de fonction interdit en PHP
+     * ou similaire aux fonction utilisé dans cette class
      * @param $balise
      * @param $attributs
      * @param $text
@@ -126,7 +137,8 @@ class Modules_phpml
         return self::{'tag_' . $balise}($balise, $attributs, $text);
     }
 
-    /**
+    /** créé une balise
+     * "[$balise $attr]$text[/$balise]"
      * @param string $balise
      * @param array $attributs
      * @param string $text
@@ -145,7 +157,9 @@ class Modules_phpml
         }
     }
 
-    /**
+    /** implémentation test réalisé
+     * si vous voulez créé une balise c'est comme si dessous
+     * ce n'est donc pas trés compliqué à réalisé
      * @param $balise
      * @param $attributs
      * @param $text
@@ -156,7 +170,7 @@ class Modules_phpml
         return '[TEST::TEST]';
     }
 
-    /**
+    /** vérificateur de si la balise existe ou pas
      * @param $balise
      * @return bool
      */

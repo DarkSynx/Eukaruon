@@ -106,7 +106,7 @@ class Modules_gestionnaire
     }
 
     /**
-     *
+     * instantiation de Page_en_cache
      */
     protected function set_Page_en_cache()
     {
@@ -137,7 +137,7 @@ class Modules_gestionnaire
 
 
     /**
-     *
+     * Permet de charger le module Modules_autorisations
      */
     protected function set_Modules_autorisations()
     {
@@ -148,7 +148,7 @@ class Modules_gestionnaire
 
     /* ----------------------------------- */
 
-    /**
+    /** recuperer la liste des espaces de nom
      * @param $nom
      * @return mixed
      */
@@ -158,6 +158,8 @@ class Modules_gestionnaire
     }
 
     /**
+     * permet de generer 63 drapeau pour controler 63 modules
+     * par la méthode module1 | module2 | module3 ...
      * @param $nom_module
      * @return int
      */
@@ -174,7 +176,7 @@ class Modules_gestionnaire
         return $this->valeur_drapeau_incrementer;
     }
 
-    /**
+    /** permet d'obtenir la liste des modules d'instance
      * @param $nom_du_module
      * @param false $force
      * @param null $donnees_module
@@ -233,7 +235,11 @@ class Modules_gestionnaire
         return $this->list_modules_instancier[$nom_du_module_repertorier]['module'];
     }
 
-    /**
+    /** vérifie si le module exploité
+     *  est fils à module_outils et comporte bien
+     *  son interface; valable seulement pour les
+     *  modules utilisé en dehors des pages réaliser
+     *  par exemple dans index.php
      * @param $nom_du_module
      */
     public function parent_et_interfaces($nom_du_module)
@@ -494,24 +500,24 @@ class Modules_gestionnaire
         return $this->tableau_contenant_donnes;
     }
 
-    /**
-     * @param int $valeur_combiner
+    /** fonction là pour recuprer la valeur d'un drapeau
+     * @param int $valeur_combiner_decimal
      * @return array
      */
-    function binaire_extraction_drapeau(int $valeur_combiner): array
+    function binaire_extraction_drapeau(int $valeur_combiner_decimal): array
     {
-        $taille = strlen(decbin($valeur_combiner));
+        $taille = strlen(decbin($valeur_combiner_decimal));
         $tableau_de_valeur = array();
         for ($inc = 0; $inc < $taille; $inc++) {
             $bdc = 1 << $inc;
-            if (($valeur_combiner & $bdc) == $bdc) {
+            if (($valeur_combiner_decimal & $bdc) == $bdc) {
                 $tableau_de_valeur[] = $this->tableau_drapeau[$bdc];
             }
         }
         return $tableau_de_valeur;
     }
 
-    /**
+    /** permet d'utiliser un module charger
      * @param string $nom_module
      * @return mixed
      */

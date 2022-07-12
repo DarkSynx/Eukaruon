@@ -3,7 +3,9 @@
 namespace Eukaruon\modules\Level7;
 
 /**
- *
+ * projet prototype
+ * pas terminer donc faiblement commenter
+ * il sera même probablement recoder
  */
 class l7
 {
@@ -85,7 +87,7 @@ class l7
         $this->cphp_eol = ($tabulation == false) ? '' : PHP_EOL;
     }
 
-    /**
+    /** récupérer l'ensemble de la syntaxe
      * @param $array_file_list
      */
     private function load_syntaxe($array_file_list): void
@@ -121,7 +123,7 @@ class l7
 
     }
 
-    /**
+    /** permet de récuperer la donnée interpréter
      * @return string
      */
     public function getdata(): string
@@ -129,7 +131,7 @@ class l7
         return $this->_data;
     }
 
-    /**
+    /** démarre l'interprétation de L7
      * @param $data
      */
     public function start($data): void
@@ -156,7 +158,7 @@ class l7
         //return $this->_data;
     }
 
-    /**
+    /** permet d'exploser la syntaxe
      * @param $data
      * @param null $parent
      * @param int $encaps
@@ -189,7 +191,7 @@ class l7
         return $data;
     }
 
-    /**
+    /** permet la sous exploitation par exploder_syntaxe
      * @param $val
      * @return mixed
      */

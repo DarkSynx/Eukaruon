@@ -5,14 +5,35 @@ namespace Eukaruon\modules;
 use Exception;
 
 
+/**
+ * ce Module est utilisé avec le module habillage et objets
+ * pour réalisé du PHP décorator
+ * ce module est donc là pour offrir des fonctionnalités
+ * différente dit fonctionnalité en amont comme tester le temps
+ * d'execution du script
+ */
 class Modules_actions
 {
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->_gen_var_phpml = array();
     }
 
+    /**
+     * @param $ac_class
+     * @param $ac_type
+     * @param $ac_element1
+     * @param $ac_element2
+     * @param $ac_methode
+     * @param $exploit
+     * @param $inserts
+     * @param $contenu
+     * @return mixed
+     */
     private function appel_dobjet($ac_class, $ac_type, $ac_element1, $ac_element2, $ac_methode, $exploit, $inserts, $contenu)
     {
         $maclass = '\Eukaruon\modules\Modules_' . $ac_class;
@@ -20,6 +41,12 @@ class Modules_actions
         return $appel_dobjet->utilise_methode($ac_class . '_' . $ac_methode, $exploit, $inserts, $contenu);
     }
 
+    /**
+     * @param bool $test
+     * @param $var
+     * @param $varnom
+     * @param string $message
+     */
     private function error_afficher(bool $test, &$var, $varnom, string $message)
     {
         try {
@@ -36,6 +63,12 @@ class Modules_actions
         }
     }
 
+    /**
+     * @param $qui
+     * @param $fichier
+     * @param array $args
+     * @return mixed
+     */
     public static function LoadInScripts($qui, $fichier, $args = [])
     {
         $classn = get_class($qui);
@@ -44,11 +77,17 @@ class Modules_actions
         return new $path_parts['filename'](...$args);
     }
 
+    /**
+     *
+     */
     public static function debutTempTest()
     {
         echo '<?php $time_start = microtime(true); ?>';
     }
 
+    /**
+     *
+     */
     public static function finTempTest()
     {
         echo '<?php 

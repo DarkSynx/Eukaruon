@@ -30,7 +30,7 @@ class Modules_securiser
         /* peut être ajouté l'utilisation de l'identifiant unique en BDD pour renforcer la sécurité */
     }
 
-    /**
+    /** permet de spécifier un identifiant unique
      * @param $identifiant
      */
     public function ajouter_identifiant_unique($identifiant)
@@ -38,7 +38,7 @@ class Modules_securiser
         $this->_identifiant_unique = hash('sha256', $identifiant);
     }
 
-    /**
+    /** valeur qui sera encapsuler
      * @param string $nom_variable
      * @param $valeur
      */
@@ -47,7 +47,7 @@ class Modules_securiser
         $this->_valeur_encapsuler[$nom_variable] = $valeur;
     }
 
-    /**
+    /** valeur qui sera sécurisé chiffré
      * @param string $nom_variable
      * @param $valeur
      * @param string $clee
@@ -62,7 +62,7 @@ class Modules_securiser
         $this->_valeur_encapsuler[$nom_variable]['valeur'] = $valeur;
     }
 
-    /**
+    /** valeur sera déchiffré
      * @param string $nom_variable
      * @param string $clee
      * @param bool $decrypt
@@ -79,7 +79,7 @@ class Modules_securiser
         return null;
     }
 
-    /**
+    /** valeur en session qui sera chiffré
      * @param string $nom_variable
      * @param $valeur
      * @param string $clee
@@ -95,7 +95,7 @@ class Modules_securiser
         $_SESSION[$nom_variable]['valeur'] = $valeur;
     }
 
-    /**
+    /** valeur en session qui sera déchiffré
      * @param string $nom_variable
      * @param string $clee
      * @param bool $decrypt
@@ -113,7 +113,7 @@ class Modules_securiser
     }
 
 
-    /**
+    /** sauvgarde simple d'une valeur en session
      * @param string $nom_variable
      * @param $valeur
      * @return array
@@ -124,7 +124,7 @@ class Modules_securiser
         return [$nom_variable => $valeur];
     }
 
-    /**
+    /** recupérer une valeur par son label en sessions
      * @param string $nom_variable
      * @return mixed
      */

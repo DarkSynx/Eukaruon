@@ -58,7 +58,7 @@ class Modules_outils implements interfaces_modules
         }
     }
 
-    /**
+    /** outils est là comme class mère a certain modules
      * @param null $donnee_gestionnaire
      * @param bool $pas_de_post_construct
      */
@@ -88,7 +88,8 @@ class Modules_outils implements interfaces_modules
         }
     }
 
-    /**
+    /** cette fonction est là pour préparer une réinitialisation d'une
+     * instanciation
      * @param $donnee_gestionnaire
      * @return mixed|void
      */
@@ -98,7 +99,7 @@ class Modules_outils implements interfaces_modules
         $this->Ajouter_donnee_dans_gestionnaire($donnee_gestionnaire);
     }
 
-    /**
+    /** permet de coder une chaine
      * @param $chaine
      * @param false $decoder
      * @return string|null
@@ -129,7 +130,14 @@ class Modules_outils implements interfaces_modules
     }
 
 
-    /**
+    /** permet de déconner du contenu
+     * - prototype à finir
+     * - il est préférable d'utilisé un fichier
+     * - de limité la chain URL à 128px donc 1674 caractére
+     * - l'objectif final est de pouvoir produire des QRcode de couleur
+     *
+     * //$decoder = '000000000000|AAAAC3000002|E111160AAAAA';
+     * //$encoder = '@05550444|-|-4AC3-502|E-4160-5A|-|-4AC3-502|E-4160-5A|';
      * @param $encoder
      * @return string
      */
@@ -193,7 +201,7 @@ class Modules_outils implements interfaces_modules
         return 'data:image/png;base64,' . base64_encode($imagedata);
     }
 
-    /**
+    /** permet la décompression d'une chaine
      * @param $chaine
      * @return array|mixed|string|string[]|null
      */
@@ -235,10 +243,6 @@ class Modules_outils implements interfaces_modules
         }
     }
 
-
-
-    // seul post_construct est en minuscule
-
     /** Permet de charger les données $donnee_gestionnaire en référence dans donnee_gestionnaire
      *  pour tout les modules qui ont besoin d'utilisé donnee_gestionnaire
      * @param $donnee_gestionnaire
@@ -251,7 +255,7 @@ class Modules_outils implements interfaces_modules
     }
 
 
-    /**
+    /** obtenir le nom du module
      * @return string
      */
     public function Name_module(): string
@@ -268,7 +272,7 @@ class Modules_outils implements interfaces_modules
         return $this->donnee_gestionnaire['DonneeUniqueServeur'];
     }
 
-    /**
+    /** recuperer l'identifiant unique du serveur
      * @return mixed
      */
     public function DonneeUniqueServeur_IDSERVEUR(): mixed
@@ -276,7 +280,7 @@ class Modules_outils implements interfaces_modules
         return $this->donnee_gestionnaire['DonneeUniqueServeur']::IDSERVEUR;
     }
 
-    /**
+    /** permet d'obtenir la table rechercher en base de donnée via la colone et la valeur
      * @param string $base_de_donnee
      * @param string $table_a_charger
      * @param string $colonne
@@ -289,7 +293,7 @@ class Modules_outils implements interfaces_modules
         return $this->Modules_bdd_utilisation_rapide->rechercher($colonne, $valeur);
     }
 
-    /**
+    /** préparer la base de donnée
      * @param string|null $base_de_donnee
      * @param string|null $table_a_charger
      */
@@ -305,7 +309,7 @@ class Modules_outils implements interfaces_modules
     }
 
     /**
-     *
+     * utilisation de la BDD
      */
     public function Modules_bdd_utilisation_rapide()
     {
@@ -365,7 +369,7 @@ class Modules_outils implements interfaces_modules
         return $this->donnee_gestionnaire[$donnee_selectionner];
     }
 
-    /**
+    /** harger le module
      * @param $verifier_existance_du_module
      */
     public function Module_a_charger($verifier_existance_du_module)
@@ -413,7 +417,7 @@ class Modules_outils implements interfaces_modules
         return $this->donnee_gestionnaire['DonneeUniqueServeur']::MODULES_UTILISATEUR_INSCRIT;
     }
 
-    /**
+    /** insertion tableau valeur à ajouter
      * @param array $tableau_valeur_ajouter
      * @param string|null $base_de_donnee
      * @param string|null $table_a_charger
