@@ -1,6 +1,6 @@
 {
   "corps": "corps.l7",
-  "donnees": {
+  "config": {
     "syntaxe": "L7"
   }
 }

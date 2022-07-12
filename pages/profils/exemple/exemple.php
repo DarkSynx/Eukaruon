@@ -12,6 +12,10 @@ class exemple
 
     public function page()
     {
+
+        AC::LoadInScripts($this, 'test.php')->testing();
+
+
         AC::debutTempTest();
         MO::doctype();
         MO::tete();

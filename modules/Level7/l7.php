@@ -2,9 +2,15 @@
 
 namespace Eukaruon\modules\Level7;
 
+/**
+ *
+ */
 class l7
 {
 
+    /**
+     *
+     */
     const REGEX_G = '/[!#$%&=@]?(?:[!#$%&=@]?\w*(?:\.\w*)?)\s?(?#
 )(?#
 ---------------------
@@ -14,6 +20,9 @@ class l7
 )(?|(?#
 )(?:\{(?:[^{}]|(?R))*\})|(?#
 )\;)/';
+    /**
+     *
+     */
     const REGEX_N = '/[!#$%&=@]?([!#$%&=@]?\w*(?:\.\w*)?)\s?(?#
 )(?#
 ---------------------
@@ -23,18 +32,52 @@ class l7
 )(?|(?#
 )(?:\{((?:[^{}]|(?R))*)\})|\;)/';
 
+    /**
+     *
+     */
     const NAMESPC = 'Eukaruon\\modules\\Level7\\syntaxe\\';
+    /**
+     * @var array
+     */
     public $matchesG = array();
+    /**
+     * @var array
+     */
     public $sub_matches = array();
+    /**
+     * @var string
+     */
     public $cphp_eol = '';
+    /**
+     * @var null
+     */
     public $exploder_syntaxe_parent = null;
+    /**
+     * @var int
+     */
     public $exploder_syntaxe_encaps = 0;
+    /**
+     * @var array
+     */
     private $_map_syntaxe = array();
+    /**
+     * @var string
+     */
     private $_data = '';
     // const TABULATION_ONOFF = false;
+    /**
+     * @var bool|mixed
+     */
     private bool $tabulation_onoff;
+    /**
+     * @var array
+     */
     private $_special_syntaxe = array();
 
+    /**
+     * @param $liste_syntaxe
+     * @param false $tabulation
+     */
     public function __construct(&$liste_syntaxe, $tabulation = false)
     {
         $this->load_syntaxe($liste_syntaxe);
@@ -42,6 +85,9 @@ class l7
         $this->cphp_eol = ($tabulation == false) ? '' : PHP_EOL;
     }
 
+    /**
+     * @param $array_file_list
+     */
     private function load_syntaxe($array_file_list): void
     {
         $gestglobal = new gestionglobal();
@@ -75,11 +121,17 @@ class l7
 
     }
 
+    /**
+     * @return string
+     */
     public function getdata(): string
     {
         return $this->_data;
     }
 
+    /**
+     * @param $data
+     */
     public function start($data): void
     {
         $this->_data = trim($data);
@@ -104,6 +156,13 @@ class l7
         //return $this->_data;
     }
 
+    /**
+     * @param $data
+     * @param null $parent
+     * @param int $encaps
+     * @param string $tabulation
+     * @return string
+     */
     public function exploder_syntaxe(&$data, &$parent = null, $encaps = 0, $tabulation = ''): string
     {
 
@@ -130,6 +189,10 @@ class l7
         return $data;
     }
 
+    /**
+     * @param $val
+     * @return mixed
+     */
     private function foreachmap($val)
     {
 

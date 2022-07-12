@@ -96,6 +96,10 @@ fclose($DUSStream);
 echo 'INSTALLATION 2/2: donnees_serveur <hr>';
 echo '</div></body></html>';
 
+/**
+ * @param $valeur
+ * @return string
+ */
 function var_export_style($valeur): string
 {
     return str_replace(
@@ -103,6 +107,11 @@ function var_export_style($valeur): string
         ['[', ']', '[]', "=> [", '[]', "=> [", '', '', '', ''], var_export($valeur, true));
 }
 
+/**
+ * @param string $path
+ * @param array $recurcive_path
+ * @return string
+ */
 function rdir(string $path, array &$recurcive_path): string
 {
     if ($path != '') {

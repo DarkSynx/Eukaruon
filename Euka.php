@@ -9,6 +9,9 @@ use Eukaruon\configs\CMD;
  */
 class Euka
 {
+    /**
+     * @param $pilote
+     */
     public function index($pilote)
     {
 

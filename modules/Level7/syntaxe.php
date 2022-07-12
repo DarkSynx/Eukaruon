@@ -2,61 +2,172 @@
 
 namespace Eukaruon\modules\Level7;
 
+/**
+ *
+ */
 class syntaxe
 {
 
+    /**
+     *
+     */
     const SPECIAL_SYNTAXE = false;
+    /**
+     *
+     */
     const SPECIAL_SYNTAXE_CHAR = '';
 
+    /**
+     * @var string
+     */
     public string $return_pre_initialisation = '';
 
+    /**
+     * @var string
+     */
     public string $return_start = '';
+    /**
+     * @var string
+     */
     public string $return_end = '';
 
 
+    /**
+     * @var string
+     */
     public string $tabulations = '';
+    /**
+     * @var string
+     */
     public string $php_eol_ctr = '';
 
+    /**
+     * @var bool
+     */
     protected bool $_tab_actived = false;
+    /**
+     * @var int
+     */
     protected int $_encaps = 0;
 
+    /**
+     * @var string|null
+     */
     protected null|string $_match_raw = '';
+    /**
+     * @var string|null
+     */
     protected null|string $_match_func = '';
+    /**
+     * @var string|null
+     */
     protected null|string $_match_sub_func = '';
+    /**
+     * @var string|null
+     */
     protected null|string $_match_hook = '';
+    /**
+     * @var string|null
+     */
     protected null|string $_match_bracket = '';
+    /**
+     * @var string|null
+     */
     protected null|string $_match_rafter = '';
+    /**
+     * @var string|null
+     */
     protected null|string $_match_curly = '';
 
+    /**
+     * @var bool
+     */
     protected bool $_del_match_raw = false;
+    /**
+     * @var bool
+     */
     protected bool $_del_match_func = false;
+    /**
+     * @var bool
+     */
     protected bool $_del_match_hook = false;
+    /**
+     * @var bool
+     */
     protected bool $_del_match_bracket = false;
+    /**
+     * @var bool
+     */
     protected bool $_del_match_rafter = false;
+    /**
+     * @var bool
+     */
     protected bool $_del_match_curly = false;
 
 
+    /**
+     * @var string
+     */
     protected string $_change_match_raw = '';
+    /**
+     * @var string
+     */
     protected string $_change_match_func = '';
+    /**
+     * @var string
+     */
     protected string $_change_match_hook = '';
+    /**
+     * @var string
+     */
     protected string $_change_match_bracket = '';
+    /**
+     * @var string
+     */
     protected string $_change_match_rafter = '';
+    /**
+     * @var string
+     */
     protected string $_change_match_curly = '';
 
+    /**
+     * @var bool
+     */
     protected bool $_use_post_work = false;
 
 
+    /**
+     * @var bool
+     */
     protected bool $_sub_function = false;
 
+    /**
+     * @var
+     */
     protected $_my_parent;
 
+    /**
+     * @var
+     */
     protected $_global_exploite;
 
+    /**
+     * @param $global_exploite
+     */
     public function __construct($global_exploite)
     {
         $this->_global_exploite = $global_exploite;
     }
 
+    /**
+     * @param $thisisit
+     * @param string $matchesG
+     * @param int|string|null $subfonction
+     * @param syntaxe|null $parent
+     * @param $encaps
+     * @param $tab_actived
+     * @return bool
+     */
     public function pre_initialisation(&$thisisit, string &$matchesG, null|int|string &$subfonction, self|null &$parent, &$encaps, $tab_actived): bool
     {
 
@@ -151,6 +262,10 @@ class syntaxe
         return true;
     }
 
+    /**
+     * @param $l7_obj_used
+     * @param $thematchesg
+     */
     public function gest_gen_contener_matchesG_ternair(&$l7_obj_used, &$thematchesg): void
     {
 
@@ -191,36 +306,62 @@ class syntaxe
 
     }
 
+    /**
+     * @return string
+     */
     public function gen_end(): string
     {
         return ($this->return_end == '' ? '' : ($this->php_eol_ctr . $this->tabulations . $this->return_end));
     }
 
+    /**
+     * @return string
+     */
     public function gen_endx(): string
     {
         return ($this->return_end == '' ? '' : ($this->tabulations . $this->return_end));
     }
 
+    /**
+     * @return string
+     */
     public function gen_start(): string
     {
         return $this->return_start == '' ? '' : $this->tabulations . $this->return_start . $this->php_eol_ctr;
     }
 
+    /**
+     * @return mixed
+     */
     public function get_gtable()
     {
         return $this->_global_exploite->get_table_global();
     }
 
+    /**
+     * @param string $val
+     * @param string $key
+     * @return mixed
+     */
     public function add_gtable($val = '', $key = '')
     {
         return $this->_global_exploite->add_item_table_global($val, $key);
     }
 
+    /**
+     * @param string $key
+     * @return mixed
+     */
     public function rmv_gtable($key = '')
     {
         return $this->_global_exploite->remove_item_table_global($key);
     }
 
+    /**
+     * @param string $data
+     * @param array $tab
+     * @return bool|string|null
+     */
     protected function analyse(&$data = '', &$tab = array())
     {
 
@@ -342,6 +483,10 @@ class syntaxe
 
     }
 
+    /**
+     * @param $v
+     * @param $tab
+     */
     protected function type_gen(&$v, &$tab)
     {
 

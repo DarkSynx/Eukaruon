@@ -69,6 +69,10 @@ class Modules_pages extends Modules_outils
     // Attention post_construct est là pour nous éviter de réinstancier l'objet inutilement
     // donc comme l'objet est déjà instancier vous pouvez relancer les fonction de __construct dans
     // post_construct
+    /**
+     * @param $donnee_gestionnaire
+     * @return mixed|void
+     */
     public function post_construct(&$donnee_gestionnaire)
     {
         $this->Ajouter_donnee_dans_gestionnaire($donnee_gestionnaire);
@@ -83,11 +87,18 @@ class Modules_pages extends Modules_outils
         $this->identifiant_utilisateur = $identifiant_utilisateur;
     }
 
+    /**
+     * @param array $variable
+     */
     public function mise_en_stockage(array $variable = array())
     {
         $_SESSION['stockage'] = $variable;
     }
 
+    /**
+     * @param array $variable
+     * @return mixed
+     */
     public function recuperation_en_stockage(array $variable = array())
     {
         return $_SESSION['stockage'];
@@ -118,6 +129,10 @@ class Modules_pages extends Modules_outils
         return CACHE . $nom_page . '.html.php';
     }
 
+    /**
+     * @param $page
+     * @param false $headerhtml
+     */
     public function affichage($page, $headerhtml = false)
     {
         /* if($headerhtml) {
@@ -133,6 +148,10 @@ class Modules_pages extends Modules_outils
         // die();
     }
 
+    /**
+     * @param int|null $numero_de_page
+     * @return bool|string
+     */
     public function afficher_la_page(?int $numero_de_page = null): bool|string
     { // par défault vide va renvoyer à l'acceuil
 
@@ -163,12 +182,18 @@ class Modules_pages extends Modules_outils
 
     }
 
+    /**
+     * @return mixed
+     */
     public function tableau_page_en_cache()
     {
         $page_en_cache = $this->Donnee_selectionner_du_gestionnaire('Page_en_cache');
         return $page_en_cache->get_page_en_cache();
     }
 
+    /**
+     * @param $demande_de_page
+     */
     public function dev_auto_generer_mise_en_cache($demande_de_page)
     {
         $tableau_page_en_cache = $this->tableau_page_en_cache();
@@ -186,6 +211,11 @@ class Modules_pages extends Modules_outils
 
 
     // à tester !!
+
+    /**
+     * @param null $fonction_dutilisation
+     * @return int|null
+     */
     public function recuperer_page_en_url($fonction_dutilisation = null): int|null
     {
         // utilisé ?page={numero}/{page_{nom}}
@@ -308,11 +338,11 @@ class Modules_pages extends Modules_outils
     /** Cette methode permet de récupérer le fichier .json d'un profil de page créé et d'en exploité les données
      * cette fonction est necessaire à la génération d'une page avant ça mise en cache
      * dans le Json il devra y avoir si dessous syntaxe pour definir l'exploitatation de L7
-     * "donnees": {
+     * "config": {
      * "syntaxe": "L7"
      *  }
      * forcer l'utilisation d'une page PHP non classique
-     *  "donnees": {
+     *  "config": {
      * "extension_force": "php"
      * }
      * @param $nom_profil
@@ -322,34 +352,23 @@ class Modules_pages extends Modules_outils
     {
         $nom_specifique = explode('_', basename($nom_profil));
         $tableau_donnee = self::options_profil($nom_profil);
-        if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
-                $tableau_donnee['donnees']['syntaxe'] == 'PHP' ||
-                $tableau_donnee['donnees']['syntaxe'] == 'php'
-            )) {
+        if (self::syntaxe_utiliser($tableau_donnee, 'php')) {
+
             return file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.php');
-        } else if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
-                $tableau_donnee['donnees']['syntaxe'] == 'PHPML' ||
-                $tableau_donnee['donnees']['syntaxe'] == 'phpml'
-            )) {
-            //var_dump(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml');
-            //$donee_exploite = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml');
+
+        } else if (self::syntaxe_utiliser($tableau_donnee, 'phpml')) {
+
             $phpml = new PHPML(PROFILS . $nom_profil . '/' . $nom_profil . '.phpml', true);
             return $phpml->get_gen_data();
 
-
-        } else if (array_key_exists('syntaxe', $tableau_donnee['donnees']) && (
-                $tableau_donnee['donnees']['syntaxe'] == 'L7' ||
-                $tableau_donnee['donnees']['syntaxe'] == 'l7'
-            )) {
-
-            //$Modules_Level7 = new \Eukaruon\modules\Modules_Level7();
+        } else if (self::syntaxe_utiliser($tableau_donnee, 'l7')) {
 
             if (empty($this->donnee_gestionnaire['Modules_Level7']) || is_null($this->donnee_gestionnaire['Modules_Level7'])) {
-                //include_once MODULES . 'Modules_Level7.php';
+
                 $Modules_Level7 = new L7(null, true);
-                // var_dump($Modules_Level7);
+
             } else {
-                //var_dump($this->donnee_gestionnaire);
+
                 $Modules_Level7 = &$this->donnee_gestionnaire['Modules_Level7'];
             }
 
@@ -367,16 +386,49 @@ class Modules_pages extends Modules_outils
         }
     }
 
+    /**
+     * @param $tableau_donnee
+     * @param $valeur
+     * @return bool
+     */
+    public static function syntaxe_utiliser($tableau_donnee, $valeur)
+    {
+        return self::tableau_donnee_config($tableau_donnee, 'syntaxe', $valeur);
+    }
+
+    /**
+     * @param $tableau_donnee
+     * @param $label
+     * @param $valeur
+     * @return bool
+     */
+    public static function tableau_donnee_config($tableau_donnee, $label, $valeur)
+    {
+        return (array_key_exists('config', $tableau_donnee) &&
+            array_key_exists($label, $tableau_donnee['config']) && (
+                $tableau_donnee['config'][$label] == strtoupper($valeur) ||
+                $tableau_donnee['config'][$label] == $valeur));
+    }
+
+    /**
+     * @param $nom_profil
+     * @return mixed
+     */
     public static function options_profil($nom_profil)
     {
         $donnee = file_get_contents(PROFILS . $nom_profil . '/' . $nom_profil . '.json');
         return json_decode($donnee, true);
     }
 
+    /**
+     * @param $tableau_donnee
+     * @return string
+     */
     public static function recup_extention($tableau_donnee)
     {
-        if (array_key_exists('extension_force', $tableau_donnee['donnees']) &&
-            $tableau_donnee['donnees']['extension_force'] == 'php') {
+        if (array_key_exists('config', $tableau_donnee) &&
+            array_key_exists('extension_force', $tableau_donnee['config']) &&
+            $tableau_donnee['config']['extension_force'] == 'php') {
             return 'php';
         }
         return 'html';
@@ -622,6 +674,8 @@ class Modules_pages extends Modules_outils
 
             if ($path_parts['extension'] == 'php') {
                 $chemin_encache = CACHE . $path_parts['filename'] . '.html.php';
+            } else {
+                $chemin_encache = $chemin_encache . '.php';
             }
 
             $fd = fopen($chemin_encache, 'w');

@@ -8,26 +8,51 @@
  */
 class Modules_securiser
 {
+    /**
+     * @var array
+     */
     private array $_valeur_encapsuler = array();
+    /**
+     * @var string
+     */
     private string $_iv = '';
-    private String $_identifiant_unique = '';
+    /**
+     * @var string
+     */
+    private string $_identifiant_unique = '';
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->_iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
         /* peut être ajouté l'utilisation de l'identifiant unique en BDD pour renforcer la sécurité */
     }
 
+    /**
+     * @param $identifiant
+     */
     public function ajouter_identifiant_unique($identifiant)
     {
         $this->_identifiant_unique = hash('sha256', $identifiant);
     }
 
+    /**
+     * @param string $nom_variable
+     * @param $valeur
+     */
     public function valeur_a_encapsuler(string $nom_variable, $valeur)
     {
         $this->_valeur_encapsuler[$nom_variable] = $valeur;
     }
 
+    /**
+     * @param string $nom_variable
+     * @param $valeur
+     * @param string $clee
+     * @param bool $encrypt
+     */
     public function valeur_asecuriser(string $nom_variable, $valeur, string $clee, bool $encrypt = false)
     {
         $this->_valeur_encapsuler[$nom_variable]['clee'] = md5($clee);
@@ -37,6 +62,12 @@ class Modules_securiser
         $this->_valeur_encapsuler[$nom_variable]['valeur'] = $valeur;
     }
 
+    /**
+     * @param string $nom_variable
+     * @param string $clee
+     * @param bool $decrypt
+     * @return false|mixed|string|null
+     */
     public function valeur_desecuriser(string $nom_variable, string $clee, bool $decrypt = false)
     {
         if ($this->_valeur_encapsuler[$nom_variable]['clee'] == md5($clee)) {
@@ -48,6 +79,12 @@ class Modules_securiser
         return null;
     }
 
+    /**
+     * @param string $nom_variable
+     * @param $valeur
+     * @param string $clee
+     * @param bool $encrypt
+     */
     public function sauvgarder_en_session_securiser(string $nom_variable, $valeur, string $clee, bool $encrypt = false)
     {
         $_SESSION[$nom_variable]['iv'] = $this->_iv;
@@ -58,6 +95,12 @@ class Modules_securiser
         $_SESSION[$nom_variable]['valeur'] = $valeur;
     }
 
+    /**
+     * @param string $nom_variable
+     * @param string $clee
+     * @param bool $decrypt
+     * @return false|mixed|string|null
+     */
     public function valeur_en_session_securiser(string $nom_variable, string $clee, bool $decrypt = false)
     {
         if ($_SESSION[$nom_variable]['clee'] == hash('sha256', $clee)) {
@@ -70,12 +113,21 @@ class Modules_securiser
     }
 
 
+    /**
+     * @param string $nom_variable
+     * @param $valeur
+     * @return array
+     */
     public function sauvgarder_en_session(string $nom_variable, $valeur): array
     {
         $_SESSION[$nom_variable] = $valeur;
         return [$nom_variable => $valeur];
     }
 
+    /**
+     * @param string $nom_variable
+     * @return mixed
+     */
     public function valeur_en_session(string $nom_variable)
     {
         return $_SESSION[$nom_variable];

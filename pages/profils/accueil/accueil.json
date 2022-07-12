@@ -1,7 +1,9 @@
 {
   "corps": "accueil.phpml",
+  "config": {
+    "syntaxe": "PHPML"
+  },
   "donnees": {
-    "syntaxe": "PHPML",
     "LANGUE": "fr",
     "TITRE": "test de page"
   }

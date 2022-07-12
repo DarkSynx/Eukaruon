@@ -24,17 +24,38 @@ class Modules_gestionnaire
      * @var array
      */
     protected array $list_modules_instancier = array();
+    /**
+     * @var array
+     */
     protected array $tableau_contenant_donnes = array();
     // protected array $Modules_charger = array();
 
 
+    /**
+     * @var string
+     */
     protected string $prefix_constante = 'MGC_';
 
+    /**
+     * @var int|float
+     */
     protected int|float $valeur_drapeau_incrementer = 0.5;
+    /**
+     * @var array
+     */
     protected array $tableau_drapeau = array();
+    /**
+     * @var string
+     */
     private string $nom_module = '';
 
+    /**
+     * @var array
+     */
     private array $_liste_exception_module = array();
+    /**
+     * @var array
+     */
     private array $_liste_espace_de_nom = array();
 
     /** Le constructeur démarre les modules essentiels au bon fonctionnement
@@ -84,6 +105,9 @@ class Modules_gestionnaire
         $this->liste_modules_instance($this->name_space('configs') . 'DonneeUniqueServeur', true);
     }
 
+    /**
+     *
+     */
     protected function set_Page_en_cache()
     {
         $this->generer_drapeau_tableau('Page_en_cache');
@@ -112,6 +136,9 @@ class Modules_gestionnaire
     }
 
 
+    /**
+     *
+     */
     protected function set_Modules_autorisations()
     {
         $this->generer_drapeau_tableau('Modules_autorisations');
@@ -121,11 +148,19 @@ class Modules_gestionnaire
 
     /* ----------------------------------- */
 
+    /**
+     * @param $nom
+     * @return mixed
+     */
     public function name_space($nom)
     {
         return $this->_liste_espace_de_nom[$nom];
     }
 
+    /**
+     * @param $nom_module
+     * @return int
+     */
     public function generer_drapeau_tableau($nom_module): int
     { // les modules primaire sont limité à 63 modules
         $this->valeur_drapeau_incrementer = intval($this->valeur_drapeau_incrementer * 2);
@@ -139,6 +174,13 @@ class Modules_gestionnaire
         return $this->valeur_drapeau_incrementer;
     }
 
+    /**
+     * @param $nom_du_module
+     * @param false $force
+     * @param null $donnees_module
+     * @param false $force_post_construct
+     * @return mixed
+     */
     protected function &liste_modules_instance($nom_du_module, $force = false, &$donnees_module = null, $force_post_construct = false): mixed
     {
         $nom_du_module_repertorier = basename($nom_du_module);
@@ -191,6 +233,9 @@ class Modules_gestionnaire
         return $this->list_modules_instancier[$nom_du_module_repertorier]['module'];
     }
 
+    /**
+     * @param $nom_du_module
+     */
     public function parent_et_interfaces($nom_du_module)
     {
         $nom_du_module_repertorier = basename($nom_du_module);
@@ -449,6 +494,10 @@ class Modules_gestionnaire
         return $this->tableau_contenant_donnes;
     }
 
+    /**
+     * @param int $valeur_combiner
+     * @return array
+     */
     function binaire_extraction_drapeau(int $valeur_combiner): array
     {
         $taille = strlen(decbin($valeur_combiner));
@@ -462,6 +511,10 @@ class Modules_gestionnaire
         return $tableau_de_valeur;
     }
 
+    /**
+     * @param string $nom_module
+     * @return mixed
+     */
     public function &Utiliser_le_module(string $nom_module)
     {
         return $this->list_modules_instancier[$nom_module]['module'];

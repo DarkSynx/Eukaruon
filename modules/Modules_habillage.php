@@ -1,14 +1,34 @@
 <?php namespace Eukaruon\modules;
 
+use JetBrains\PhpStorm\Pure;
+
+/**
+ *
+ */
 class Modules_habillage
 {
 
-    protected $value;
-    protected $injection;
-    protected $arbre_noms;
+    //protected $value;
+    //protected $injection;
+    //protected $arbre_noms;
+    //private string $_big_data = '';
 
-    private string $_big_data = '';
+    /**
+     * @var string
+     */
+    private string $arbre_noms;
+    /**
+     * @var array
+     */
+    private array $injection;
+    /**
+     * @var array
+     */
+    private array $value;
 
+    /**
+     * @var array|string[]
+     */
     private array $liste_tag =
         ['a', 'abbr', 'acronym', 'address', 'applet', 'area', 'article', 'aside',
             'audio', 'b', 'base', 'basefont', 'bdi', 'bdo', 'big', 'blockquote', 'body', 'button', 'canvas', 'caption',
@@ -20,8 +40,17 @@ class Modules_habillage
             'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strike', 'strong', 'style',
             'sub', 'summary', 'sup', 'svg', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time',
             'title', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr'];
+    /**
+     * @var array|string[]
+     */
     private array $liste_tag_exception = ['img', '!DOCTYPE', 'br', 'hr', 'input', 'link', 'meta'];
 
+
+    /**
+     * @param array $value
+     * @param array $injection
+     * @param string $arbre_noms
+     */
     public function __construct(array $value = ['', 0], array $injection = [], string $arbre_noms = '')
     {
         $this->arbre_noms = $arbre_noms;
@@ -30,6 +59,12 @@ class Modules_habillage
     }
 
 
+    /**
+     * @param $function
+     * @param array|string|null $argument
+     * @param false $no_aid
+     * @return $this
+     */
     public function appliquer($function, array|string|null $argument = array(), $no_aid = false): static
     {
         // call_user_func => $function($this->value)
@@ -75,7 +110,13 @@ class Modules_habillage
 
     }
 
-    public static function de(array|string|null $value = null, array $injection = [], string $arbre_noms = '')
+    /**
+     * @param array|string|null $value
+     * @param array $injection
+     * @param string $arbre_noms
+     * @return static
+     */
+    #[Pure] public static function de(array|string|null $value = null, array $injection = [], string $arbre_noms = ''): static
     {
 
         if (is_null($value)) $value = ['', 0];
@@ -83,6 +124,10 @@ class Modules_habillage
         return new static($value, $injection, $arbre_noms);
     }
 
+    /**
+     * @param array|null $output
+     * @return array
+     */
     public function recuperer(array|null $output = null): array
     {
 
@@ -93,6 +138,10 @@ class Modules_habillage
         return $this->value;
     }
 
+    /**
+     * @param array|null $output
+     * @return array
+     */
     public function afficher(array|null $output = null): array
     {
 
@@ -105,21 +154,43 @@ class Modules_habillage
         return $this->value;
     }
 
+    /**
+     * @param $value
+     * @return array
+     */
     private function trim($value)
     {
         return [trim($value[0]), $value[1]];
     }
 
+    /**
+     * @param $value
+     * @return array
+     */
     private function htmlentities($value)
     {
         return [htmlentities($value[0]), $value[1]];
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function doctype($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return ["<!DOCTYPE $argument", $value[1]];
     }
 
+    /**
+     * @param $tag
+     * @param $value
+     * @param $argument
+     * @return array
+     */
     private function gentag($tag, $value, $argument)
     {
         $val0 = $value[0];
@@ -128,74 +199,195 @@ class Modules_habillage
         return ["<$tag{$this->argumentifieur($argument)}>$val0", $value[1]];
     }
 
+    /**
+     * @param $tag
+     * @param $value
+     * @return array
+     */
+    private function startag($tag, $value)
+    {
+        //["<head>$val0", $value[1]];
+        return ["<$tag>{$value[0]}", $value[1]];
+    }
+
+    /**
+     * @param $tag
+     * @param $value
+     * @return array
+     */
     private function endtag($tag, $value)
     {
         return ["</$tag>", $value[1]];
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function startHTML($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->gentag('html', $value, $argument);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function endHTML($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->endtag('html', $value);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function startheader($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->gentag('header', $value, $argument);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function endheader($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->endtag('header', $value);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function startmain($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->gentag('main', $value, $argument);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function endmain($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->endtag('main', $value);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function startdiv($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->gentag('div', $value, $argument);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function enddiv($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->endtag('div', $value);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function startHead($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         $val0 = $value[0];
         $this->value[1]++;
         $value[1]++;
-        return ["<head>$val0", $value[1]];
+        return $this->startag('head', $value);
+
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function endHead($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->endtag('head', $value);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function startBody($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->gentag('body', $value, $argument);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function endBody($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         return $this->endtag('body', $value);
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function text($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         $val0 = $value[0];
@@ -204,6 +396,14 @@ class Modules_habillage
         return ["<span>$argument</span>$val0", $value[1]];
     }
 
+    /**
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function text_apres($value, $injection, $arbre_noms, $argument, $no_aid)
     {
         $val0 = $value[0];
@@ -212,12 +412,22 @@ class Modules_habillage
         return ["$val0<span>$argument</span>", $value[1]];
     }
 
+    /**
+     * @param $output
+     * @param $retour
+     * @return array
+     */
     public static function concatenation($output, $retour): array
     {
         // var_dump($output[1] , $retour[1]);
         return [$output[0] . $retour[0], $retour[1]];
     }
 
+    /**
+     * @param array $argument
+     * @param string $arguments_generer
+     * @return string|null
+     */
     private function argumentifieur(array $argument, string $arguments_generer = ''): string|null
     {
         if (count($argument) > 0) {
@@ -235,6 +445,15 @@ class Modules_habillage
         return $arguments_generer;
     }
 
+    /**
+     * @param $tag
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function tag($tag, $value, $injection, $arbre_noms, $argument, $no_aid): array
     {
         // $this->value
@@ -272,6 +491,15 @@ class Modules_habillage
     }
 
 
+    /**
+     * @param $tag
+     * @param $value
+     * @param $injection
+     * @param $arbre_noms
+     * @param $argument
+     * @param $no_aid
+     * @return array
+     */
     private function tag_exception($tag, $value, $injection, $arbre_noms, $argument, $no_aid)
     {
         $val0 = $value[0];

@@ -3,12 +3,22 @@
 use Eukaruon\modules\Level7\l7;
 use FilesystemIterator;
 
+/**
+ *
+ */
 class Modules_Level7 extends Modules_outils
 {
+    /**
+     * @var l7
+     */
     protected l7 $Level7;
     // Attention post_construct est là pour nous éviter de réinstancier l'objet inutilement
     // donc comme l'objet est déjà instancier vous pouvez relancer les fonction de __construct dans
     // post_construct
+    /**
+     * @param $donnee_gestionnaire
+     * @return mixed|void
+     */
     public function post_construct(&$donnee_gestionnaire)
     {
         $this->Ajouter_donnee_dans_gestionnaire($donnee_gestionnaire);
@@ -31,6 +41,10 @@ class Modules_Level7 extends Modules_outils
         $this->Level7 = new l7(liste_syntaxe: $recuperation_liste_obtjet_syntaxique, tabulation: false);
     }
 
+    /**
+     * @param $donnees
+     * @return string
+     */
     public function generer_l7($donnees)
     {
         $this->Level7->start($donnees);

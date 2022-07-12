@@ -2,11 +2,21 @@
 
 use Exception;
 
+
 class Modules_cache extends Modules_outils
 {
 
+    /**
+     * @var mixed|null
+     */
     private mixed $_rappel_fonction = null;
+    /**
+     * @var int
+     */
     private int $_temp_du_cache = 60;
+    /**
+     * @var string|bool|object|null
+     */
     private string|bool|null|object $_data_exploite = null;
 
     /* utilisation :
@@ -30,6 +40,13 @@ class Modules_cache extends Modules_outils
      *  CODE);
      */
 
+    /**
+     * @param string $nom_donnee
+     * @param mixed|null $donnee
+     * @param int|null $temp_cache_seconds
+     * @param string $dossier
+     * @return bool|object|string|null
+     */
     public function cache(string $nom_donnee, mixed $donnee = null, int|null $temp_cache_seconds = null, string $dossier = '')
     {
         /* 1 on vérifie si le fichier existe et que le temp de cache est inférieur au temps qu'on lui a
@@ -65,6 +82,11 @@ class Modules_cache extends Modules_outils
 
     }
 
+    /**
+     * @param string $fichier
+     * @param bool $force
+     * @return bool|object|string|null
+     */
     public function lecture_cache(string $fichier, bool $force = false)
     {
         if ($this->_data_exploite === null || $force) {
@@ -73,6 +95,12 @@ class Modules_cache extends Modules_outils
         return $this->_data_exploite;
     }
 
+    /**
+     * @param string $fichier
+     * @param mixed|null $donnee
+     * @param int|null $temp_cache_seconds
+     * @return mixed
+     */
     private function ecrire_cache(string $fichier, mixed $donnee = null, int|null $temp_cache_seconds = null)
     {
         if (!file_exists(dirname($fichier, 1))) {
@@ -118,6 +146,10 @@ class Modules_cache extends Modules_outils
      * cela offre une compatibilité avec la fonction principal
      */
 
+    /**
+     * @param $fichier
+     * @return mixed|void
+     */
     private function maclassexploiter($fichier)
     {
         try {
@@ -144,6 +176,11 @@ class Modules_cache extends Modules_outils
 
     }
 
+    /**
+     * @param $fichier
+     * @param $donnee
+     * @return mixed
+     */
     public function ecriture_cache($fichier, $donnee)
     {
         $this->_data_exploite = $donnee;
@@ -152,6 +189,10 @@ class Modules_cache extends Modules_outils
         return $donnee;
     }
 
+    /**
+     * @param string $nom_donnee
+     * @param string $dossier
+     */
     public function supprimer_cache(string $nom_donnee, string $dossier = '')
     {
         if (strlen($dossier) == 0 && str_contains($nom_donnee, ':')) {

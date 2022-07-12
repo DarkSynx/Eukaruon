@@ -107,6 +107,9 @@ class Modules_bdd
         return $this->module_dbb->rechercher($this->table, $colonne, $valeur_rechercher, $type_de_recherche, $selecteur_specifique);
     }
 
+    /**
+     * @return bool
+     */
     public function table_charger()
     {
         return is_null($this->table);

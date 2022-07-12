@@ -1,4 +1,5 @@
-<!doctype html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<?php error_reporting(0); header("Content-type: text/html; charset=utf-8"); ?><!doctype html PUBLIC
+        "-//IETF//DTD HTML 2.0//EN">
 <html>
 <head></head>
 <body>test de html

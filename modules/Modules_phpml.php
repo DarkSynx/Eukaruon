@@ -4,24 +4,46 @@ namespace Eukaruon\modules;
 
 use DOMDocument;
 
+/**
+ *
+ */
 class Modules_phpml
 {
 
+    /**
+     * @var string
+     */
     private string $_data = '';
+    /**
+     * @var string
+     */
     private string $_gen_data = '';
 
+    /**
+     * @param $data
+     * @param false $lien
+     */
     public function __construct($data, $lien = false)
     {
         $this->_data = $data;
         $this->_gen_data = $this->phpml($lien);
     }
 
+    /**
+     * @return string
+     */
     public function get_gen_data(): string
     {
         return $this->_gen_data;
     }
 
     // CMAV: class tag
+
+    /**
+     * @param bool $lien_utiliser
+     * @param string $pageGenerer
+     * @return string
+     */
     public function phpml(bool $lien_utiliser = false, $pageGenerer = ''): string
     {
         if ($lien_utiliser) $this->_data = file_get_contents($this->_data);
@@ -34,6 +56,11 @@ class Modules_phpml
 
     }
 
+    /**
+     * @param $start_childNodes
+     * @param $pageGenerer
+     * @return string
+     */
     private function childNodes_exploitation($start_childNodes, $pageGenerer)
     {
         $balise = '';
@@ -58,6 +85,10 @@ class Modules_phpml
         return $balise;
     }
 
+    /**
+     * @param $childNode_attributes
+     * @return array
+     */
     private function get_attributs($childNode_attributes): array
     {
         $Attributs = ['actions' => null, 'exploit' => null, 'inserts' => null, 'autres' => array()];
@@ -83,11 +114,24 @@ class Modules_phpml
 
 
     //_______________________________________________________
+
+    /**
+     * @param $balise
+     * @param $attributs
+     * @param $text
+     * @return mixed
+     */
     public function appel_balise($balise, $attributs, $text)
     {
         return self::{'tag_' . $balise}($balise, $attributs, $text);
     }
 
+    /**
+     * @param string $balise
+     * @param array $attributs
+     * @param string $text
+     * @return string
+     */
     public function generer(string $balise, array $attributs, string $text): string
     {
         if (self::balise_existe($balise)) {
@@ -101,11 +145,21 @@ class Modules_phpml
         }
     }
 
+    /**
+     * @param $balise
+     * @param $attributs
+     * @param $text
+     * @return string
+     */
     public static function tag_test($balise, $attributs, $text): string
     {
         return '[TEST::TEST]';
     }
 
+    /**
+     * @param $balise
+     * @return bool
+     */
     public static function balise_existe($balise)
     {
         return method_exists('Eukaruon\modules\Modules_phpml', 'tag_' . $balise);

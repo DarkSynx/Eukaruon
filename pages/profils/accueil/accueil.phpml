@@ -1,5 +1,5 @@
 <phpml>
-    <test></test>
+    <test/>
     <class id="2" actions="test.test" exploit="{
 'doctype':'html',
 'lang':'fr',

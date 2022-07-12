@@ -16,8 +16,17 @@ use Exception;
  */
 class pilote
 {
+    /**
+     *
+     */
     const NO_RELOAD_MODULE = 0;
+    /**
+     *
+     */
     const RELOAD_MODULE = 1;
+    /**
+     *
+     */
     const RELOAD_POST_CONSTRUCT = 2;
     /** Représente un tableau des fichiers à charger
      * - chemins.php
@@ -30,6 +39,9 @@ class pilote
         //'installation.php'
     ];
 
+    /**
+     *
+     */
     const LIST_EXCEPTION_MODULE = [
         'Modules_autorisations',
         'CMD',
@@ -38,6 +50,9 @@ class pilote
         'Page_en_cache'
     ];
 
+    /**
+     *
+     */
     const LIST_NAME_SPACE = [
         'configs' => 'Eukaruon\\configs\\',
         'modules' => 'Eukaruon\\modules\\',
@@ -91,6 +106,9 @@ class pilote
         }
     }
 
+    /**
+     * @return string
+     */
     public function gestion_url(): string
     {
 
@@ -106,6 +124,9 @@ class pilote
         return $url;
     }
 
+    /**
+     * @return Modules_gestionnaire|object|null
+     */
     public function &Utiliser_le_gestionnaire()
     {
         return $this->Modules_gestionnaire;
@@ -130,12 +151,13 @@ class pilote
         } else {
 
             if (is_null($modules_primaire)) {
-                $this->Ecrire_journal('Chargement module : [ ' . $module_a_charger . ' ]');
+                //$this->Ecrire_journal('Chargement module : [ ' . $module_a_charger . ' ]');
                 return $this->Modules_gestionnaire->charger_le_module($module_a_charger, $modules_primaire, $modules_secondaire, $forcer_recharger_module);
             } else {
-                $this->Ecrire_journal('Chargement module : [ ' . $module_a_charger . ' ] avec options de donnee charger : ' . (is_array($modules_primaire) ? implode(' | ', $modules_primaire) : $modules_primaire));
+                //$this->Ecrire_journal('Chargement module : [ ' . $module_a_charger . ' ] avec options de donnee charger : ' . (is_array($modules_primaire) ? implode(' | ', $modules_primaire) : $modules_primaire));
                 return $this->Modules_gestionnaire->charger_le_module($module_a_charger, $modules_primaire, $modules_secondaire, $forcer_recharger_module);
             }
+
         }
     }
 
@@ -151,17 +173,19 @@ class pilote
 
 
 spl_autoload_register(
-    function ($class_name) {
-        try {
-            $class_name = basename($class_name);
+/**
+ * @param $class_name
+ */ function ($class_name) {
+    try {
+        $class_name = basename($class_name);
 
-            $portion_nom = explode('_', $class_name);
-            $dossier_a_charger = strtolower($portion_nom[0]);
+        $portion_nom = explode('_', $class_name);
+        $dossier_a_charger = strtolower($portion_nom[0]);
 
 
-            switch ($class_name) {
-                case 'Modules_autorisations':
-                    include_once CONFIGS . 'Modules_autorisations.php';
+        switch ($class_name) {
+            case 'Modules_autorisations':
+                include_once CONFIGS . 'Modules_autorisations.php';
                     break;
                 case 'CMD':
                     include_once CONFIGS . 'CMD.php';

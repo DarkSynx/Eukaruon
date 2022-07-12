@@ -2,11 +2,21 @@
 
 class Modules_erreurs
 {
+    /**
+     *
+     */
     public function __construct()
     {
         set_error_handler(array($this, 'gestion_derreurs'));
     }
 
+    /**
+     * @param int $errno
+     * @param string $errstr
+     * @param string $errfile
+     * @param int $errline
+     * @param array $errcontext
+     */
     public function gestion_derreurs(int $errno, string $errstr = '', string $errfile = '', int $errline = -1, array $errcontext = [])
     {
         var_dump(ARCHIVES);

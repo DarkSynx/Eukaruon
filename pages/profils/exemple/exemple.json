@@ -1,8 +1,10 @@
 {
   "corps": "exemple.php",
-  "donnees": {
+  "config": {
     "extension_force": "php",
-    "syntaxe": "php",
+    "syntaxe": "php"
+  },
+  "donnees": {
     "LANGUE": "fr",
     "TITRE": "test de page"
   }

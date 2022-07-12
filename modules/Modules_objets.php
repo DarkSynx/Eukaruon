@@ -5,41 +5,71 @@ namespace Eukaruon\modules;
 use Eukaruon\modules\Modules_habillage as MH;
 
 
+/**
+ *
+ */
 class Modules_objets //extends Modules_habillage
 {
 
 
+    /**
+     *
+     */
     public static function bar_de_recherche()
     {
 
     }
 
+    /**
+     *
+     */
     public static function menu_deroulant()
     {
 
     }
 
+    /**
+     *
+     */
     public static function bar_de_chargement()
     {
 
     }
 
+    /**
+     *
+     */
     public static function boutton_action()
     {
 
     }
 
+    /**
+     *
+     */
     public static function bar_slider()
     {
 
     }
 
+    /**
+     *
+     */
     public static function tab()
     {
 
 
     }
 
+    /**
+     * @param string $texte
+     * @param string $valeur
+     * @param string $type
+     * @param string $id
+     * @param string $class
+     * @param false $retour
+     * @return array
+     */
     public static function bare_de_texte($texte = '', $valeur = '', $type = 'text', $id = '', $class = '', $retour = false)
     {
 
@@ -60,6 +90,16 @@ class Modules_objets //extends Modules_habillage
 
     //364x463
     // 1280 < icone > icone + texte
+    /**
+     * @param $texte
+     * @param string $image
+     * @param string $id
+     * @param string $class
+     * @param string $theme
+     * @param string $lien
+     * @param array $injecter
+     * @param false $no_tag_a
+     */
     public static function boutton_ajustable($texte, $image = '', $id = '', $class = '', $theme = 'grey', $lien = '', array $injecter = [], $no_tag_a = false)
     {
 
@@ -92,11 +132,21 @@ class Modules_objets //extends Modules_habillage
 
     }
 
+    /**
+     * @param $clef
+     * @param $egale_a
+     * @return bool
+     */
     public static function session($clef, $egale_a)
     {
         return (array_key_exists($clef, $_SESSION) && $_SESSION[$clef] == $egale_a);
     }
 
+    /**
+     * @param $name
+     * @param false $actualiser
+     * @return mixed
+     */
     public static function css($name, $actualiser = false)
     {
         MH::de()
@@ -106,6 +156,9 @@ class Modules_objets //extends Modules_habillage
         return $name;
     }
 
+    /**
+     * @param $url
+     */
     public static function autoload($url)
     {
         MH::de()
@@ -113,6 +166,10 @@ class Modules_objets //extends Modules_habillage
             ->afficher();
     }
 
+    /**
+     * @param $name
+     * @param false $actualiser
+     */
     public static function scripttheme($name, $actualiser = false)
     {
         MH::de()
@@ -121,6 +178,18 @@ class Modules_objets //extends Modules_habillage
     }
 
 
+    /**
+     * @param string $nom
+     * @param $tableau_de_type
+     * @param string $boutton_valider
+     * @param string $method
+     * @param string $page_dappel
+     * @param string $injection
+     * @param string $stylecss
+     * @param array $output
+     * @param false $retour
+     * @return array
+     */
     public static function formulaire(string $nom, $tableau_de_type, $boutton_valider = 'valider', $method = 'POST', $page_dappel = '', $injection = '', $stylecss = '', array $output = ['', 0], $retour = false)
 
     {
@@ -196,6 +265,15 @@ class Modules_objets //extends Modules_habillage
         return $output;
     }
 
+    /**
+     * @param string $tag
+     * @param string $donee
+     * @param array $argument
+     * @param false $retour
+     * @param string $id
+     * @param string $class
+     * @return array
+     */
     public static function tag($tag = 'span', $donee = '', $argument = [], $retour = false, $id = '', $class = '')
     {
         if ($id !== '') $argument['id'] = $id;
@@ -209,6 +287,14 @@ class Modules_objets //extends Modules_habillage
         return $output;
     }
 
+    /**
+     * @param string $donee
+     * @param array $argument
+     * @param false $retour
+     * @param string $id
+     * @param string $class
+     * @return array
+     */
     public static function div($donee = '', $argument = [], $retour = false, $id = '', $class = '')
     {
         if ($id !== '') $argument['id'] = $id;
@@ -225,6 +311,9 @@ class Modules_objets //extends Modules_habillage
     /* ------------------------------------------ */
     // 'img', '!DOCTYPE', 'br', 'hr', 'input', 'link'
 
+    /**
+     * @param string[] $argument
+     */
     public static function doctype($argument = ['html'])
     {
         MH::de()
@@ -233,6 +322,9 @@ class Modules_objets //extends Modules_habillage
     }
 
 
+    /**
+     * @param array|string $argument
+     */
     public static function debutHeader(array|string $argument = [])
     {
         $argument == 'END' ?
@@ -241,11 +333,17 @@ class Modules_objets //extends Modules_habillage
             MH::de()->appliquer('startheader', $argument)->afficher();
     }
 
+    /**
+     *
+     */
     public static function finHeader()
     {
         MH::de()->appliquer('endheader', no_aid: true)->afficher();
     }
 
+    /**
+     * @param array|string $argument
+     */
     public static function debutMain(array|string $argument = [])
     {
         $argument == 'END' ?
@@ -254,21 +352,35 @@ class Modules_objets //extends Modules_habillage
             MH::de()->appliquer('startmain', $argument)->afficher();
     }
 
+    /**
+     *
+     */
     public static function Mainfin()
     {
         MH::de()->appliquer('endmain', no_aid: true)->afficher();
     }
 
+    /**
+     * @param array $argument
+     */
     public static function meta($argument = [])
     {
         MH::de()->appliquer('meta', $argument, no_aid: true)->afficher();
     }
 
+    /**
+     * @param $valeur
+     */
     public static function titre($valeur)
     {
         MH::de($valeur)->appliquer('title', no_aid: true)->afficher();
     }
 
+    /**
+     * @param array|string $argument
+     * @param string $id
+     * @param string $class
+     */
     public static function debutDiv(array|string $argument = [], $id = '', $class = '')
     {
         if ($id !== '') $argument['id'] = $id;
@@ -281,12 +393,19 @@ class Modules_objets //extends Modules_habillage
             MH::de()->appliquer('startdiv', $argument)->afficher();
     }
 
+    /**
+     *
+     */
     public static function finDiv()
     {
         MH::de()->appliquer('enddiv', no_aid: true)->afficher();
     }
 
 
+    /**
+     * @param array $argument
+     * @param string $src
+     */
     public static function js($argument = [], $src = '')
     {
         if ($src !== '') $argument['src'] = $src;
@@ -294,12 +413,18 @@ class Modules_objets //extends Modules_habillage
         MH::de()->appliquer('script', $argument, no_aid: true)->afficher();
     }
 
+    /**
+     * @param string[] $argument
+     */
     public static function tete($argument = ['lang' => 'fr'])
     {
         MH::de()->appliquer('startHTML', $argument, no_aid: true)->afficher();
         MH::de()->appliquer('startHead', [], no_aid: true)->afficher();
     }
 
+    /**
+     * @param array|string $argument
+     */
     public static function corp(array|string $argument = [])
     {
         if ($argument == 'END') {
@@ -311,6 +436,9 @@ class Modules_objets //extends Modules_habillage
         }
     }
 
+    /**
+     * @param array $argument
+     */
     public static function fin($argument = [])
     {
         MH::de()->appliquer('endBody')->afficher();

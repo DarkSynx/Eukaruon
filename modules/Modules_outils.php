@@ -22,6 +22,9 @@ class Modules_outils implements interfaces_modules
      */
     protected array $donnee_gestionnaire = array();
 
+    /**
+     * @var array|string[]
+     */
     protected array $alpha_codec = DonneeUniqueServeur::ALPHACODE;
     // // ahoubipvcjqwdkrxelsyfmtzgn4702581369AHOUBIPVCJQWDKRXELSYFMTZGN;_+#!@|-
     // ; -> arguments
@@ -35,10 +38,19 @@ class Modules_outils implements interfaces_modules
     // créé une fonction qui générer une chaine ac
     // via $alpha_codec
 
+    /**
+     * @var array
+     */
     protected array $arguments_url = array();
 
+    /**
+     * @var object|null
+     */
     protected ?object $Modules_bdd_utilisation_rapide = null;
 
+    /**
+     *
+     */
     public function gen_alpha()
     {
         foreach ($this->alpha_codec as $key => $val) {
@@ -46,6 +58,10 @@ class Modules_outils implements interfaces_modules
         }
     }
 
+    /**
+     * @param null $donnee_gestionnaire
+     * @param bool $pas_de_post_construct
+     */
     public function __construct($donnee_gestionnaire = null, bool $pas_de_post_construct = false)
     {
         // Attention post_construct est là pour nous éviter de réinstancier l'objet inutilement
@@ -72,12 +88,21 @@ class Modules_outils implements interfaces_modules
         }
     }
 
+    /**
+     * @param $donnee_gestionnaire
+     * @return mixed|void
+     */
     public function post_construct(&$donnee_gestionnaire)
     {
 
         $this->Ajouter_donnee_dans_gestionnaire($donnee_gestionnaire);
     }
 
+    /**
+     * @param $chaine
+     * @param false $decoder
+     * @return string|null
+     */
     protected function codec_ac($chaine, $decoder = false)
     {
 
@@ -104,6 +129,10 @@ class Modules_outils implements interfaces_modules
     }
 
 
+    /**
+     * @param $encoder
+     * @return string
+     */
     public function pixel_decodage($encoder)
     {
         // prototype à finir
@@ -164,6 +193,10 @@ class Modules_outils implements interfaces_modules
         return 'data:image/png;base64,' . base64_encode($imagedata);
     }
 
+    /**
+     * @param $chaine
+     * @return array|mixed|string|string[]|null
+     */
     protected function decompress_pxc($chaine)
     {
         if (strlen($chaine) > 12) return null;
@@ -218,6 +251,9 @@ class Modules_outils implements interfaces_modules
     }
 
 
+    /**
+     * @return string
+     */
     public function Name_module(): string
     {
         return get_class($this);
@@ -253,6 +289,10 @@ class Modules_outils implements interfaces_modules
         return $this->Modules_bdd_utilisation_rapide->rechercher($colonne, $valeur);
     }
 
+    /**
+     * @param string|null $base_de_donnee
+     * @param string|null $table_a_charger
+     */
     public function Modules_bdd_preparation(null|string $base_de_donnee = null, null|string $table_a_charger = null)
     {
         $this->Modules_bdd_utilisation_rapide();
@@ -264,6 +304,9 @@ class Modules_outils implements interfaces_modules
         }
     }
 
+    /**
+     *
+     */
     public function Modules_bdd_utilisation_rapide()
     {
 
@@ -322,6 +365,9 @@ class Modules_outils implements interfaces_modules
         return $this->donnee_gestionnaire[$donnee_selectionner];
     }
 
+    /**
+     * @param $verifier_existance_du_module
+     */
     public function Module_a_charger($verifier_existance_du_module)
     {
 
@@ -367,6 +413,12 @@ class Modules_outils implements interfaces_modules
         return $this->donnee_gestionnaire['DonneeUniqueServeur']::MODULES_UTILISATEUR_INSCRIT;
     }
 
+    /**
+     * @param array $tableau_valeur_ajouter
+     * @param string|null $base_de_donnee
+     * @param string|null $table_a_charger
+     * @return mixed
+     */
     public function Modules_bdd_ajouter(array $tableau_valeur_ajouter = array(), null|string $base_de_donnee = null, null|string $table_a_charger = null): mixed
     {
         $this->Modules_bdd_preparation($base_de_donnee, $table_a_charger);

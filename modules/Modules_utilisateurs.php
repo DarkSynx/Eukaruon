@@ -20,14 +20,27 @@ class Modules_utilisateurs extends Modules_outils
     protected bool $utilisateur_bdd_ok = false;
 
 
+    /**
+     * @var bool
+     */
     protected bool $utilisateur_bloquer = false; // true l'utilisaeur est ok false bloquer
+    /**
+     * @var int
+     */
     protected int $utilisateur_page_direction = -1; // la page ou l'on va rediriger l'utilisateur
+    /**
+     * @var int
+     */
     protected int $date_blocage = 0; // la date de deblocage de l'utilisateur
 
 
     //--------------------------------------------------------
 
 
+    /**
+     * @param $donnee_gestionnaire
+     * @return mixed|void
+     */
     public function post_construct(&$donnee_gestionnaire)
     {
         $this->Ajouter_donnee_dans_gestionnaire($donnee_gestionnaire);
@@ -55,6 +68,9 @@ class Modules_utilisateurs extends Modules_outils
         $this->utilisateur_bdd_ok = $this->verifier_lutilisateur();
     }
 
+    /**
+     * @return bool
+     */
     public function verifier_lutilisateur(): bool
     {
         /* ----------------------------------- */
@@ -293,6 +309,9 @@ class Modules_utilisateurs extends Modules_outils
         );
     }
 
+    /**
+     * @return int
+     */
     public function get_utilisateur_page_direction(): int
     {
         return $this->utilisateur_page_direction;
