@@ -7,16 +7,16 @@ namespace Composer\Autoload;
 class ComposerStaticInit0dbc9c64796aac9f8428bc9c53813fdd
 {
     public static $prefixLengthsPsr4 = array (
-        'D' => 
+        'E' => 
         array (
-            'Darksynx\\Eukaruon\\' => 18,
+            'Eukaruon\\' => 9,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Darksynx\\Eukaruon\\' => 
+        'Eukaruon\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => '/',
         ),
     );
 

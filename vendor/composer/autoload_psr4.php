@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Darksynx\\Eukaruon\\' => array($baseDir . '/src'),
+    'Eukaruon\\' => array('/'),
 );

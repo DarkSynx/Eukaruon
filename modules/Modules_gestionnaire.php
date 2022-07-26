@@ -7,7 +7,8 @@ use Exception;
 use FilesystemIterator;
 
 
-/** module principale de gestion des autres modules
+/**
+ * module principale de gestion des autres modules
  *  - set_DonneeUniqueServeur
  *  - set_Modules_bdd
  *  - set_Modules_bdd
@@ -19,8 +20,9 @@ use FilesystemIterator;
 class Modules_gestionnaire
 {
 
-    /** Va contenir un tableu avec la liste des fichiers du dossier ./modules
-     *  qui commence que par 'Modules_' et ne contiendra pas Module_gestionnaire
+    /**
+     * Va contenir un tableu avec la liste des fichiers du dossier ./modules
+     * qui commence que par 'Modules_' et ne contiendra pas Module_gestionnaire
      * @var array
      */
     protected array $list_modules_instancier = array();
@@ -40,10 +42,12 @@ class Modules_gestionnaire
      * @var int|float
      */
     protected int|float $valeur_drapeau_incrementer = 0.5;
+
     /**
      * @var array
      */
     protected array $tableau_drapeau = array();
+
     /**
      * @var string
      */
@@ -53,17 +57,18 @@ class Modules_gestionnaire
      * @var array
      */
     private array $_liste_exception_module = array();
+
     /**
      * @var array
      */
     private array $_liste_espace_de_nom = array();
 
-    /** Le constructeur démarre les modules essentiels au bon fonctionnement
+    /**
+     *  Le constructeur démarre les modules essentiels au bon fonctionnement
      *  chaque module essentiel dit primaire devra être rajouté à la main. Ils sont
      *  considérés comme des modules sensibles et ne peuvent donc pas être chargé automatiquement
      *  - une methode set_[nomdumodule] devra être créé pour charger celui-ci et une variable
      *  - une variable aussi : "protected ?object $Modules_[NOMMODULE] = null;" à null devra être définit
-     *
      *  - les modules essentiel sont ceux correspondent aux modules primaires de cette application
      *  - les autres modules sont chargers à la demande
      */
@@ -80,19 +85,19 @@ class Modules_gestionnaire
         $this->set_Modules_autorisations();
 
 
-        /* doit être générer coté Administration en dev vous pouvez l'activer */
-        /* la gestion des modules est administrer par /configs/CMD.php */
+        // doit être générer coté Administration en dev vous pouvez l'activer
+        // la gestion des modules est administrer par /configs/CMD.php
         $this->generer_list_modules();
 
         // on fabrique le drapeau MGC_AUTRES_MODULES pour indiqué que l'on peut attaquer le dossier
         // autres_modules pour y charger des modules secondaire c'est un indicateur à mettre dans
-        //
-        //$this->generer_drapeau_tableau('AUTRES_MODULES');
-
+        // $this->generer_drapeau_tableau('AUTRES_MODULES');
         // ajouter le gestionnaire de sous module : Module_sousmodule
+
     }
 
-    /** On instancie ici les données de ./configs/DonneeUniqueServeur.php
+    /**
+     * On instancie ici les données de ./configs/DonneeUniqueServeur.php
      * attention DonneeUniqueServeur.php n'est créé qu'a l'installation du serveur via
      * installation.php et DonneeUniqueServeur.php sera misà jours par la suite vie des
      * Applicatifs coté ./administration
@@ -115,8 +120,8 @@ class Modules_gestionnaire
         $this->liste_modules_instance($this->name_space('configs') . 'Page_en_cache', true);
     }
 
-    /** Permet de charger le module de gestion des bases de donnée
-     *
+    /**
+     * Permet de charger le module de gestion des bases de donnée
      */
     public function set_Modules_bdd()
     {
@@ -125,8 +130,8 @@ class Modules_gestionnaire
         //$this->Modules_bdd->set_selection_module_bdd('Modules_bdd_sqlite');
     }
 
-    /** Permet de charger le module Level7
-     *
+    /**
+     * Permet de charger le module Level7
      */
     public function set_Modules_Level7()
     {
@@ -134,7 +139,6 @@ class Modules_gestionnaire
         $this->liste_modules_instance($this->name_space('modules') . 'Modules_Level7', true);
         //$this->Modules_bdd->set_selection_module_bdd('Modules_bdd_sqlite');
     }
-
 
     /**
      * Permet de charger le module Modules_autorisations
@@ -146,13 +150,12 @@ class Modules_gestionnaire
         $this->liste_modules_instance($this->name_space('configs') . 'Modules_autorisations', true);
     }
 
-    /* ----------------------------------- */
-
-    /** recuperer la liste des espaces de nom
+    /**
+     * recuperer la liste des espaces de nom
      * @param $nom
      * @return mixed
      */
-    public function name_space($nom)
+    public function name_space($nom): mixed
     {
         return $this->_liste_espace_de_nom[$nom];
     }
@@ -164,26 +167,28 @@ class Modules_gestionnaire
      * @return int
      */
     public function generer_drapeau_tableau($nom_module): int
-    { // les modules primaire sont limité à 63 modules
+    {
+        // les modules primaire sont limité à 63 modules
         $this->valeur_drapeau_incrementer = intval($this->valeur_drapeau_incrementer * 2);
         if ($this->valeur_drapeau_incrementer <= pow(2, 63)) {
             $this->tableau_drapeau[$this->valeur_drapeau_incrementer] = $nom_module;
             $prefix_module_nom = $this->prefix_constante . strtoupper($nom_module);
-            if (!defined($prefix_module_nom))
+            if (!defined($prefix_module_nom)) {
                 define($prefix_module_nom, $this->valeur_drapeau_incrementer);
+            }
         }
-
         return $this->valeur_drapeau_incrementer;
     }
 
-    /** permet d'obtenir la liste des modules d'instance
+    /**
+     * permet d'obtenir la liste des modules d'instance
      * @param $nom_du_module
      * @param false $force
      * @param null $donnees_module
      * @param false $force_post_construct
      * @return mixed
      */
-    protected function &liste_modules_instance($nom_du_module, $force = false, &$donnees_module = null, $force_post_construct = false): mixed
+    protected function &liste_modules_instance($nom_du_module, bool $force = false, &$donnees_module = null, bool $force_post_construct = false): mixed
     {
         $nom_du_module_repertorier = basename($nom_du_module);
 
@@ -209,11 +214,10 @@ class Modules_gestionnaire
                 }
                 $this->list_modules_instancier[$nom_du_module_repertorier]['donnee'] = &$donnees_module;
                 $this->list_modules_instancier[$nom_du_module_repertorier]['module'] = new $nom_du_module($donnees_module, $force_post_construct);
-                $this->parent_et_interfaces($nom_du_module);
             } else {
 
-                /* pas oublier de retirer les here 1,2,3
-                et gerer les fichier dans configs*/
+                //pas oublier de retirer les here 1,2,3
+                //et gerer les fichier dans configs
                 if (in_array($nom_du_module, $this->_liste_exception_module)) {
 
                     $nom_du_module = $this->name_space('configs') . $nom_du_module;
@@ -227,8 +231,8 @@ class Modules_gestionnaire
                     }
                 }
                 $this->list_modules_instancier[$nom_du_module_repertorier]['module'] = new $nom_du_module(null, $force_post_construct);
-                $this->parent_et_interfaces($nom_du_module);
             }
+            $this->parent_et_interfaces($nom_du_module);
             return $this->list_modules_instancier[$nom_du_module_repertorier]['module'];
         }
 
@@ -260,14 +264,14 @@ class Modules_gestionnaire
                     'Modules_autorisations'
                 ];
 
-                $list_tagmodules_acepter = ['Modules' /*, 'sousmodules'*/];
+                $list_tagmodules_acepter = ['Modules']; // 'sousmodules'
                 if (
                     !in_array($nom_du_module, $list_modules_exceptions) &&
                     in_array($nom_eclater[0], $list_tagmodules_acepter)
                     && (
-                        /* les interfaces */
+                        // les interfaces
                         !in_array('interfaces_modules', $interfaces_modules) ||
-                        /* les modules */
+                        // les modules
                         $Modules_outils != 'Modules_outils'
                     )
                 ) {
@@ -290,7 +294,8 @@ class Modules_gestionnaire
     }
 
 
-    /** Permet d'obtenir la liste des modules disponible
+    /**
+     * Permet d'obtenir la liste des modules disponible
      * @return array
      */
     public function generer_list_modules(): array
@@ -325,7 +330,8 @@ class Modules_gestionnaire
         return $this->list_modules_instancier;
     }
 
-    /** Permet d'obtenir l'accés à l'objet DonneeUniqueServeur par référence
+    /**
+     * Permet d'obtenir l'accés à l'objet DonneeUniqueServeur par référence
      * @return mixed
      */
     public function &get_DonneeUniqueServeur(): mixed
@@ -333,32 +339,36 @@ class Modules_gestionnaire
         return $this->list_modules_instancier['DonneeUniqueServeur']['module'];
     }
 
-    /** Permet l'instanciation d'un module
+
+    /**
+     * Permet l'instanciation d'un module
+     * forcer_recharger_module = 0 -> on ne fait rien
+     * forcer_recharger_module = 1 -> on réinstancie le module
+     * forcer_recharger_module = 2 -> on réinstancie pas le module on relance post_construct
      * @param $nom_module
-     * @param null $modules_primaire
-     * @return mixed
+     * @param mixed|null $modules_primaire
+     * @param mixed|null $modules_secondaire
+     * @param int $forcer_recharger_module
+     * @param bool $force_post_construct
+     * @return array|object
      */
-    public function &charger_le_module($nom_module, $modules_primaire = null, $modules_secondaire = null, int $forcer_recharger_module = 0, $force_post_construct = false): array|object
+    public function &charger_le_module($nom_module, mixed $modules_primaire = null, mixed $modules_secondaire = null, int $forcer_recharger_module = 0, bool $force_post_construct = false): array|object
     {
-        //  $forcer_recharger_module = 0 => on ne fait rien
-        //  $forcer_recharger_module = 1 => on réinstancie le module
-        //  $forcer_recharger_module = 2 => on réinstancie pas le module on relance post_construct
 
         $donnee = null;
-        /* sauvgarde temporaire du nom du module */
+        // sauvgarde temporaire du nom du module
         $this->nom_module = $nom_module;
 
-        /* partie ou l'on instancie le module avec ces modules utilitaire */
+        // artie ou l'on instancie le module avec ces modules utilitaire
         if ($forcer_recharger_module === 1 || !array_key_exists($nom_module, $this->list_modules_instancier) || is_null($this->list_modules_instancier[$nom_module])) {
             if (!is_null($modules_primaire)) {
                 $donnee = &$this->chargement_donnee_choisi($modules_primaire, $modules_secondaire);
             }
             //$this->Modules_charger[$nom_module]['module'] = new $nom_module($this->Modules_charger[$nom_module]['donnee']);
-
             return $this->liste_modules_instance($nom_module, true, $donnee, $force_post_construct);
         }
 
-        /* partie ou l'on redémarre le post_construct du module avec ces modules utilitaire */
+        // partie ou l'on redémarre le post_construct du module avec ces modules utilitaire
         if (!is_null($modules_primaire)) {
             $donnee = &$this->chargement_donnee_choisi($modules_primaire, $modules_secondaire);
             if ($forcer_recharger_module === 2) {
@@ -368,11 +378,12 @@ class Modules_gestionnaire
             }
         }
 
-        /* on retourne le module module pour l'exploité par référence */
+        // on retourne le module module pour l'exploité par référence
         return $this->liste_modules_instance($nom_module, false, $donnee, $force_post_construct);
     }
 
-    /** Cette section permet de charger les données que possède Module_gestionnaire par
+    /**
+     * Cette section permet de charger les données que possède Module_gestionnaire par
      * exemple comme il charge les donnée DonneeUniqueServeur si dans un autre module on à besoin des données pour
      * travailler avec nous pouvons alors les charger ici , les donnée sont partager par référence pour évité la
      * multiplication des données.
@@ -381,7 +392,18 @@ class Modules_gestionnaire
      * - si je désire avoir les deux modules charger alors je représente comme cela 'DonneeUniqueServeur | Modules_bdd'
      * avec un '|' comme séparateur
      * - vous pouvez aussi représenter les données dans un tableau ['DonneeUniqueServeur',' Modules_bdd']
+     *            * le gestionnaire de drapeau ne gére de 66 modules max
+     * à n'activer que si vous en avez une utilité
+     *
+     *  $Modules_pages = $pilote->Charger_le_module
+     *      module_a_charger: 'Modules_pages',
+     *      modules_primaire: MGC_PAGE_EN_CACHE | MGC_MODULES_BDD <-- ici
+     *
+     * elseif (is_int($modules_primaire))
+     * $donnee_tableau = $this->binaire_extraction_drapeau($modules_primaire);
+     *
      * @param mixed $modules_primaire
+     * @param array|null $modules_secondaire
      * @return array
      */
     public function &chargement_donnee_choisi(mixed $modules_primaire, array $modules_secondaire = null): array
@@ -392,21 +414,7 @@ class Modules_gestionnaire
 
             if (is_array($modules_primaire)) {
                 $donnee_tableau = $modules_primaire;
-            } /*
-            // le gestionnaire de drapeau ne gére de 66 modules max
-            // à n'activer que si vous en avez une utilité
-            /*
-             *  $Modules_pages = $pilote->Charger_le_module(
-             *      module_a_charger: 'Modules_pages',
-             *      modules_primaire: MGC_PAGE_EN_CACHE | MGC_MODULES_BDD <-- ici
-             *  );
-             * /
-            elseif (is_int($modules_primaire)) {
-                $donnee_tableau = $this->binaire_extraction_drapeau($modules_primaire);
-                // $donnee_tableau =
-            }
-            */
-            elseif (is_string($modules_primaire)) {
+            } elseif (is_string($modules_primaire)) {
                 $donnee_tableau = explode('|', $modules_primaire);
             }
 
@@ -415,7 +423,7 @@ class Modules_gestionnaire
                 $donnee_tableau = array_merge($donnee_tableau, $modules_secondaire);
             }
 
-            /* gestion des autorisations : Modules_autorisations */
+            // gestion des autorisations : Modules_autorisations
             if (strpos($this->nom_module, '_')) {
                 $nom_module = explode('_', $this->nom_module);
                 if ($nom_module[0] == 'sousmodules') {
@@ -500,7 +508,8 @@ class Modules_gestionnaire
         return $this->tableau_contenant_donnes;
     }
 
-    /** fonction là pour recuprer la valeur d'un drapeau
+    /**
+     * fonction là pour recuprer la valeur d'un drapeau
      * @param int $valeur_combiner_decimal
      * @return array
      */
@@ -517,11 +526,12 @@ class Modules_gestionnaire
         return $tableau_de_valeur;
     }
 
-    /** permet d'utiliser un module charger
+    /**
+     * permet d'utiliser un module charger
      * @param string $nom_module
      * @return mixed
      */
-    public function &Utiliser_le_module(string $nom_module)
+    public function &Utiliser_le_module(string $nom_module): mixed
     {
         return $this->list_modules_instancier[$nom_module]['module'];
     }
