@@ -1,6 +1,7 @@
 <?php namespace Eukaruon\modules;
 
 
+use Eukaruon\configs\DonneeUniqueServeur;
 use Eukaruon\modules\interfaces\interfaces_bdd;
 use SQLite3;
 
@@ -20,15 +21,41 @@ class Modules_bdd_sqlite implements interfaces_bdd
      * @var object|null
      */
     protected ?object $SQLite3 = null;
+    protected ?object $gen = null;
+
 
     /** Instancie le gestionnaire SQlite 3 dans la variable $SQLite3
      * @param $nom_de_la_bdd
      */
     public function selection_bdd($nom_de_la_bdd)
     {
-        $this->SQLite3 = new SQLite3(BDD . $nom_de_la_bdd);
-    }
+        // mode spline ou normal
+        // definit une utilisation exceptionel pour Eukarion
+        // d'une Bdd dans un dossier spécifique
+        /*if (str_contains($nom_de_la_bdd, ':')) {
+            $exp_nom_de_la_bdd = explode(':', $nom_de_la_bdd);
+            $this->gen = new Modules_gen();
+            $nom_dossier = $this->gen->scanner_index($exp_nom_de_la_bdd[1]);
+            if ($nom_dossier) {
+                $this->SQLite3 = new SQLite3(UTILISATEURS . $nom_dossier . '/' . $exp_nom_de_la_bdd[0]);
+            }
+        } */
 
+        $this->SQLite3 = new SQLite3(
+            BDD . $nom_de_la_bdd,
+            SQLITE3_OPEN_READWRITE,
+            DonneeUniqueServeur::SQLITE_ENC
+        );
+
+
+        $this->SQLite3->busyTimeout(5000);
+        // WAL mode has better control over concurrency.
+        // Source: https://www.sqlite.org/wal.html
+        $this->SQLite3->exec('PRAGMA journal_mode = wal;');
+        $this->SQLite3->exec('PRAGMA synchronous = NORMAL;');
+        $this->SQLite3->exec('PRAGMA schema.taille_cache = 16000;');
+
+    }
 
     /** Permet de réalisé une recherche dans une base de donnée
      * @param $nom_de_la_table
@@ -67,7 +94,7 @@ class Modules_bdd_sqlite implements interfaces_bdd
         $extraire_valeur_tableau = array_values($tableau_valeur_ajouter);
         $clee_tableau = '"' . implode('","', $extraire_colonne_tableau) . '"';
         $valeur_tableau = '"' . implode('","', $extraire_valeur_tableau) . '"';
-        $requette = "INSERT INTO $nom_de_la_table($clee_tableau) VALUES ($valeur_tableau)";
+        $requette = "INSERT INTO $nom_de_la_table($clee_tableau) VALUES($valeur_tableau)";
         return $this->SQLite3->exec($requette);
     }
 
@@ -101,7 +128,8 @@ class Modules_bdd_sqlite implements interfaces_bdd
      * @param bool $pas_de_retour
      * @return mixed
      */
-    public function suppression($nom_de_la_table, $identifiant, $where_id = 'id', $pas_de_retour = true): mixed
+    public
+    function suppression($nom_de_la_table, $identifiant, $where_id = 'id', $pas_de_retour = true): mixed
     {
         $requette = "DELETE FROM $nom_de_la_table WHERE $where_id IN ('$identifiant');";
         return $this->SQLite3->exec($requette);
@@ -113,7 +141,8 @@ class Modules_bdd_sqlite implements interfaces_bdd
      * @param $requette_specifique_brute
      * @return mixed
      */
-    public function requette_brute_query($requette_specifique_brute): mixed
+    public
+    function requette_brute_query($requette_specifique_brute): mixed
     {
         return $this->SQLite3->query($requette_specifique_brute);
     }
@@ -124,7 +153,8 @@ class Modules_bdd_sqlite implements interfaces_bdd
      * @param $requette_specifique_brute
      * @return mixed
      */
-    public function requette_brute_exec($requette_specifique_brute): mixed
+    public
+    function requette_brute_exec($requette_specifique_brute): mixed
     {
         return $this->SQLite3->exec($requette_specifique_brute);
     }

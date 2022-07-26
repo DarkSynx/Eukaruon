@@ -35,7 +35,7 @@ class pilote
      */
     const MODULES_PRIMAIRE = [
         'chemins.php',
-        'journal.php',
+        //'journal.php',
         //'installation.php'
     ];
 
@@ -91,7 +91,7 @@ class pilote
         //new Modules_erreurs();
 
         $this->Modules_gestionnaire = new Modules_gestionnaire(self::LIST_EXCEPTION_MODULE, self::LIST_NAME_SPACE);
-        $this->journal = new journal();
+        // $this->journal = new journal();
 
 
     }

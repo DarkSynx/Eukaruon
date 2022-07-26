@@ -2,14 +2,16 @@
 
 
 use FilesystemIterator;
+use SQLite3;
 
 include_once 'chemins.php';
 
+$iinc = 0;
 
 echo '<!DOCTYPE html><html lang="fr"><head><title>Eukaruon : Installation</title></head><body><h2>INSTALLATION</h2><div style="border:1px solid grey;width:95%;margin:auto;padding:15px;">';
 $folder = dirname($_SERVER['PHP_SELF']);
 
-$htaccess = <<<HTA
+$htaccess = <<<HTACCESS
 <IfModule mod_rewrite.c>
 RewriteEngine On
 # Do not enable rewriting for files or directories that exist
@@ -17,7 +19,10 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /Eukaruon/index.php?page=$1 [L]
 </IfModule>
-HTA;
+<FilesMatch "\.(db|sqlite|sqlite2|sqlite3|sq|sq2|sq3)$">
+Deny from all
+</FilesMatch>
+HTACCESS;
 
 
 $httf = fopen(RACINE . '.htaccess', 'w');
@@ -50,12 +55,72 @@ rdir(RACINE, $recurcive_path);
 $donnees_serveur = [
     'PHP_VERSION' => (PHP_VERSION_ID >= 80000 ? PHP_VERSION_ID : 'ERROR_VERSION_PAS_PHP8_OU_SUPERIEUR'),
     'IDSERVEUR' => bin2hex($bytes),
+    'SQLITE_ENC' => hash('sha512', $bytes . time()),
     'MODULES_UTILISATEUR_INSCRIT' => 'Modules_bdd_sqlite',
     'ALPHACODE' => [$tableau_alpha_code, false],
     'LIEN_INTERNE_VALIDE' => [$recurcive_path, false]
 ];
 
-echo 'INSTALLATION 1/2: donnees_serveur <br>';
+echo 'INSTALLATION ' . $iinc++ . '/2: donnees_serveur <br>';
+
+
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+function DbCreation($nom, $script, $iinc)
+{
+    global $donnees_serveur;
+    @unlink(BDD . $nom);
+    $donnees_serveur['BDD_' . strtoupper(basename($nom, ".db"))] = $nom;
+    $db = new SQLite3(BDD . $nom);
+    $db->exec($script);
+    $db->close();
+    echo "INSTALLATION : $iinc/2: $nom <br>";
+}
+
+DbCreation("inscription.db",
+    'create table inscription
+(
+    id                    INTEGER not null
+        constraint inscription_pk
+            primary key autoincrement
+        unique,
+    idsession             TEXT,
+    date_session          date,
+    clee_authentification TEXT,
+    identifiant_unique    TEXT,
+    status                INT
+);', $iinc++);
+
+DbCreation("ip.db",
+    'create table ip
+(
+    ip                TEXT not null
+        constraint ip_pk
+            primary key,
+    tentative         INT,
+    date_tentative    date,
+    blocage           INT,
+    date_deblocage    INT,
+    blocage_definitif INT
+);', $iinc++);
+
+DbCreation("utilisateurs.db",
+    'create table utilisateurs
+(
+    idutilisateur INTEGER not null
+        primary key autoincrement
+        unique,
+    nom           TEXT,
+    mail          TEXT,
+    bio           TEXT,
+    url           TEXT,
+    entreprise    TEXT
+);
+
+create unique index utilisateurs_id_uindex
+    on utilisateurs (idutilisateur);'
+    , $iinc++);
+
+//-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 
 $DUSStream = fopen(CONFIGS . 'DonneeUniqueServeur.php', 'w');
 
@@ -93,7 +158,8 @@ foreach ($donnees_serveur as $cle => $valeurs) {
 fwrite($DUSStream, '}');
 fclose($DUSStream);
 
-echo 'INSTALLATION 2/2: donnees_serveur <hr>';
+echo 'INSTALLATION ' . $iinc++ . '/2: donnees_serveur <br>';
+
 echo '</div></body></html>';
 
 /**

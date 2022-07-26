@@ -1,3 +1,151 @@
+<?php
+
+namespace Eukaruon\modules;
+
+/**
+ *
+ */
+class Modules_gen
+{
+
+
+    // ---------------------------------------------------
+    /**
+     * @param string $ip
+     * @param string $dossier
+     * @return bool|string
+     */
+    public function ajouter_IP(string $ip, string $dossier): bool|string
+    {
+        return $this->ajouter_dossier(IP, "\"$ip\" = \"$dossier\";");
+    }
+
+    /**
+     * @param string $idp
+     * @param string $nom
+     * @return bool|string
+     */
+    public function ajouter_index(string $idp, string $nom): bool|string
+    {
+        return $this->ajouter_dossier(INDEX, "\"$idp\" = \"$nom\";");
+    }
+
+
+    /**
+     * @param string $idp
+     * @param string $nom
+     * @return bool|string
+     */
+    public function ajouter_revers(string $idp, string $nom): bool|string
+    {
+        return $this->ajouter_dossier(REVERS, "\"$nom\" = \"$idp\";");
+    }
+
+    /**
+     * @param string $path
+     * @param string $nom
+     * @return bool|string
+     */
+    private function ajouter_dossier(string $path, string $nom): bool|string
+    {
+
+        $nonstop_boucle = true;
+        $conteur = 0;
+        $tableau_fichier = array_fill(0, 999, 1);
+
+        while ($nonstop_boucle) {
+
+            foreach ($tableau_fichier as $numero_de_fichier => $valeur) {
+                if (is_writable($path . "$numero_de_fichier.ini")) {
+                    $fp = fopen($path . "$numero_de_fichier.ini", 'a');
+                    fwrite($fp, $nom . PHP_EOL);
+                    fclose($fp);
+                    return true;
+                }
+            }
+
+            // par sécurité on met à false et on laisse le while se stoper seul
+            // aprés 1000 boucle on stop
+            if ($conteur++ >= 1000) $nonstop_boucle = false;
+            if ($conteur++ >= 2) {
+                clearstatcache();
+                usleep(10000);
+            }
+        }
+        return false; // false sera une réponse en erreur
+    }
+
+    // ---------------------------------------------------
+
+    /**
+     * @param string $ip
+     * @return bool|string
+     */
+    public function scanner_ip(string $ip): bool|string
+    {
+        return $this->scanner(IP, $ip);
+    }
+
+    /**
+     * @param string $idp
+     * @return bool|string
+     */
+    public function scanner_index(string $idp): bool|string
+    {
+        return $this->scanner(INDEX, $idp);
+    }
+
+    /**
+     * @param string $login
+     * @return bool|string
+     */
+    public function scanner_revers(string $login): bool|string
+    {
+        return $this->scanner(REVERS, $login);
+    }
+
+    /**
+     * @param string $path
+     * @param string $idp
+     * @return bool|string
+     */
+    private function scanner(string $path, string $idp): bool|string
+    {
+
+        $nonstop_boucle = true;
+        $conteur = 0;
+        $tableau_fichier = array_fill(0, 999, 1);
+
+        while ($nonstop_boucle) {
+
+            foreach ($tableau_fichier as $numero_de_fichier => $valeur) {
+
+                if (is_readable($path . "$numero_de_fichier.ini")) {
+
+                    $file_ini_array = parse_ini_file($path . "$numero_de_fichier.ini");
+
+                    if (in_array($idp, $file_ini_array)) return "$idp-{$file_ini_array[$idp]}";
+
+                    $tableau_fichier[$numero_de_fichier] = false;
+                }
+            }
+            $tableau_fichier = array_filter($tableau_fichier);
+
+            // par sécurité on met à false et on laisse le while se stoper seul
+            // aprés 1000 boucle on stop
+            if (count($tableau_fichier) == 0 || $conteur++ >= 1000) $nonstop_boucle = false;
+            if ($conteur++ >= 2) {
+                clearstatcache();
+                usleep(10000);
+            }
+        }
+        return false; // false sera une réponse en erreur
+    }
+
+    // ---------------------------------------------------
+}
+
+-_-_-_-_-_-_-_-_-_-_-_-_-__-_-_-_-__-_-_-_-_-__-_-_-_-_-__-_-_-_-_-__-_--__-
 
 L7 expérimental test évolution de code
 https://regex101.com/r/9uYz3T/1

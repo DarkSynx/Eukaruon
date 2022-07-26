@@ -44,6 +44,26 @@ const JOURNAUX = RACINE . 'journaux' . '/';
  *
  */
 const BDD = RACINE . 'bdd' . '/';
+
+/**
+ *
+ */
+const INDEX = BDD . 'Index' . '/';
+
+/**
+ *
+ */
+const REVERS = BDD . 'Revers' . '/';
+
+/**
+ *
+ */
+const UTILISATEURS = BDD . 'Utilisateurs' . '/';
+
+/**
+ *
+ */
+const IP = BDD . 'IP' . '/';
 /**
  *
  */

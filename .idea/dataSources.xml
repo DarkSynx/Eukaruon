@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="utilisateurs" uuid="5a853dff-a393-4e92-9d7c-27707fa5fe75">
-      <driver-ref>sqlite.xerial</driver-ref>
+    <data-source source="LOCAL" name="save_ex_db" uuid="a3bd1182-5650-4a0a-95b8-acfc26d9f05c">
+      <driver-ref>dceb90e2-16d0-4628-aac9-c3364d809098</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\synx\PhpstormProjects\Eukaruon\bdd\utilisateurs.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\synxcinaty\PhpstormProjects\Eukaruon\bdd\save_ex_db.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
@@ -13,17 +13,26 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="utilisateurs [2]" uuid="a3bd1182-5650-4a0a-95b8-acfc26d9f05c">
+    <data-source source="LOCAL" name="inscription.db" uuid="910f8c45-84b2-409f-a15d-bd9053724c35">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\synxcinaty\PhpstormProjects\Eukaruon\bdd\utilisateurs.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/bdd/inscription.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.34.0/sqlite-jdbc-3.34.0.jar</url>
-        </library>
-      </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="ip.db" uuid="357ca8ae-fe11-4aa1-ac1e-3aa532e34e98">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/bdd/ip.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="utilisateurs.db" uuid="3ffc9989-50c3-4fa4-8b2d-6157d0ce89e0">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/bdd/utilisateurs.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
 </project>

@@ -287,9 +287,9 @@ class Modules_outils implements interfaces_modules
      * @param string|int $valeur
      * @return mixed
      */
-    public function Modules_bdd_recherche(string $colonne, string|int $valeur, null|string $base_de_donnee = null, null|string $table_a_charger = null): mixed
+    public function Modules_bdd_recherche(string $colonne, string|int $valeur, null|string $base_de_donnee = null, null|string $table_a_charger = null, $pointeur_utilisateur = null): mixed
     {
-        $this->Modules_bdd_preparation($base_de_donnee, $table_a_charger);
+        $this->Modules_bdd_preparation($base_de_donnee, $table_a_charger, $pointeur_utilisateur);
         return $this->Modules_bdd_utilisation_rapide->rechercher($colonne, $valeur);
     }
 
@@ -297,11 +297,16 @@ class Modules_outils implements interfaces_modules
      * @param string|null $base_de_donnee
      * @param string|null $table_a_charger
      */
-    public function Modules_bdd_preparation(null|string $base_de_donnee = null, null|string $table_a_charger = null)
+    public function Modules_bdd_preparation(null|string $base_de_donnee = null, null|string $table_a_charger = null, $pointeur_utilisateur = null)
     {
         $this->Modules_bdd_utilisation_rapide();
         if (!is_null($base_de_donnee)) {
-            $this->Modules_bdd_utilisation_rapide->selectionner_BDD($this->Module_utiliser_exploitant_BDD(), $base_de_donnee);
+            // SQlite detect here
+            if ($this->Module_utiliser_exploitant_BDD() == 'Modules_bdd_sqlite' && $pointeur_utilisateur) {
+                $this->Modules_bdd_utilisation_rapide->selectionner_BDD($this->Module_utiliser_exploitant_BDD(), "$base_de_donnee:$pointeur_utilisateur");
+            } else {
+                $this->Modules_bdd_utilisation_rapide->selectionner_BDD($this->Module_utiliser_exploitant_BDD(), $base_de_donnee);
+            }
         }
         if (!is_null($table_a_charger)) {
             $this->Modules_bdd_utilisation_rapide->charger_table($table_a_charger);

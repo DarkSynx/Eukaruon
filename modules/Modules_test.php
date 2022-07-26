@@ -15,7 +15,6 @@ class Modules_test
     public function test()
     {
 
-
     }
 }
 

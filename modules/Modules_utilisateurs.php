@@ -38,6 +38,15 @@ class Modules_utilisateurs extends Modules_outils
 
     //--------------------------------------------------------
 
+    /**
+     * permet l'authentification de l'utilisateur
+     * et la création des cookies necessaire à l'utilisation
+     * des pages
+     */
+    public function authentfication_utilisateur()
+    {
+
+    }
 
     /**
      * @param $donnee_gestionnaire
@@ -76,7 +85,10 @@ class Modules_utilisateurs extends Modules_outils
     public function verifier_lutilisateur(): bool
     {
         /* ----------------------------------- */
-        /* Etape 0 VERIFICATION IP
+        /* Attention !!! VERIFIER $pointeur_utilisateur et son
+         * suivis
+         *
+            * Etape 0 VERIFICATION IP
          * on vérifie que l'IP n'est pas bloqué
          * par un potentiel brut force avec la table ip
          *
@@ -98,17 +110,28 @@ class Modules_utilisateurs extends Modules_outils
         } else { // Utilisateur OK
             $this->utilisateur_bloquer = false;
             if ($this->verifier_cookie_existe()) {
-                //vérifier unite_identification == identifiant de session
+
+                // vérifier unite_identification == identifiant de session
                 $unite_identification = $_COOKIE['unite_identification'];
 
-                //$clee_identification = password_hash($_COOKIE['unite_identification'] . $IDserveur,  PASSWORD_BCRYPT);
+                // $clee_identification = password_hash($_COOKIE['unite_identification'] . $IDserveur,  PASSWORD_BCRYPT);
                 $clee_identification = $_COOKIE['clee_identification'];
 
-                //$clee_authentification = password_hash($idsession . uniqid() . time(), PASSWORD_BCRYPT);
+                // $clee_authentification = password_hash($idsession . uniqid() . time(), PASSWORD_BCRYPT);
                 $clee_authentification = $_COOKIE['clee_authentification'];
+
+                // identifiant de la page charger
                 $idpage_identifiant = $_COOKIE['idpage_identifiant'];
 
-                if ($unite_identification == session_id()) {
+                // Attention !!!!! revoir cette nouvel information
+                // pointeur utilisateur permet s'il est présent d'indiquer
+                // l'utilisateur
+                // $pointeur_utilisateur = $_COOKIE['pointeur_utilisateur'] ?? null;
+
+                if (
+                    $unite_identification == session_id()
+                    // && $pointeur_utilisateur !== null
+                ) {
 
                     if (password_verify(
                         $_COOKIE['unite_identification'] .
@@ -116,10 +139,11 @@ class Modules_utilisateurs extends Modules_outils
                         $clee_identification)) {
 
                         $results = $this->Modules_bdd_recherche(
-                            'idsession',
-                            $unite_identification,
-                            'utilisateurs.db',
-                            'inscription'
+                            'idsession'
+                            , $unite_identification
+                            , 'inscription.db'
+                            , 'inscription'
+                        /*,$pointeur_utilisateur*/
                         );
 
                         $trouver = false;
@@ -183,7 +207,7 @@ class Modules_utilisateurs extends Modules_outils
             $results = $this->Modules_bdd_recherche(
                 'ip',
                 $ip,
-                'utilisateurs.db',
+                'ip.db',
                 'ip'
             );
 
@@ -285,13 +309,19 @@ class Modules_utilisateurs extends Modules_outils
     /** Vérifie les Cookies
      * @return int
      */
+    // pointeur_utilisateur
+    /**
+     * @return int
+     */
     public function verifier_cookie_existe(): int
     {
         return (
+
             array_key_exists('clee_identification', $_COOKIE) &&
             array_key_exists('unite_identification', $_COOKIE) &&
             array_key_exists('clee_authentification', $_COOKIE) &&
             array_key_exists('idpage_identifiant', $_COOKIE) &&
+            // array_key_exists('pointeur_utilisateur', $_COOKIE) &&
 
             strlen($_COOKIE['clee_identification']) == 60 && // représente le hash BlowFish
             $_COOKIE['clee_identification'] != '' &&
@@ -308,6 +338,11 @@ class Modules_utilisateurs extends Modules_outils
             strlen($_COOKIE['idpage_identifiant']) > 0 &&
             $_COOKIE['idpage_identifiant'] != '' &&
             $_COOKIE['idpage_identifiant'] != chr(32)
+
+            /*&&
+            strlen($_COOKIE['pointeur_utilisateur']) > 0 &&
+            $_COOKIE['pointeur_utilisateur'] != '' &&
+            $_COOKIE['pointeur_utilisateur'] != chr(32)*/
         );
     }
 
@@ -355,6 +390,7 @@ class Modules_utilisateurs extends Modules_outils
 
         /*-------------------------*/
         /* variable pour coté cookie */
+        //$pointeur_utilisateur = hash('sha256', $this->DonneeUniqueServeur_IDSERVEUR() . $identifiant_unique . time());
         $clee_identification = password_hash($idsession . $this->DonneeUniqueServeur_IDSERVEUR(), PASSWORD_BCRYPT);
         $unite_identification_cookie = $idsession;
         $clee_authentification_cookie = password_hash($clee_authentification . $identifiant_unique . $this->DonneeUniqueServeur_IDSERVEUR(), PASSWORD_BCRYPT);
@@ -364,6 +400,7 @@ class Modules_utilisateurs extends Modules_outils
         setcookie("unite_identification", $unite_identification_cookie);
         setcookie("clee_authentification", $clee_authentification_cookie);
         setcookie("idpage_identifiant", $idpage_identifiant);
+        //setcookie("pointeur_utilisateur", $pointeur_utilisateur);
 
 
         /* ajouter en Bdd */
