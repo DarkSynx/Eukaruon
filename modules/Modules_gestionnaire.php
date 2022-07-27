@@ -176,7 +176,7 @@ class Modules_gestionnaire
         $this->tableau_drapeau[$this->valeur_drapeau_incrementer] = $nom_module;
         $prefix_module_nom = $this->prefix_constante . strtoupper($nom_module);
         if (!defined($prefix_module_nom)) {
-            define($prefix_module_nom, $this->valeur_drapeau_incrementer);
+            //define($prefix_module_nom, $this->valeur_drapeau_incrementer);
         }
         return $this->valeur_drapeau_incrementer;
     }
