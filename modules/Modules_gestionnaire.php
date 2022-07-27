@@ -162,7 +162,7 @@ class Modules_gestionnaire
 
     /**
      * permet de generer 63 drapeau pour controler 63 modules
-     * par la méthode module1 | module2 | module3 ...
+     * par la méthode module1 | module2 | module3
      * @param $nom_module
      * @return int
      */
@@ -170,12 +170,13 @@ class Modules_gestionnaire
     {
         // les modules primaire sont limité à 63 modules
         $this->valeur_drapeau_incrementer = intval($this->valeur_drapeau_incrementer * 2);
-        if ($this->valeur_drapeau_incrementer <= pow(2, 63)) {
-            $this->tableau_drapeau[$this->valeur_drapeau_incrementer] = $nom_module;
-            $prefix_module_nom = $this->prefix_constante . strtoupper($nom_module);
-            if (!defined($prefix_module_nom)) {
-                define($prefix_module_nom, $this->valeur_drapeau_incrementer);
-            }
+        if ($this->valeur_drapeau_incrementer > pow(2, 63))
+            return $this->valeur_drapeau_incrementer;
+
+        $this->tableau_drapeau[$this->valeur_drapeau_incrementer] = $nom_module;
+        $prefix_module_nom = $this->prefix_constante . strtoupper($nom_module);
+        if (!defined($prefix_module_nom)) {
+            define($prefix_module_nom, $this->valeur_drapeau_incrementer);
         }
         return $this->valeur_drapeau_incrementer;
     }
