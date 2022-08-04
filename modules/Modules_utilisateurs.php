@@ -1,6 +1,8 @@
 <?php namespace Eukaruon\modules;
 
 
+use Eukaruon\configs\DonneeUniqueServeur;
+
 /**
  * module utilisateur l'objectif de ce module
  * c'est de proposé un ensemble d'outils qui permet
@@ -141,8 +143,8 @@ class Modules_utilisateurs extends Modules_outils
                         $results = $this->Modules_bdd_recherche(
                             'idsession'
                             , $unite_identification
-                            , 'inscription.db'
-                            , 'inscription'
+                            , DonneeUniqueServeur::BDD_INSCRIPTION
+                            , DonneeUniqueServeur::BDD_INSCRIPTION_TABLE
                         /*,$pointeur_utilisateur*/
                         );
 
@@ -205,10 +207,10 @@ class Modules_utilisateurs extends Modules_outils
             }
 
             $results = $this->Modules_bdd_recherche(
-                'ip',
-                $ip,
-                'ip.db',
                 'ip'
+                , $ip
+                , DonneeUniqueServeur::BDD_IP
+                , DonneeUniqueServeur::BDD_IP_TABLE
             );
 
             // retracer les donné dans $this->utilisateur_bdd
@@ -391,9 +393,17 @@ class Modules_utilisateurs extends Modules_outils
         /*-------------------------*/
         /* variable pour coté cookie */
         //$pointeur_utilisateur = hash('sha256', $this->DonneeUniqueServeur_IDSERVEUR() . $identifiant_unique . time());
-        $clee_identification = password_hash($idsession . $this->DonneeUniqueServeur_IDSERVEUR(), PASSWORD_BCRYPT);
+
+        $clee_identification = password_hash(
+            $idsession . DonneeUniqueServeur::IDSERVEUR,
+            PASSWORD_BCRYPT);
+
         $unite_identification_cookie = $idsession;
-        $clee_authentification_cookie = password_hash($clee_authentification . $identifiant_unique . $this->DonneeUniqueServeur_IDSERVEUR(), PASSWORD_BCRYPT);
+
+        $clee_authentification_cookie = password_hash(
+            $clee_authentification . $identifiant_unique . DonneeUniqueServeur::IDSERVEUR,
+            PASSWORD_BCRYPT);
+
         $idpage_identifiant = -1;
 
         setcookie("clee_identification", $clee_identification);

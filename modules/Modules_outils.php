@@ -277,7 +277,7 @@ class Modules_outils implements interfaces_modules
      */
     public function DonneeUniqueServeur_IDSERVEUR(): mixed
     {
-        return $this->donnee_gestionnaire['DonneeUniqueServeur']::IDSERVEUR;
+        return $this->DonneeUniqueServeur()::IDSERVEUR;
     }
 
     /** permet d'obtenir la table rechercher en base de donnée via la colone et la valeur

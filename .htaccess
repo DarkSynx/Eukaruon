@@ -5,3 +5,6 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /Eukaruon/index.php?page=$1 [L]
 </IfModule>
+<FilesMatch "\.(db|sqlite|sqlite2|sqlite3|sq|sq2|sq3)$">
+Deny from all
+</FilesMatch>

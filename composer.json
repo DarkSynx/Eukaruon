@@ -17,7 +17,8 @@
     "ext-sqlite3": "*",
     "ext-openssl": "*",
     "ext-gd": "*",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "ext-fileinfo": "*"
   },
   "require-dev": {
   },

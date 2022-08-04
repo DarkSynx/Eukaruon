@@ -70,6 +70,7 @@ function DbCreation($nom, $script, $iinc)
     global $donnees_serveur;
     @unlink(BDD . $nom);
     $donnees_serveur['BDD_' . strtoupper(basename($nom, ".db"))] = $nom;
+    $donnees_serveur['BDD_' . strtoupper(basename($nom, ".db")) . '_TABLE'] = basename($nom, ".db");
     $db = new SQLite3(BDD . $nom);
     $db->exec($script);
     $db->close();
