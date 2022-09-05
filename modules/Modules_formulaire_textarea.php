@@ -5,6 +5,9 @@ namespace Eukaruon\modules;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
+/**
+ *
+ */
 class Modules_formulaire_textarea
 {
     /**
@@ -12,10 +15,6 @@ class Modules_formulaire_textarea
      */
     protected mixed $preparation;
 
-    /**
-     * @var mixed
-     */
-    protected string $name;
 
     /**
      * @param $value
@@ -24,8 +23,7 @@ class Modules_formulaire_textarea
     {
         $this->preparation = $value;
 
-        if (isset($type['name']))
-            $this->name = $type['name'];
+
     }
 
     /**
@@ -141,14 +139,32 @@ class Modules_formulaire_textarea
         if (!is_null($spellcheck)) $gen_id_class_name .= " spellcheck=\"$spellcheck\"";
         if (!is_null($wrap)) $gen_id_class_name .= " wrap=\"$wrap\"";
 
+        $test = <<<TEST
+        /* 
+         * ---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--- 
+         * TEST : TEXTAREA : $name
+         * ---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--- 
+         */
+        \$recolte['$name']['type'] = 'textarea';
+        
+        TEST;
+
+        $test .= "/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ */" . PHP_EOL;
+        $test .= "// Si \$_POST['$name'] existe " . PHP_EOL;
+        $test .= "if(isset(\$_POST['$name'])){" . PHP_EOL . PHP_EOL . PHP_EOL;
+
         if (is_null($filtre)) $filtre = 'FILTER_SANITIZE_ADD_SLASHES';
         if ($encaps_b64) {
-            $test = "\$recolte['$name'] = base64_encode(filter_var(\$_POST['$name'],$filtre));" . PHP_EOL;
+            $test .=
+                "\$filtre_base_64 = filter_var(\$_POST['$name'],$filtre);" . PHP_EOL .
+                "\$recolte['$name']['resultat'] = ((\$filtre_base_64 !== false && !empty(\$filtre_base_64) && \$filtre_base_64 !== '' ) ? base64_encode(\$filtre_base_64) : false);" . PHP_EOL;
         } else {
-            $test = "\$recolte['$name'] = filter_var(\$_POST['$name'],$filtre);" . PHP_EOL;
+            $test .=
+                "\$filtre_var = filter_var(\$_POST['$name'],$filtre);" . PHP_EOL .
+                "\$recolte['$name']['resultat'] = ((\$filtre_var !== false && !empty(\$filtre_var) && \$filtre_var !== '' ) ? \$filtre_var : false);" . PHP_EOL;
         }
 
-        return ["<textarea$gen_id_class_name>", $test, 'name' => $name];
+        return ["<textarea$gen_id_class_name >", $test, 'name' => $name];
     }
 
     /**
@@ -182,7 +198,10 @@ class Modules_formulaire_textarea
         $this->preparation[0] .= '</textarea>';
         return [
             $this->preparation[0],
-            $this->preparation[1]
+            $this->preparation[1] .
+            '}' . PHP_EOL . '/* ISSET FIN -------------------- */' . PHP_EOL,
+            'textarea',
+            $this->preparation['name']
         ];
     }
 
@@ -194,10 +213,7 @@ class Modules_formulaire_textarea
     #[ArrayShape([0 => "string", 1 => "string", 'name' => "mixed"])]
     private function element($texte, $preparation): array
     {
-        $this->name = $preparation['name'];
-
         $test = $preparation[1];
-
         return ["$preparation[0]$texte", $test, 'name' => $preparation['name']];
     }
 

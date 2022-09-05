@@ -21,14 +21,21 @@ class Modules_formulaire_select
     protected string $name;
 
     /**
+     * @var mixed
+     */
+    protected array $liste;
+
+    /**
      * @param $value
      */
     public function __construct($value)
     {
         $this->preparation = $value;
 
-        if (isset($type['name']))
-            $this->name = $type['name'];
+        /* if (isset($type['name']))
+             $this->name = $type['name'];*/
+
+
     }
 
     /**
@@ -104,11 +111,44 @@ class Modules_formulaire_select
 
         if (is_null($filtre)) $filtre = '/[^a-zA-Z0-1+-_.]/';
 
-        $test = "\$_POST['$name'] = preg_replace('$filtre', '', \$_POST['$name']);" . PHP_EOL;
-        $test .= "\$recolte['$name'][0] = preg_match('$filtre', \$_POST['$name']);" . PHP_EOL;
+        $test = <<<TEST
+        /* 
+         * ---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--- 
+         * TEST : SELECT : $name
+         * ---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--- 
+         */
+        \$recolte['$name']['type'] = 'select';
+        
+        TEST;
 
-        return ["<select$gen_id_class_name>", $test, 'name' => $name];
+        $test .= "/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ */" . PHP_EOL;
+        $test .= "// Si \$_POST['$name'] existe " . PHP_EOL;
+        $test .= "if(isset(\$_POST['$name'])){" . PHP_EOL . PHP_EOL . PHP_EOL;
+
+        $test .= "// analyse de \$_POST['$name'] " . PHP_EOL;
+        $test .= "\$recolte['$name']['avant'] = strlen(\$_POST['$name']);" . PHP_EOL;
+
+        $test .= "// nettoyage de \$_POST['$name'] " . PHP_EOL;
+        $test .= "\$_POST['$name'] = preg_replace('$filtre', '', \$_POST['$name']);" . PHP_EOL;
+        $test .= "\$recolte['$name']['resultat'] = preg_match('$filtre', \$_POST['$name']);" . PHP_EOL;
+
+        $test .= "// debut analyse 1/2 de \$_POST['$name'] " . PHP_EOL;
+        $test .= "\$recolte['$name']['apres'] = strlen(\$_POST['$name']);" . PHP_EOL;
+        $test .= "\$recolte['$name']['modification'] = (\$recolte['$name']['apres'] == \$recolte['$name']['avant']);" . PHP_EOL;
+
+        return ["<select$gen_id_class_name>" . PHP_EOL, $test, 'name' => $name, 'liste' => array()];
     }
+
+
+    /**
+     * @param $fonction
+     * @return static
+     */
+    #[Pure] private static function queue($fonction): static
+    {
+        return new static($fonction);
+    }
+
 
     /**
      * @param $valeur
@@ -121,34 +161,11 @@ class Modules_formulaire_select
         return static::queue(
             call_user_func_array(
                 [$this, 'element'],
-                [$valeur, $label, $this->preparation])
+                [$valeur, $label, $this->preparation]
+            )
         );
     }
 
-    /**
-     * @param $fonction
-     * @return static
-     */
-    #[Pure] private static function queue($fonction): static
-    {
-        return new static($fonction);
-    }
-
-    /**
-     * @return array
-     */
-    public function finaliser(): array
-    {
-        $this->preparation[0] .= PHP_EOL . '</select>';
-        return [
-            $this->preparation[0],
-            $this->preparation[1] .
-            "\$recolte['{$this->preparation['name']}']['test'] = in_array(
-                \$_POST['{$this->preparation['name']}'],
-                \$recolte['{$this->preparation['name']}']['valeur']
-                );" . PHP_EOL
-        ];
-    }
 
     /**
      * @param $valeur
@@ -159,11 +176,38 @@ class Modules_formulaire_select
     #[ArrayShape([0 => "string", 1 => "string", 'name' => "mixed"])]
     private function element($valeur, $label, $preparation): array
     {
-        $this->name = $preparation['name'];
 
-        $test = $preparation[1] . "\$recolte['{$preparation['name']}']['valeur'][] = '$valeur';" . PHP_EOL;
+        //var_dump($preparation);
+        $preparation['liste'][$label] = $valeur;
+        //$this->liste = $preparation['liste'];
+        //$this->name = $preparation['name'];
 
-        return ["{$preparation[0]}<option value=\"$valeur\">$label</option>" . PHP_EOL, $test, 'name' => $preparation['name']];
+        $test = $preparation[1] . "\$recolte['{$preparation['name']}']['autre'][] = '$valeur';" . PHP_EOL;
+
+        return [
+            "{$preparation[0]}<option value=\"$valeur\">$label</option>" . PHP_EOL,
+            $test,
+            'name' => $preparation['name'],
+            'liste' => $preparation['liste']
+        ];
     }
 
+
+    /**
+     * @return array
+     */
+    public function finaliser(): array
+    {
+        // $liste = implode('\',\'', $this->preparation['liste']);
+        $this->preparation[0] .= '</select>';
+        return [
+            $this->preparation[0],
+            $this->preparation[1] .
+            "// fin analyse 2/2 " . PHP_EOL . "
+             \$recolte['{$this->preparation['name']}']['test'] = in_array(\$_POST['{$this->preparation['name']}'],\$recolte['{$this->preparation['name']}']['autre']);" . PHP_EOL .
+            '}' . PHP_EOL . '/* ISSET FIN -------------------- */' . PHP_EOL,
+            'select',
+            $this->preparation['name']
+        ];
+    }
 }

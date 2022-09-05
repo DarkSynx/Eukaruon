@@ -15,7 +15,7 @@ class Modules_formulaire_input
     /**
      *
      */
-    const ARGUMENT = [
+    private const ARGUMENT = [
         'accept',
         'alt',
         'autocomplete',
@@ -51,31 +51,31 @@ class Modules_formulaire_input
     /**
      *indique une fonction filtre de php à utilisé
      */
-    const FONCTION_PHPFILTER = 0;
+    private const FONCTION_PHPFILTER = 0;
     /**
      *indique une fonction php à utilisé
      */
-    const FONCTION_PHP = 1;
+    private const FONCTION_PHP = 1;
     /**
      *indique que c'est une fonction de cette class si
      */
-    const FONCTION_CLASS = 2;
+    private const FONCTION_CLASS = 2;
     /**
      *indique que c'est un filtre preg_replace
      */
-    const FONCTION_PREGREPLACE = 3;
+    private const FONCTION_PREGREPLACE = 3;
     /**
      *indique que c'est un type différent int float
      */
-    const MODE_TYPE = 3;
+    private const MODE_TYPE = 3;
     /**
      *indique que c'est un filtre preg_match
      */
-    const FONCTION_PREGMATCH = 4;
+    private const FONCTION_PREGMATCH = 4;
     /**
      *
      */
-    const TYPE = [
+    private const TYPE = [
 
         /* Une case à cocher qui permet de sélectionner/désélectionner une valeur. */
         'checkbox' => [
@@ -146,8 +146,7 @@ class Modules_formulaire_input
                 // Un objet FileList qui liste les fichiers choisis
                 'files' => 'objet',
                 // Un attribut booléen qui, lorsqu'il est présent, indique que plusieurs fichiers peuvent être sélectionnés.
-                'multiple' => 'bool',
-
+                'multiple' => 'bool'
             ]],
 
         /* Un contrôle qui n'est pas affiché mais dont la valeur est envoyée au serveur. Il y a un exemple dans la
@@ -357,10 +356,7 @@ class Modules_formulaire_input
      * @var mixed
      */
     protected mixed $preparation;
-    /**
-     * @var mixed
-     */
-    protected string $name;
+
 
     /**
      * @param array $type
@@ -369,8 +365,8 @@ class Modules_formulaire_input
     {
         $this->preparation = $type;
 
-        if (isset($type['name']))
-            $this->name = $type['name'];
+        /*if (isset($type['name']))
+            $this->name = $type['name'];*/
 
     }
 
@@ -385,6 +381,7 @@ class Modules_formulaire_input
      */
     public static function defini(string $type, string $option = null, string $id = '', string $class = '', string $name = ''): static
     {
+
         if (key_exists($type, self::TYPE)) {
 
             return new static(self::corp($type, $option, $id, $class, $name));
@@ -413,7 +410,26 @@ class Modules_formulaire_input
 
         // ici on défini coté php générer la variable récolte qui va servire de récolte d'information
         // et à partir de recolte vous pourrez juger si le formulaire passe ou pas
-        $test = '';
+        $test = <<<TEST
+        /* 
+         * ---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--- 
+         * TEST : INPUT : $type : $name
+         * ---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--- 
+         */
+        \$recolte['$name']['type'] = '$type';
+        
+        TEST;
+
+        $test .= "/* /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ */" . PHP_EOL;
+        if ($type == 'file') {
+            $test .= "// Si \$_FILE['$name'] existe " . PHP_EOL;
+            $test .= "if(isset(\$_FILE['$name'])){" . PHP_EOL . PHP_EOL . PHP_EOL;
+        } else {
+            $test .= "// Si \$_POST['$name'] existe " . PHP_EOL;
+            $test .= "if(isset(\$_POST['$name'])){" . PHP_EOL . PHP_EOL . PHP_EOL;
+        }
+
+
         $test = self::nettoyage($test, $type, $mode, $name);
         $test = self::validation($test, $type, $mode, $name);
 
@@ -432,6 +448,7 @@ class Modules_formulaire_input
     private static function nettoyage($test, $type, $mode, $name): string
     {
         $test .= "/* ===[ TEST DE : $name] === */" . PHP_EOL;
+
         if ( // on detecte si nettoyage est vide
             count(self::TYPE[$type]['nettoyage']) > 0 &&
             isset(self::TYPE[$type]['nettoyage'][0]) &&
@@ -447,29 +464,25 @@ class Modules_formulaire_input
                 $nettoyage_action = $nettoyage_filtre_2[$mode][1];
             }
 
-            switch ($nettoyage_action) {
-                case self::FONCTION_PHPFILTER : // indique une fonction filtre de php à utilisé
-                    $test .= "// nettoyage de \$_POST['$name'] " . PHP_EOL;
-                    $test .= "\$_POST['$name'] = filter_var(\$_POST['$name'], $nettoyage_filtre);" . PHP_EOL;
-                    break;
-                case self::FONCTION_PHP : // indique une fonction php à utilisé
-                    $test .= "// nettoyage de \$_POST['$name'] " . PHP_EOL;
-                    $test .= "\$_POST['$name'] = $nettoyage_filtre(\$_POST['$name']);" . PHP_EOL;
-                    break;
-                case self::FONCTION_CLASS : // indique que c'est une fonction de cette class si
-                    $test .= "// nettoyage de \$_POST['$name'] " . PHP_EOL;
-                    $test .= self::$nettoyage_filtre($name) . PHP_EOL;
-                    break;
-                case self::FONCTION_PREGREPLACE : // indique que c'est un filtre preg_replace
-                    $test .= "// nettoyage de \$_POST['$name'] " . PHP_EOL;
-                    $test .= "\$_POST['$name'] = preg_replace('$nettoyage_filtre', '', \$_POST['$name']);" . PHP_EOL;
-                    break;
-                default:
-                    throw new Exception(
-                        'Erreur dans le tableau de type une valeur ' .
-                        'dans la constante TYPE[nettoyage][1] est detecter : [' .
-                        $nettoyage_action . '] inconnu !');
-            }
+
+            $test .= "// analyse de \$_POST['$name'] " . PHP_EOL;
+            $test .= "\$recolte['$name']['avant'] = strlen(\$_POST['$name']);" . PHP_EOL;
+            $test .= "// nettoyage de \$_POST['$name'] " . PHP_EOL . PHP_EOL;
+            $test .= match ($nettoyage_action) {
+                self::FONCTION_PHPFILTER => "\$_POST['$name'] = filter_var(\$_POST['$name'], $nettoyage_filtre);" . PHP_EOL,
+                self::FONCTION_PHP => "\$_POST['$name'] = $nettoyage_filtre(\$_POST['$name']);" . PHP_EOL,
+                self::FONCTION_CLASS => self::$nettoyage_filtre($name) . PHP_EOL,
+                self::FONCTION_PREGREPLACE => "\$_POST['$name'] = preg_replace('$nettoyage_filtre', '', \$_POST['$name']);" . PHP_EOL,
+                default => throw new Exception(
+                    'Erreur dans le tableau de type une valeur ' .
+                    'dans la constante TYPE[nettoyage][1] est detecter : [' .
+                    $nettoyage_action . '] inconnu !'),
+            };
+            $test .= PHP_EOL . "// fin analyse de \$_POST['$name'] " . PHP_EOL;
+            $test .= "\$recolte['$name']['apres'] = strlen(\$_POST['$name']);" . PHP_EOL;
+            $test .= "\$recolte['$name']['modification'] = (\$recolte['$name']['apres'] == \$recolte['$name']['avant']);" . PHP_EOL;
+
+            // $test .= "\$recolte['$name']['valeur'] = &\$_POST['$name'];" . PHP_EOL;
 
         }
         return $test;
@@ -491,42 +504,21 @@ class Modules_formulaire_input
             isset(self::TYPE[$type]['validation'][0]) &&
             isset(self::TYPE[$type]['validation'][1])
         ) {
-            /*
-            $validation_filtre = self::TYPE[$type]['validation'][0];
-            $validation_action = self::TYPE[$type]['validation'][1];
-
-            if ($validation_action == self::MODE_TYPE) { // indique que c'est un type différent int float
-                $validation_filtre_2 = $validation_filtre;
-                $validation_filtre = $validation_filtre_2[$mode][0];
-                $validation_action = $validation_filtre_2[$mode][1];
-            }
-            */
 
             list($validation_filtre, $validation_action) = self::validation_spec(self::TYPE[$type], $mode);
 
-            switch ($validation_action) {
-                case self::FONCTION_PHPFILTER : // indique une fonction filtre de php à utilisé
-                    $test .= "// validation de \$_POST['$name'] " . PHP_EOL;
-                    $test .= "\$recolte['$name'][0] = filter_var(\$_POST['$name'], $validation_filtre);" . PHP_EOL;
-                    break;
-                case self::FONCTION_PHP : // indique une fonction php à utilisé
-                    $test .= "// validation de \$_POST['$name'] " . PHP_EOL;
-                    $test .= "\$recolte['$name'][0] = $validation_filtre(\$_POST['$name']);" . PHP_EOL;
-                    break;
-                case self::FONCTION_CLASS : // indique que c'est une fonction de cette class si
-                    $test .= "// validation de \$_POST['$name'] " . PHP_EOL;
-                    $test .= self::$validation_filtre($name, false, $mode) . PHP_EOL;
-                    break;
-                case self::FONCTION_PREGMATCH : // indique que c'est un filtre preg_replace
-                    $test .= "// validation de \$_POST['$name'] " . PHP_EOL;
-                    $test .= "\$_POST['$name'] = preg_replace('$validation_filtre', '', \$_POST['$name']);" . PHP_EOL;
-                    break;
-                default:
-                    throw new Exception(
-                        'Erreur dans le tableau de type une valeur ' .
-                        'dans la constante TYPE[validation][1] est detecter : [' .
-                        $validation_action . '] inconnu !');
-            }
+            $test .= "// validation de \$_POST['$name'] " . PHP_EOL;
+
+            $test .= match ($validation_action) {
+                self::FONCTION_PHPFILTER => "\$recolte['$name']['resultat'] = filter_var(\$_POST['$name'], $validation_filtre);" . PHP_EOL,
+                self::FONCTION_PHP => "\$recolte['$name']['resultat'] = $validation_filtre(\$_POST['$name']);" . PHP_EOL,
+                self::FONCTION_CLASS => self::$validation_filtre($name, false, $mode) . PHP_EOL,
+                self::FONCTION_PREGMATCH => "\$recolte['$name']['resultat'] = preg_match('$validation_filtre', '', \$_POST['$name']);" . PHP_EOL,
+                default => throw new Exception(
+                    'Erreur dans le tableau de type une valeur ' .
+                    'dans la constante TYPE[validation][1] est detecter : [' .
+                    $validation_action . '] inconnu !'),
+            };
 
         }
         return $test;
@@ -537,7 +529,7 @@ class Modules_formulaire_input
      * @param $mode
      * @return array
      */
-    public static function validation_spec($preparation, $mode): array
+    private static function validation_spec($preparation, $mode): array
     {
         // $validation_filtre = self::TYPE[$type]['validation'][0];
         // $validation_action = self::TYPE[$type]['validation'][1];
@@ -562,7 +554,7 @@ class Modules_formulaire_input
      */
     private static function passwors_hash($name, bool $test_interne = false, string $option = ''): string
     {
-        return "\$recolte['$name'][0] = hash('sha512', \$_POST['$name']);";
+        return "\$recolte['$name']['resultat'] = hash('sha512', \$_POST['$name']);";
     }
 
 
@@ -580,7 +572,7 @@ class Modules_formulaire_input
     {
         // === false
         if ($test_interne) return strtotime($name);
-        return "\$recolte['$name'][0] = strtotime(\$_POST['$name']);";
+        return "\$recolte['$name']['resultat'] = strtotime(\$_POST['$name']);";
     }
 
 
@@ -598,7 +590,7 @@ class Modules_formulaire_input
         //+33 7 17 41 83 03
         if ($test_interne) return preg_match('/\+\d{11}|\d{10}/', $name);
 
-        return "\$recolte['$name'][0] = preg_match('/\+\d{11}|\d{10}/',\$_POST['$name']);";
+        return "\$recolte['$name']['resultat'] = preg_match('/\+\d{11}|\d{10}/',\$_POST['$name']);";
     }
 
     /**
@@ -609,11 +601,13 @@ class Modules_formulaire_input
      */
     private static function validation_fichier($name, bool $test_interne = false, string|null $option = null): string
     {
+        $size = '1000000';
         if (is_null($option)) $option = 'upload';
         if ($option[0] == '[' && $option[-1] == ']') {
-            $exoption = explode(',', $option);
-            $option = $exoption[0];
-            unset($exoption[0]);
+            $exoption = explode(',', trim(substr($option, 1, -1)));
+            $option = trim($exoption[0]);
+            $size = trim($exoption[1]);
+            unset($exoption[0], $exoption[1]);
             $exoption = implode(',', $exoption);
         } else {
             $exoption = "
@@ -629,7 +623,7 @@ class Modules_formulaire_input
         !isset(\$_FILES['$name']['error']) ||
         is_array(\$_FILES['$name']['error'])
     ) {
-        \$recolte['$name'][0] = false;
+        \$recolte['$name']['retour_test'][0] = false;
     }
 
     // Check \$_FILES['$name']['error'] value.
@@ -637,17 +631,17 @@ class Modules_formulaire_input
         case UPLOAD_ERR_OK:
             break;
         case UPLOAD_ERR_NO_FILE:
-           \$recolte['$name'][1] = false;
+           \$recolte['$name']['retour_test'][1] = false;
         case UPLOAD_ERR_INI_SIZE:
         case UPLOAD_ERR_FORM_SIZE:
-            \$recolte['$name'][2] = false;
+            \$recolte['$name']['retour_test'][2] = false;
         default:
-            \$recolte['$name'][3] = false;
+            \$recolte['$name']['retour_test'][3] = false;
     }
 
     // You should also check filesize here.
-    if (\$_FILES['$name']['size'] > 1000000) {
-        \$recolte['$name'][4] = false;
+    if (\$_FILES['$name']['size'] > $size) {
+        \$recolte['$name']['retour_test'][4] = false;
     }
 
     // DO NOT TRUST \$_FILES['$name']['mime'] VALUE !!
@@ -656,26 +650,37 @@ class Modules_formulaire_input
     if ( false === 
         (\$ext = array_search(
         \$finfo->file(\$_FILES['$name']['tmp_name']),
-        array(
-            $exoption
-        ),
+        array($exoption),
         true
     ))) {
-       \$recolte['$name'][5] = false;
+       \$recolte['$name']['retour_test'][5] = false;
     }
 
-    // You should name it uniquely.
-    // DO NOT USE \$_FILES['$name']['name'] WITHOUT ANY VALIDATION !!
-    // On this example, obtain safe unique name from its binary data.
-    \$recolte['$name']['function_move_me'] = function(){
-        if (!move_uploaded_file(
-            \$_FILES['$name']['tmp_name'],
-            sprintf('./$option/%s.%s',
-                sha1_file(\$_FILES['$name']['tmp_name']),
-                \$ext
-            )
-        ));
-        };
+    // All check error
+    if( count(\$recolte['$name']['retour_test']) > 0 ) {
+        \$recolte['$name']['resultat'] = false;    
+    } else {
+        \$recolte['$name']['resultat'] = true; 
+        
+        // You should name it uniquely.
+        // DO NOT USE \$_FILES['$name']['name'] WITHOUT ANY VALIDATION !!
+        // On this example, obtain safe unique name from its binary data.
+        \$recolte['$name']['function'] = function() use (\$ext) {
+            if (
+                    !move_uploaded_file(
+                        \$_FILES['$name']['tmp_name'],
+                        sprintf(
+                            '$option/%s.%s',
+                            sha1_file(\$_FILES['$name']['tmp_name']),
+                            \$ext
+                        )
+                    )
+                ){
+                    return false;
+                } 
+                return true;
+            };
+        }
 ";
     }
 
@@ -693,8 +698,9 @@ class Modules_formulaire_input
                     $this->preparation[2] .= $test; // test lier à data-
                 }
             }
+
             return static::queue(
-                ["{$this->preparation[0]} $nom=\"$valeur\"", $this->preparation[1], $this->preparation[2], 'name' => $this->name]
+                ["{$this->preparation[0]} $nom=\"$valeur\"", $this->preparation[1], $this->preparation[2], 'name' => $this->preparation['name']]
             );
         }
         throw new Exception(
@@ -746,7 +752,9 @@ class Modules_formulaire_input
         return [
             $this->preparation[0],
             $this->preparation[2] .
-            '/* ===[ FIN ] === */' . PHP_EOL
+            '}' . PHP_EOL . '/* ISSET FIN -------------------- */' . PHP_EOL,
+            'input',
+            $this->preparation['name']
         ];
     }
 
@@ -763,12 +771,9 @@ class Modules_formulaire_input
     #[ArrayShape([0 => "string", 1 => "mixed", 2 => "string", 'name' => "mixed"])]
     private function element($argument, $valeur, $preparation, $mode, $test_specifique, $maxmin_test): array
     {
-        // vérification valeur par type
-        // concaténation de test
+
         $test = $preparation[2] . "";
-
-        //var_dump($this->name);
-
+        $name = $preparation['name'];
 
         /* V E R I F I C A T I O N - C O D E - U T I L I S A T E U R & F I L T R E */
         if (isset($preparation[1]['argument'][$argument])) {
@@ -784,25 +789,17 @@ class Modules_formulaire_input
                 $test .= "$test_specifique" . PHP_EOL;
             }
 
-            if (!is_null($maxmin_test)) {
-                $test .= "// -> ajout test maxmin : " . PHP_EOL;
-                $test .= "\$recolte['{$this->name}'][1]['maxmin_test'] = " .
-                    "(\$recolte['{$this->name}'][1]['$maxmin_test'] >= \$_POST['{$this->name}'] && " .
-                    "\$recolte['{$this->name}'][1]['min'] <= \$_POST['{$this->name}']);" . PHP_EOL;
-            }
 
             switch ($type_var) {
                 case 'int':
                     if (!is_int($valeur))
-                        throw new Exception("Erreur dans l'argument: {$this->name} [ $argument => $type_var ]");
-
-                    $test .= "\$recolte['{$this->name}'][1]['$argument'] = $valeur;" . PHP_EOL;
+                        $this->exception_element($name, $argument, $type_var);
+                    $test .= "\$recolte['$name']['autre']['$argument'] = $valeur;" . PHP_EOL;
                     break;
                 case 'text':
                     if (!is_string($valeur))
-                        throw new Exception("Erreur dans l'argument: {$this->name} [ $argument => $type_var ]");
-
-                    $test .= "\$recolte['{$this->name}'][1]['$argument'] = '$valeur';" . PHP_EOL;
+                        $this->exception_element($name, $argument, $type_var);
+                    $test .= "\$recolte['$name']['autre']['$argument'] = '$valeur';" . PHP_EOL;
                     break;
                 default:
 
@@ -811,30 +808,30 @@ class Modules_formulaire_input
                         isset($preparation[1]['validation'][0]) &&
                         isset($preparation[1]['validation'][1])
                     ) {
-                        $test .= "\$recolte['{$this->name}'][1]['$argument'] = '$valeur';" . PHP_EOL;
+                        $test .= "\$recolte['$name']['autre']['$argument'] = '$valeur';" . PHP_EOL;
 
                         list($validation_filtre, $validation_action) = self::validation_spec($preparation[1], $mode);
 
                         switch ($validation_action) {
                             case self::FONCTION_PHPFILTER : // indique une fonction filtre de php à utilisé
                                 if (filter_var($valeur, $validation_filtre) === false)
-                                    throw new Exception("Erreur dans l'argument: {$this->name} [ $argument => $type_var ]");
+                                    $this->exception_element($name, $argument, $type_var);
                                 break;
                             case self::FONCTION_PHP : // indique une fonction php à utilisé
                                 $val = $validation_filtre($valeur);
                                 if ($val === false)
-                                    throw new Exception("Erreur dans l'argument: {$this->name} [ $argument => $type_var ]");
+                                    $this->exception_element($name, $argument, $type_var);
                                 break;
                             case self::FONCTION_CLASS : // indique que c'est une fonction de cette class si
                                 if ($validation_filtre != 'passwors_hash') {
                                     $val = self::$validation_filtre($valeur, true);
                                     if ($val == false)
-                                        throw new Exception("Erreur dans l'argument: {$this->name} [ $argument => $type_var ]");
+                                        $this->exception_element($name, $argument, $type_var);
                                 }
                                 break;
                             case self::FONCTION_PREGMATCH : // indique que c'est un filtre preg_replace
                                 if (!preg_match($validation_filtre, $valeur))
-                                    throw new Exception("Erreur dans l'argument: {$this->name} [ $argument => $type_var ]");
+                                    $this->exception_element($name, $argument, $type_var);
                                 break;
                             default:
                                 throw new Exception(
@@ -845,16 +842,52 @@ class Modules_formulaire_input
 
                     }
 
-
                 //throw new Exception("Erreur type inexistant $argument => $type" );
+            }
+
+            if (!is_null($maxmin_test)) {
+                $test .= "// -> ajout test maxmin : " . PHP_EOL;
+
+                if ($preparation[1]['argument'][$argument] == 'int') {
+                    if ($argument == 'min' || $argument == 'max') {
+                        $test .= "\$recolte['$name']['test'] = " .
+                            "(\$recolte['$name']['autre']['max'] >= \$_POST['$name'] && " .
+                            "\$recolte['$name']['autre']['min'] <= \$_POST['$name']);" . PHP_EOL;
+                    } else {
+                        $test .= "\$recolte['$name']['test'] = " .
+                            "(\$recolte['$name']['autre']['maxlength'] >= strlen(\$_POST['$name']) && " .
+                            "\$recolte['$name']['autre']['minlength'] <= strlen(\$_POST['$name']));" . PHP_EOL;
+                    }
+                } else {
+                    if ($argument == 'min' || $argument == 'max') {
+                        $test .= "\$recolte['$name']['test'] = (" .
+                            "strtotime(\$recolte['$name']['autre']['max']) >= strtotime(\$_POST['$name']) && " .
+                            "strtotime(\$recolte['$name']['autre']['min']) <= strtotime(\$_POST['$name'])"
+                            . ");" . PHP_EOL;
+                    } else {
+                        $test .= "\$recolte['$name']['test'] = (" .
+                            "strtotime(\$recolte['$name']['autre']['maxlength']) >= strlen(\$_POST['$name']) && " .
+                            "strtotime(\$recolte['$name']['autre']['minlength']) <= strlen(\$_POST['$name'])"
+                            . ");" . PHP_EOL;
+                    }
+                }
+
+
             }
 
 
         }
         /* F - I - N :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: :: ::  */
 
+        return ["$preparation[0] $argument=\"$valeur\"", $preparation[1], $test, 'name' => $preparation['name']];
+    }
 
-        return ["{$preparation[0]} $argument=\"$valeur\"", $preparation[1], $test, 'name' => $preparation['name']];
+    /**
+     * @throws Exception
+     */
+    private function exception_element($name, $argument, $type_var)
+    {
+        throw new Exception("Erreur dans l'argument: $name [ $argument => $type_var ]");
     }
 
 }

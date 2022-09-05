@@ -35,6 +35,7 @@ class pilote
      */
     const MODULES_PRIMAIRE = [
         'chemins.php',
+        'chemins_web.php',
         //'journal.php',
         //'installation.php'
     ];
